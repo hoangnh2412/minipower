@@ -25,7 +25,7 @@ Cách làm dựa trên ba nguyên tắc:
 | **Presales** — [`presales/`](src/presales/) | Module nghề | ULNL + quotation trước ký — không sở hữu khảo sát | [presales/README.md](src/presales/README.md) |
 | **Công cụ làm ra Minipower** — [`toolbox/`](src/toolbox/) | Module nghề | Viết/soát skill, mở module — `minipower-toolbox-*`. Không cài workspace khách | [toolbox/README.md](src/toolbox/README.md) |
 | **Tài liệu (Outline)** — [`docs/`](src/docs/) | Module kênh | SOP MCP mặt `docs`: tra / publish / migrate Outline (`minipower-docs-outline`) | [docs/README.md](src/docs/README.md) |
-| **Việc (Lark Tasks)** — [`tasks/`](src/tasks/) | Module kênh | SOP MCP mặt `tasks` (`minipower-tasks-lark`); `none` thì `memory/tasks/` trên dự án đích | [tasks/README.md](src/tasks/README.md) |
+| **Việc (OpenProject / Lark)** — [`tasks/`](src/tasks/) | Module kênh | SOP MCP mặt `tasks` (`minipower-tasks-openproject` · `minipower-tasks-lark`); `none` thì SQLite `artifact` | [tasks/README.md](src/tasks/README.md) |
 | **Chat (Lark IM)** — [`chat/`](src/chat/) | Module kênh | SOP MCP mặt `chat` (`minipower-chat-lark`) — tách khỏi task | [chat/README.md](src/chat/README.md) |
 | **Mã nguồn (GitLab)** — [`vcs/`](src/vcs/) | Module kênh | SOP MCP/git mặt `code` (`minipower-vcs-gitlab`) | [vcs/README.md](src/vcs/README.md) |
 | [`contracts/`](contracts/) | Tầng nền | Luật chơi chung giữa các module và giữa repo tài liệu ↔ repo code: trace spine, điểm bàn giao H1–H6, quy ước chung, schema `PACK.md` | [contracts/README.md](contracts/README.md) |
@@ -242,6 +242,7 @@ Lá-rời theo kit `@platform/core`: **mô tả việc**. Pattern con chỉ đ�
 | Skill | Mặt profile | Dùng khi | Cách dùng |
 |-------|-------------|----------|-----------|
 | **[minipower-docs-outline](src/docs/skills/minipower-docs-outline/README.md)** | `docs=outline` | wiki Outline, publish | L1 đọc · L3 publish/migrate một bảng |
+| **[minipower-tasks-openproject](src/tasks/skills/minipower-tasks-openproject/README.md)** | `tasks=openproject` | work package OpenProject | connect MCP · L1 search · L3 nếu có tool ghi |
 | **[minipower-tasks-lark](src/tasks/skills/minipower-tasks-lark/README.md)** | `tasks=lark` | tasklist Lark | L1 list · L3 nếu MCP có tool ghi |
 | **[minipower-chat-lark](src/chat/skills/minipower-chat-lark/README.md)** | `chat=lark` | tin nhóm, nhắc việc | L1 đọc · L3 gửi sau OK |
 | **[minipower-vcs-gitlab](src/vcs/skills/minipower-vcs-gitlab/README.md)** | `code=gitlab` | MR, pipeline | L1 search · L3 MR/comment; commit sau preview |

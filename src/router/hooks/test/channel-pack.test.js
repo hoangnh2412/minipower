@@ -72,5 +72,6 @@ for (const pack of CHANNELS) {
 
 test("tasks: agent-file persona ADR-036 (không qua CLI/registry)", () => {
   assert.ok(existsSync(join(ROOT, "tasks", "agents", "minipower-tasks-lark.md")))
+  assert.ok(existsSync(join(ROOT, "tasks", "agents", "minipower-tasks-openproject.md")))
   assert.ok(existsSync(join(ROOT, "tasks", "rules", "l1-l2-l3-tasks.md")))
 })

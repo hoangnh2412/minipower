@@ -1,6 +1,6 @@
 # L1 / L2 / L3 — pack `tasks/`
 
-Dùng chung mọi lá kênh việc (Lark hôm nay; OpenProject khi có SOP).
+Dùng chung mọi lá kênh việc (`minipower-tasks-openproject` · `minipower-tasks-lark`).
 
 | Tầng | Agent được | Cổng người |
 |------|------------|------------|

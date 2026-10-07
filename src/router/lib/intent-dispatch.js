@@ -61,6 +61,7 @@ export const INTENT_RULES = [
   { skill: "minipower-frontend-review-react", keys: ["review react", "review tsx", "review frontend"] },
   { skill: "minipower-toolbox-skill-author", keys: ["viết skill", "soát skill", "skill lá"] },
   { skill: "minipower-docs-outline", keys: ["outline", "wiki"] },
+  { skill: "minipower-tasks-openproject", keys: ["openproject", "work package", "wp #"] },
   { skill: "minipower-tasks-lark", keys: ["tasklist", "lark task"] },
   { skill: "minipower-chat-lark", keys: ["tin nhắn lark", "lark im"] },
   { skill: "minipower-vcs-gitlab", keys: ["merge request", "gitlab", "pipeline"] },
