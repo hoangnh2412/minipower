@@ -4,6 +4,7 @@ Tài liệu hướng dẫn **framework** Minipower (không nhầm với `{projec
 
 | File | Nội dung | Đọc khi |
 |------|----------|---------|
+| [tutorial.md](tutorial.md) | **Tutorial thực hành:** từ file mô tả sơ → từng bước ra DOC gì, skill nào | Bắt đầu dự án mới, chỉ có yêu cầu thô |
 | [pipeline.md](pipeline.md) | Pipeline 6 phase, nguyên tắc, luồng artifact, phase→DOC | Hiểu quy trình & folder dự án |
 | [parallel-work.md](parallel-work.md) | Multi-BA/SA/PM, sync, xung đột, dev tối thiểu | Lead team, dự án nhiều module |
 | [token-guard.md](token-guard.md) | Hook chặn đọc/sửa lan man trên `docs/` | Làm việc trên repo `docs/` dự án |

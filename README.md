@@ -288,7 +288,7 @@ Nguyên tắc tổ chức:
 
 ## Liên kết nhanh
 
-- [Danh mục skill & cách dùng](#danh-mục-skill--cách-dùng) · [Gọi chung](#gọi-chung--tự-chọn-skill) · [Chạy test](#chạy-test-repo-này) · [dispatcher SKILL](src/router/skills/minipower-router/SKILL.md) · [TPL](src/router/templates/README.md)
+- [Danh mục skill & cách dùng](#danh-mục-skill--cách-dùng) · [Tutorial tài liệu](src/router/docs/tutorial.md) · [Gọi chung](#gọi-chung--tự-chọn-skill) · [Chạy test](#chạy-test-repo-này) · [dispatcher SKILL](src/router/skills/minipower-router/SKILL.md) · [TPL](src/router/templates/README.md)
 - [router](src/router/README.md) · [discovery](src/discovery/README.md) · [analyst](src/analyst/README.md) · [architecture](src/architecture/README.md) · [pm](src/pm/README.md) · [support](src/support/README.md) · [qa](src/qa/README.md) · [presales](src/presales/README.md)
 - [backend](src/backend/README.md) · [frontend](src/frontend/README.md) · [ops](src/ops/README.md) · [toolbox](src/toolbox/README.md)
 - [docs](src/docs/README.md) · [tasks](src/tasks/README.md) · [chat](src/chat/README.md) · [vcs](src/vcs/README.md)
