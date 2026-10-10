@@ -13,6 +13,10 @@ Manifest: [PACK.md](PACK.md).
 | **minipower-router-deliberation** | [skills/minipower-router-deliberation/README.md](./skills/minipower-router-deliberation/README.md) | Premise gate mềm PROCEED/RESHAPE/STOP |
 | **minipower-router-readiness** | [skills/minipower-router-readiness/README.md](./skills/minipower-router-readiness/README.md) | Soát tiền đề trước thực thi, hỏi một lượt |
 
+## Tài liệu
+
+- [docs/router-and-skills.md](docs/router-and-skills.md) — router, hook, phụ thuộc skill & handoff pack
+
 ## Hook (Đợt D2 — luật; máy còn ở sdlc/hooks)
 
 - [rules/dispatch.md](rules/dispatch.md) · [rules/identity.md](rules/identity.md) · [rules/l3.md](rules/l3.md)
