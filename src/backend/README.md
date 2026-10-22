@@ -60,6 +60,7 @@ Chi tiết publish sang repo product: [Publish skill sang repo consumer](#publis
 | **minipower-backend-notification-dotnet** | [skills/minipower-backend-notification-dotnet/README.md](./skills/minipower-backend-notification-dotnet/README.md) | Email SMTP Mailkit |
 | **minipower-backend-caching-dotnet** | [skills/minipower-backend-caching-dotnet/README.md](./skills/minipower-backend-caching-dotnet/README.md) | Memory + Redis cache |
 | **minipower-backend-entityframework-dotnet** | [skills/minipower-backend-entityframework-dotnet/README.md](./skills/minipower-backend-entityframework-dotnet/README.md) | EF multitenancy |
+| **minipower-backend-entityframework-dotnet-auto-migrate** | [skills/minipower-backend-entityframework-dotnet-auto-migrate/README.md](./skills/minipower-backend-entityframework-dotnet-auto-migrate/README.md) | Auto migrate Host (`EnsureMigrateDb` / Template) |
 | **minipower-backend-swashbuckle-dotnet** | [skills/minipower-backend-swashbuckle-dotnet/README.md](./skills/minipower-backend-swashbuckle-dotnet/README.md) | Swagger / OpenAPI |
 | **minipower-backend-healthcheck-dotnet** | [skills/minipower-backend-healthcheck-dotnet/README.md](./skills/minipower-backend-healthcheck-dotnet/README.md) | Health endpoints |
 | **minipower-backend-telemetry-dotnet** | [skills/minipower-backend-telemetry-dotnet/README.md](./skills/minipower-backend-telemetry-dotnet/README.md) | OpenTelemetry |

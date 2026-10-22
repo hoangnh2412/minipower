@@ -93,7 +93,7 @@ foreach (var tenant in tenants)
 | Mỗi tenant một DB | [patterns/separate-tenant-db/SKILL.md](./patterns/separate-tenant-db/SKILL.md) |
 | Master + pool + DB riêng | [patterns/hybrid/SKILL.md](./patterns/hybrid/SKILL.md) |
 | Resolver tùy biến | [patterns/custom-di/SKILL.md](./patterns/custom-di/SKILL.md) |
-| Auto migrate khi start Host | [patterns/auto-migrate/SKILL.md](./patterns/auto-migrate/SKILL.md) |
+| Auto migrate khi start Host | [minipower-backend-entityframework-dotnet-auto-migrate](../minipower-backend-entityframework-dotnet-auto-migrate/SKILL.md) |
 | Setup chung | [reference/setup.md](./reference/setup.md) |
 
 ## Sample repo

@@ -11,7 +11,7 @@
 - [ ] 4. Chọn pattern (single-db | separate-tenant-db | hybrid)
 - [ ] 5. AppDbContext, UoW, entities
 - [ ] 6. appsettings ConnectionStrings + Cache:ConnectionString
-- [ ] 7. Auto migrate Host — [patterns/auto-migrate/SKILL.md](../patterns/auto-migrate/SKILL.md)
+- [ ] 7. Auto migrate Host — [minipower-backend-entityframework-dotnet-auto-migrate](../../minipower-backend-entityframework-dotnet-auto-migrate/SKILL.md)
 - [ ] 8. dotnet build
 ```
 

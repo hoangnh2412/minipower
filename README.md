@@ -19,7 +19,7 @@ Cách làm dựa trên ba nguyên tắc:
 | Thành phần | Loại | Giải quyết việc gì | Bắt đầu |
 |------------|------|--------------------|---------|
 | **Dispatcher / runtime** — [`router/`](src/router/) | Dispatcher | Hook, skeleton, TPL, plugin root; gợi ý pack; init `project_mode` + provider (`minipower-router`) | [router/README.md](src/router/README.md) |
-| **Code backend .NET** — [`backend/`](src/backend/) | Module nghề | Dựng backend .NET theo framework Jarvis chuẩn công ty: scaffold chạy được ngay, gắn auth / cache / EF / observability theo nhu cầu, review PR trước khi merge — 15 skill `minipower-backend-*` | [backend/README.md](src/backend/README.md) · cài: [§ Cài vào Cursor](src/backend/README.md#cài-vào-cursor) |
+| **Code backend .NET** — [`backend/`](src/backend/) | Module nghề | Dựng backend .NET theo framework Jarvis chuẩn công ty: scaffold chạy được ngay, gắn auth / cache / EF / observability theo nhu cầu, review PR trước khi merge — 15 skill `minipower-backend-*` (lá EF auto-migrate tách riêng) | [backend/README.md](src/backend/README.md) · cài: [§ Cài vào Cursor](src/backend/README.md#cài-vào-cursor) |
 | **Code frontend React** — [`frontend/`](src/frontend/) | Module nghề | Dựng frontend React theo kit UI `@platform/core` chuẩn công ty: app host chạy được ngay, feature module đúng cấu trúc kit (API · form · CRUD · route · quyền), tuỳ biến page có sẵn của kit không fork, lint ép convention + kiến trúc, review PR — 9 skill `minipower-frontend-*` (ADR-040) | [frontend/README.md](src/frontend/README.md) · cài: [§ Cài vào Cursor](src/frontend/README.md#cài-vào-cursor) |
 | **Vận hành hạ tầng** — [`ops/`](src/ops/) | Module nghề | Kỹ năng DevOps/SRE: thu thập metrics Grafana/Prometheus chuẩn hoá cho AI chẩn đoán sự cố; sẽ mở rộng dần sang chẩn đoán theo case (memory leak, deadlock, log flow), cài server, CI/CD — skill `minipower-ops-*` (ADR-023) | [ops/README.md](src/ops/README.md) |
 | **Presales** — [`presales/`](src/presales/) | Module nghề | ULNL + quotation trước ký — không sở hữu khảo sát | [presales/README.md](src/presales/README.md) |
@@ -206,6 +206,7 @@ Lá-rời: **mô tả việc**. Provider/pattern con chỉ đọc khi skill cha 
 | **[minipower-backend-authentication-dotnet](src/backend/skills/minipower-backend-authentication-dotnet/README.md)** | JWT, API Key, Cognito | *Bật Bearer cho API* |
 | **[minipower-backend-caching-dotnet](src/backend/skills/minipower-backend-caching-dotnet/README.md)** | Redis / memory cache | *Thêm cache Redis service đơn hàng* |
 | **[minipower-backend-entityframework-dotnet](src/backend/skills/minipower-backend-entityframework-dotnet/README.md)** | EF, multitenancy | *Init CoreDbContext hybrid tenant* |
+| **[minipower-backend-entityframework-dotnet-auto-migrate](src/backend/skills/minipower-backend-entityframework-dotnet-auto-migrate/README.md)** | EF migrate khi start Host | *Bật AutoMigrate EnsureMigrateDb / Template* |
 | **[minipower-backend-swashbuckle-dotnet](src/backend/skills/minipower-backend-swashbuckle-dotnet/README.md)** | Swagger | *Bọc BaseResponse + JWT trên Swagger* |
 | **[minipower-backend-healthcheck-dotnet](src/backend/skills/minipower-backend-healthcheck-dotnet/README.md)** | `/health/*` | *Thêm readiness Redis + SQL* |
 | **[minipower-backend-telemetry-dotnet](src/backend/skills/minipower-backend-telemetry-dotnet/README.md)** | OTEL | *Bật OTLP + enrich* |

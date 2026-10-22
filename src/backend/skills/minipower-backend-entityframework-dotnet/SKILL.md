@@ -43,7 +43,7 @@ Skill điều phối `Jarvis.EntityFramework` trên ASP.NET Core. Hướng dẫn
 | Separate tenant DB | [patterns/separate-tenant-db/SKILL.md](patterns/separate-tenant-db/SKILL.md) |
 | Hybrid | [patterns/hybrid/SKILL.md](patterns/hybrid/SKILL.md) |
 | Custom DI resolver | [patterns/custom-di/SKILL.md](patterns/custom-di/SKILL.md) |
-| Auto migrate Host (`EnsureMigrateDb` / Template / Registered) | [patterns/auto-migrate/SKILL.md](patterns/auto-migrate/SKILL.md) |
+| Auto migrate Host (`EnsureMigrateDb` / `EnsureMigrateTemplateDb`) | [minipower-backend-entityframework-dotnet-auto-migrate](../minipower-backend-entityframework-dotnet-auto-migrate/SKILL.md) |
 
 **Luôn đọc:** [reference/setup.md](reference/setup.md).
 

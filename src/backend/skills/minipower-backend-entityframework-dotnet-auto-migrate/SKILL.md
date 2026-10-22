@@ -9,7 +9,7 @@ dependencies:
 
 → SSOT: `jarvis/frameworks/Platform.ORM.EntityFramework/AppBuilderExtension.cs`  
 → Mẫu: `jarvis/Sample/Program.cs` (sau `MapControllers`, trước seed / `Run`)  
-→ Index: [SKILL.md](../../SKILL.md)
+→ Orchestrator EF: [minipower-backend-entityframework-dotnet](../minipower-backend-entityframework-dotnet/SKILL.md)
 
 Platform chỉ cung cấp **hai** extension migrate trên `IApplicationBuilder`:
 
@@ -48,7 +48,7 @@ Cả hai đọc `ConnectionStrings:AutoMigrate`, dùng `TenantScopedContextValid
 **Chỉ** dùng `EnsureMigrateTemplateDb` khi kiểm tra model có entity `ITenantEntity`  
 (ví dụ: `typeof(ITenantEntity).IsAssignableFrom(entityType.ClrType)` trên các entity trong model).
 
-**Cấm** `EnsureMigrateTemplateDb` khi model **không** có `ITenantEntity` — kể cả context “phụ” (Identity, Authorization EF, engine workflow, …). Các context đó migrate bằng **`EnsureMigrateDb`** qua **UoW** đã đăng ký cho DbContext tương ứng (nếu chưa có UoW → đăng ký `IUnitOfWork` + `AddCoreDbContext` theo [reference/setup.md](../../reference/setup.md), không tạo API migrate thứ ba).
+**Cấm** `EnsureMigrateTemplateDb` khi model **không** có `ITenantEntity` — kể cả context “phụ” (Identity, Authorization EF, engine workflow, …). Các context đó migrate bằng **`EnsureMigrateDb`** qua **UoW** đã đăng ký cho DbContext tương ứng (nếu chưa có UoW → đăng ký `IUnitOfWork` + `AddCoreDbContext` theo [reference/setup.md](../minipower-backend-entityframework-dotnet/reference/setup.md), không tạo API migrate thứ ba).
 
 Nhầm API → migrate sai connection (interceptor) hoặc dùng Template cho schema không phải tenant pool.
 
@@ -99,5 +99,11 @@ app.EnsureMigrateDb<IIdentityUnitOfWork>();
 
 ## Liên quan
 
-- [reference/setup.md](../../reference/setup.md) — UoW, `AddCoreDbContext`  
-- [patterns/separate-tenant-db/SKILL.md](../separate-tenant-db/SKILL.md) — tenant DB + template migrate
+- [reference/setup.md](../minipower-backend-entityframework-dotnet/reference/setup.md) — UoW, `AddCoreDbContext`  
+- [patterns/separate-tenant-db](../minipower-backend-entityframework-dotnet/patterns/separate-tenant-db/SKILL.md) — tenant DB + template migrate
+
+## Output bắt buộc
+
+- Host gọi migrate đúng API; `ConnectionStrings:AutoMigrate` trong appsettings
+- Code C# theo [minipower-backend-convention-dotnet](../minipower-backend-convention-dotnet/SKILL.md)
+- File Host/Infrastructure theo [minipower-backend-architecture-dotnet](../minipower-backend-architecture-dotnet/SKILL.md)

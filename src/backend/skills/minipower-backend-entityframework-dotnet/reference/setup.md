@@ -85,7 +85,7 @@ Placeholder `AppDbContext` khi dùng interceptor (connection thật từ Master 
 
 ## Migrate
 
-Chi tiết + quy tắc `ITenantEntity`: [patterns/auto-migrate/SKILL.md](../patterns/auto-migrate/SKILL.md).
+Chi tiết + quy tắc `ITenantEntity`: [minipower-backend-entityframework-dotnet-auto-migrate](../../minipower-backend-entityframework-dotnet-auto-migrate/SKILL.md).
 
 ```csharp
 app.EnsureMigrateDb<IMasterUnitOfWork>();
