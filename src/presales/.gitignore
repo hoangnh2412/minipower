@@ -1,1 +1,7 @@
 quotation-rates.json
+
+# Workbook/báo giá đã điền RATE_MD · MARGIN_PCT — số thương mại, không commit
+*.xlsx
+out/
+
+__pycache__/

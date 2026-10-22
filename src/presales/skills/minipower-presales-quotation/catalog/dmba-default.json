@@ -1,0 +1,515 @@
+{
+  "catalog_id": "dmba-default",
+  "version": "2.17.0",
+  "mh_per_md": 8,
+  "phases": [
+    "tt",
+    "pt",
+    "xn"
+  ],
+  "phase_names": {
+    "tt": "Thu thập",
+    "pt": "Phân tích & thiết kế",
+    "xn": "Xác nhận & bàn giao"
+  },
+  "note_mh": "MH cơ sở = công TAY, chưa trừ tự động hoá. auto_pct trừ sau, công khai với khách.",
+  "codes": {
+    "KS_HT1": {
+      "tt": 0.8,
+      "pt": 2.5,
+      "xn": 0.7
+    },
+    "KS_HT2": {
+      "tt": 0.8,
+      "pt": 2.5,
+      "xn": 0.7
+    },
+    "KS_HT3": {
+      "tt": 0.8,
+      "pt": 2.5,
+      "xn": 0.7
+    },
+    "KS_BANG": {
+      "tt": 0.2,
+      "pt": 0.8,
+      "xn": 0.3
+    },
+    "TQ_NG1": {
+      "tt": 2.0,
+      "pt": 5.0,
+      "xn": 1.0
+    },
+    "TQ_NG2": {
+      "tt": 3.0,
+      "pt": 10.0,
+      "xn": 3.0
+    },
+    "BRZ_1_1": {
+      "tt": 0.2,
+      "pt": 1.0,
+      "xn": 0.3
+    },
+    "BRZ_1_2": {
+      "tt": 0.3,
+      "pt": 1.7,
+      "xn": 0.4
+    },
+    "BRZ_1_3": {
+      "tt": 0.4,
+      "pt": 3.0,
+      "xn": 0.6
+    },
+    "BRZ_1_4": {
+      "tt": 0.5,
+      "pt": 5.0,
+      "xn": 1.0
+    },
+    "BRZ_1_5": {
+      "tt": 0.8,
+      "pt": 8.0,
+      "xn": 1.6
+    },
+    "BRZ_2_1": {
+      "tt": 0.5,
+      "pt": 1.5,
+      "xn": 0.4
+    },
+    "BRZ_2_2": {
+      "tt": 0.8,
+      "pt": 2.5,
+      "xn": 0.6
+    },
+    "BRZ_2_3": {
+      "tt": 1.0,
+      "pt": 4.5,
+      "xn": 0.9
+    },
+    "BRZ_2_4": {
+      "tt": 1.5,
+      "pt": 7.5,
+      "xn": 1.5
+    },
+    "BRZ_2_5": {
+      "tt": 2.5,
+      "pt": 12.0,
+      "xn": 2.4
+    },
+    "BRZ_3_1": {
+      "tt": 1.0,
+      "pt": 2.5,
+      "xn": 0.6
+    },
+    "BRZ_3_2": {
+      "tt": 1.5,
+      "pt": 4.2,
+      "xn": 0.9
+    },
+    "BRZ_3_3": {
+      "tt": 2.0,
+      "pt": 7.5,
+      "xn": 1.4
+    },
+    "BRZ_3_4": {
+      "tt": 3.0,
+      "pt": 12.5,
+      "xn": 2.2
+    },
+    "BRZ_3_5": {
+      "tt": 5.0,
+      "pt": 20.0,
+      "xn": 3.6
+    },
+    "BRZ_4_1": {
+      "tt": 1.0,
+      "pt": 2.5,
+      "xn": 0.6
+    },
+    "BRZ_4_2": {
+      "tt": 1.5,
+      "pt": 4.2,
+      "xn": 0.9
+    },
+    "BRZ_4_3": {
+      "tt": 2.0,
+      "pt": 7.5,
+      "xn": 1.4
+    },
+    "BRZ_4_4": {
+      "tt": 3.0,
+      "pt": 12.5,
+      "xn": 2.2
+    },
+    "BRZ_4_5": {
+      "tt": 5.0,
+      "pt": 20.0,
+      "xn": 3.6
+    },
+    "SLV1": {
+      "tt": 0.3,
+      "pt": 2.7,
+      "xn": 0.5
+    },
+    "SLV2": {
+      "tt": 0.6,
+      "pt": 5.25,
+      "xn": 0.9
+    },
+    "SLV3": {
+      "tt": 1.2,
+      "pt": 10.5,
+      "xn": 1.8
+    },
+    "SLV4": {
+      "tt": 2.4,
+      "pt": 21.0,
+      "xn": 3.6
+    },
+    "SLV_DV": {
+      "tt": 0.5,
+      "pt": 6.0,
+      "xn": 1.0
+    },
+    "GLD_DIM1": {
+      "tt": 0.4,
+      "pt": 3.75,
+      "xn": 0.6
+    },
+    "GLD_DIM2": {
+      "tt": 0.8,
+      "pt": 7.5,
+      "xn": 1.2
+    },
+    "GLD_FCT1": {
+      "tt": 0.6,
+      "pt": 6.0,
+      "xn": 1.0
+    },
+    "GLD_FCT2": {
+      "tt": 1.2,
+      "pt": 12.0,
+      "xn": 1.8
+    },
+    "GLD_FCT3": {
+      "tt": 2.4,
+      "pt": 24.0,
+      "xn": 3.6
+    },
+    "GLD_DM1": {
+      "tt": 0.8,
+      "pt": 7.5,
+      "xn": 1.4
+    },
+    "GLD_DM2": {
+      "tt": 1.6,
+      "pt": 15.0,
+      "xn": 2.6
+    },
+    "GLD_KPI": {
+      "tt": 0.3,
+      "pt": 1.8,
+      "xn": 0.4
+    },
+    "ERD1": {
+      "tt": 0.8,
+      "pt": 2.5,
+      "xn": 0.7
+    },
+    "ERD2": {
+      "tt": 1.6,
+      "pt": 5.0,
+      "xn": 1.4
+    },
+    "ERD3": {
+      "tt": 2.4,
+      "pt": 7.5,
+      "xn": 2.1
+    },
+    "LOGIC1": {
+      "tt": 1.0,
+      "pt": 4.0,
+      "xn": 1.0
+    },
+    "LOGIC2": {
+      "tt": 2.0,
+      "pt": 8.0,
+      "xn": 2.0
+    },
+    "LOGIC3": {
+      "tt": 4.0,
+      "pt": 16.0,
+      "xn": 4.0
+    },
+    "MAP1": {
+      "tt": 2.0,
+      "pt": 8.0,
+      "xn": 2.0
+    },
+    "MAP2": {
+      "tt": 4.0,
+      "pt": 20.0,
+      "xn": 4.0
+    },
+    "MAP3": {
+      "tt": 8.0,
+      "pt": 40.0,
+      "xn": 8.0
+    },
+    "BC_BG1": {
+      "tt": 1.0,
+      "pt": 4.0,
+      "xn": 3.0
+    },
+    "BC_BG2": {
+      "tt": 2.0,
+      "pt": 8.0,
+      "xn": 6.0
+    },
+    "HOTRO1": {
+      "tt": 0,
+      "pt": 0,
+      "xn": 4.0
+    },
+    "HOTRO2": {
+      "tt": 0,
+      "pt": 0,
+      "xn": 10.0
+    },
+    "GOV_QT_1": {
+      "tt": 4,
+      "pt": 12,
+      "xn": 4
+    },
+    "GOV_QT_2": {
+      "tt": 8,
+      "pt": 32,
+      "xn": 10
+    },
+    "GOV_QC_1": {
+      "tt": 4,
+      "pt": 12,
+      "xn": 4
+    },
+    "GOV_QC_2": {
+      "tt": 8,
+      "pt": 32,
+      "xn": 10
+    },
+    "GOV_TL_1": {
+      "tt": 3,
+      "pt": 9,
+      "xn": 3
+    },
+    "GOV_TL_2": {
+      "tt": 6,
+      "pt": 24,
+      "xn": 8
+    },
+    "BVD_QT_1": {
+      "tt": 8,
+      "pt": 24,
+      "xn": 8
+    },
+    "BVD_QT_2": {
+      "tt": 16,
+      "pt": 64,
+      "xn": 20
+    },
+    "BVD_QC_1": {
+      "tt": 8,
+      "pt": 24,
+      "xn": 8
+    },
+    "BVD_QC_2": {
+      "tt": 16,
+      "pt": 64,
+      "xn": 20
+    },
+    "PII_B1": {
+      "tt": 0.2,
+      "pt": 0.8,
+      "xn": 0.2
+    },
+    "PII_B2": {
+      "tt": 0.4,
+      "pt": 1.6,
+      "xn": 0.4
+    },
+    "PII_B3": {
+      "tt": 0.8,
+      "pt": 3.2,
+      "xn": 0.8
+    },
+    "ERD4": {
+      "tt": 3.2,
+      "pt": 10.0,
+      "xn": 2.8
+    },
+    "DQ_QC_1": {
+      "tt": 0,
+      "pt": 0,
+      "xn": 0
+    },
+    "DCAT1": {
+      "tt": 0.5,
+      "pt": 2.5,
+      "xn": 1.0
+    },
+    "GLOSS1": {
+      "tt": 6.4,
+      "pt": 20.16,
+      "xn": 5.44
+    },
+    "DQ_SRC1": {
+      "tt": 0.5,
+      "pt": 2.5,
+      "xn": 1.0
+    },
+    "GLOSS_SRC1": {
+      "tt": 0.5,
+      "pt": 2.5,
+      "xn": 1.0
+    }
+  },
+  "adders": {
+    "PII_F": {
+      "mh": 0.08,
+      "unit": "1 cột PII (AI gợi ý, người xác nhận)",
+      "why": "AI gợi ý theo 3 bước (đọc tên trường → đọc dữ liệu mẫu → đối chiếu danh sách PII trong governance), con người chỉ xác nhận thủ công — không tự phân tích từ đầu. Năng suất xác nhận thật: ~100 trường/1 MD = 0,08 MH/trường."
+    },
+    "CDC_OQ": {
+      "mh": 0.08,
+      "unit": "1 bảng CDC chưa rõ (AI gợi ý, người xác nhận)",
+      "why": "Cùng phương pháp AI gợi ý + người xác nhận như PII_F — AI gợi ý theo 3 bước (đọc tên trường → đọc dữ liệu mẫu → đối chiếu danh sách PII trong governance), con người chỉ xác nhận thủ công — không tự phân tích từ đầu. Năng suất xác nhận thật: ~100 trường/1 MD = 0,08 MH/trường."
+    },
+    "GRAIN": {
+      "mh": 1.5,
+      "unit": "1 bảng grain nhiều dòng",
+      "why": "thiết kế công thức OBJECT_KEY"
+    },
+    "ENUM": {
+      "mh": 0.1,
+      "unit": "1 cột enum",
+      "why": "DOM-CUSTOM + liệt kê giá trị mã"
+    },
+    "FK": {
+      "mh": 0.05,
+      "unit": "1 FK",
+      "why": "RI 1.8 + ảnh hưởng ERD"
+    },
+    "FIRST": {
+      "mh": 1.0,
+      "unit": "1 bảng đầu nhóm",
+      "why": "dựng chuẩn cho nhóm — không hưởng reuse"
+    },
+    "ROUND": {
+      "mh": 1.0,
+      "unit": "1 vòng xác nhận vượt chuẩn",
+      "why": "mức chuẩn = 1 vòng"
+    },
+    "EXPORT": {
+      "mh": 0.1,
+      "unit": "1 bản xuất ngoài md",
+      "why": "xlsx / docx"
+    },
+    "SOFT_RULE": {
+      "mh": 0.6,
+      "unit": "1 soft rule Silver",
+      "why": "cần Owner/Steward xác nhận (05-silver §1)"
+    },
+    "NEST_DEEP": {
+      "mh": 2.0,
+      "unit": "1 bảng mức 3, lồng >5 cấp",
+      "why": "thêm công làm phẳng/map từng cấp lồng khi cấu trúc tự mô tả nhưng sâu — chưa hiệu chỉnh trên giờ thực"
+    }
+  },
+  "nen": {
+    "KHUNG": {
+      "mh": 160,
+      "ten": "Bộ quy ước thiết kế 3 tầng (SSOT)"
+    },
+    "PPL": {
+      "mh": 80,
+      "ten": "Phương pháp luận (sổ tay · nhật ký · thảo luận)"
+    },
+    "PII_FW": {
+      "mh": 40,
+      "ten": "Khung PII / MSK / ENC / AC / ANON / PSEU"
+    },
+    "QUYDOI": {
+      "mh": 24,
+      "ten": "Bảng quy đổi kiểu nguồn → Oracle 26ai"
+    },
+    "GOV": {
+      "mh": 40,
+      "ten": "Đối chiếu quy định quản trị dữ liệu của khách"
+    },
+    "GLOSS": {
+      "mh": 32,
+      "ten": "Business glossary / từ điển nghiệp vụ"
+    },
+    "HOP": {
+      "mh": 16,
+      "ten": "Họp / giao ban / weekly report (1 tháng)",
+      "per": "tháng"
+    }
+  },
+  "nghiem_thu": {
+    "ks_ht": "File tổng quan hệ thống đủ 15 mục · danh sách schema/bảng có xác nhận của DBA hoặc chủ hệ thống · mọi mục thiếu dữ kiện đều có mã vấn đề mở, không bỏ trắng",
+    "ks_bang": "Từ điển cột đủ 16 cột · không ô trống (thiếu thì ghi N/A kèm vấn đề mở) · có giá trị mã và thông tin CDC/SCD",
+    "tq_ng": "Workbook đủ 11 sheet SYS·ACC·DB·SCH·SRC·TRM·CDC·GRP·INV·OOS·OQ · sheet INV đủ 23 cột · danh sách nhóm nghiệp vụ khớp DDL",
+    "brz": "Đủ 4 khối META·COL·CDC·LOAD · COL đủ 30 cột không ô trống · có 3 cột kỹ thuật BR_CREATE_TIME·BR_LAST_UPDATE_TIME·BR_OPERATION · cột PII có đủ MSK/ENC/AC/Classification · kiểu dữ liệu đã quy đổi sang Oracle đích · RIÊNG mã BRZ_4_*: phải có biên bản đối chiếu lại ý nghĩa field với đội nguồn trước khi coi là nghiệm thu (xem cờ risk ở `riskFlags()`)",
+    "slv": "Có link file Bronze nguồn · business key và grain xác định · mapping từng cột kèm công thức làm sạch · luật DQ/CDE liên quan · soft rule có xác nhận của Owner/Steward · vấn đề mở đánh mã SLV-{DOMAIN}-OQ-NNN",
+    "gld_dim": "Grain và loại SCD xác định · nguồn Silver có link · mapping thuộc tính đầy đủ · kỳ báo cáo và retention mart ghi rõ",
+    "gld_fct": "Grain xác định và được BI xác nhận · danh sách measure kèm công thức tổng hợp · dimension liên kết có khoá · kỳ báo cáo ghi rõ",
+    "gld_dm": "Danh sách chỉ tiêu kèm công thức · nguồn Silver/Gold có link · use case BI và người dùng đích ghi rõ",
+    "gld_kpi": "Mỗi chỉ tiêu có định nghĩa nghiệp vụ · công thức · grain · bộ lọc · kỳ tính · nguồn dữ liệu · cách đối soát",
+    "erd": "ERD phủ hết bảng trong nhóm · quan hệ có căn cứ từ FK hoặc xác nhận nghiệp vụ · ký hiệu theo quy ước dự án",
+    "logic": "Luồng đủ bước từ nguồn tới đích · điều kiện lọc và tham số ghi rõ · công thức khoá và quy tắc trùng lặp · xử lý lỗi",
+    "map": "Mọi cột đích có nguồn tương ứng hoặc ghi rõ N/A kèm lý do · không dòng nào bỏ trắng · có mẫu dữ liệu đối chiếu",
+    "bc_bg": "Bản md và bản xuất (xlsx/docx) khớp nhau · có số phiên bản · có biên bản review và người phê duyệt",
+    "gov": "Tài liệu quy trình/quy tắc/biểu mẫu đã bàn giao đúng độ sâu đã khai báo (Điều 4): mức `_2` (thiết kế) phải có bản do mình chủ trì soạn, có người phê duyệt của khách; mức `_1` (tham gia) phải có biên bản phiên làm việc + ý kiến đã gửi, KHÔNG cam kết khách ban hành · dòng khai báo ngoài phạm vi phải giữ lại trong hồ sơ với cột `Ngoài PV` đánh dấu, không xoá",
+    "pii_bang": "Mỗi bảng trong phạm vi có: cấp mật mức bảng đã chọn (không để \"Chưa rõ\") · nhóm quyền truy cập xác định · chính sách lưu giữ ghi rõ · số field PII đã thống kê và khớp với adder `PII_F` của dòng Bronze tương ứng",
+    "ho_tro": "Phản hồi trong SLA đã thoả thuận (kênh + thời gian phản hồi ghi rõ trong SOW) · làm rõ đặc tả khi DE phát hiện sai lệch với mô hình · GHI NHẬN câu hỏi/quyết định vào vấn đề mở hoặc đổi đặc tả — không chịu trách nhiệm pipeline chạy đúng trên production (xem tiêu chí chung #4)",
+    "dq": "Mỗi dòng CDC_OQ tách riêng khớp đúng số lượng adder CDC_OQ của dòng Bronze/Silver/Gold gốc tương ứng (không cộng trùng, không thiếu) · có danh sách vấn đề mở (OQ) kèm mã, không để trống khi chưa xác nhận được quy tắc đối soát",
+    "dcat": "GIẢ ĐỊNH — hạng mục mới bổ sung theo yêu cầu khách, chưa hiệu chỉnh trên giờ thực: mỗi nguồn có danh sách tài sản dữ liệu (bảng/field chính) kèm mô tả nghiệp vụ, phân loại, chủ sở hữu — xác nhận lại tiêu chí nghiệm thu cụ thể khi có yêu cầu chi tiết",
+    "gloss": "Mỗi nguồn có danh sách thuật ngữ nghiệp vụ riêng (tên viết tắt, giải thích, bảng dùng) kèm vấn đề mở nếu chưa xác nhận với SME · dòng GIẢ ĐỊNH (GLOSS_SRC1) chưa hiệu chỉnh trên giờ thực, xác nhận lại tiêu chí khi có yêu cầu chi tiết cho từng nguồn."
+  },
+  "nghiem_thu_chung": [
+    "Tài liệu có số phiên bản và ngày cập nhật",
+    "Mọi dữ kiện thiếu đều có mã vấn đề mở, không suy đoán",
+    "Đã qua số vòng review đã thoả thuận (mức chuẩn 1 vòng)",
+    "Đặc tả được nghiệm thu là đặc tả — không đồng nghĩa pipeline đã chạy đúng trên hệ thống thật"
+  ],
+  "auto_pct_goi_y": {
+    "1": 0.65,
+    "2": 0.3,
+    "3": 0.45,
+    "4": 0.05,
+    "note": "Tỷ lệ sinh được bằng skill/script. Công khai với khách → chi phí tạo ra mức giảm nằm ở hạng mục đầu nhóm (adder FIRST, không hưởng giảm), không tách riêng một dòng nền. Mức 3 và 4 KHÁC NHAU (từ v2.6): mức 3 tự mô tả (JSON/XML) → script đọc được cấu trúc dù không tài liệu, auto cao gần bằng mức 1; mức 4 không tự mô tả (EDIFACT/TXT định vị theo code) → không script hoá được bước đọc cấu trúc, auto gần 0. Band lớn/phức tạp (vd cấm copy template) vẫn có thể đặt thấp hơn gợi ý ở từng dòng cụ thể."
+  },
+  "bands": {
+    "field": [
+      {
+        "code": 1,
+        "max": 10
+      },
+      {
+        "code": 2,
+        "max": 25
+      },
+      {
+        "code": 3,
+        "max": 60
+      },
+      {
+        "code": 4,
+        "max": 120
+      },
+      {
+        "code": 5,
+        "max": null
+      }
+    ],
+    "note": "Hiệu chỉnh trên phân bố thật 718 bảng: p50=14 · p75=28 · p90=59 · max=364"
+  }
+}

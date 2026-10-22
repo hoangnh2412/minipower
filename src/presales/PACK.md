@@ -10,7 +10,7 @@ roles: [presales]
 stage: presales
 repo: any
 consumes: ["H0 khảo sát", "SOL-* lite"]
-produces: ["estimate-v1.0.json", "quotation"]
+produces: ["estimate-v1.0.json", "estimate-dmba-v1.0.json", "quotation", "quotation.xlsx/md/html"]
 handoff-in:  [H0]
 handoff-out: []
 memory: —
