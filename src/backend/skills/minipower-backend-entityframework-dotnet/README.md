@@ -93,6 +93,7 @@ foreach (var tenant in tenants)
 | Mỗi tenant một DB | [patterns/separate-tenant-db/SKILL.md](./patterns/separate-tenant-db/SKILL.md) |
 | Master + pool + DB riêng | [patterns/hybrid/SKILL.md](./patterns/hybrid/SKILL.md) |
 | Resolver tùy biến | [patterns/custom-di/SKILL.md](./patterns/custom-di/SKILL.md) |
+| Auto migrate khi start Host | [patterns/auto-migrate/SKILL.md](./patterns/auto-migrate/SKILL.md) |
 | Setup chung | [reference/setup.md](./reference/setup.md) |
 
 ## Sample repo
@@ -100,6 +101,7 @@ foreach (var tenant in tenants)
 | File | Nội dung |
 |------|----------|
 | `Sample/HostApplicationBuilderExtension.cs` | Master + tenant DbContext |
+| `Sample/Program.cs` (`EnsureMigrateDb`, `EnsureMigrateTemplateDb`) | Auto migrate mẫu |
 | `Sample/Controllers/MultitenancyEfTestController.cs` | HTTP + background job |
 
 ## Liên quan

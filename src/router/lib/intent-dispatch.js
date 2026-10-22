@@ -42,6 +42,7 @@ export const INTENT_RULES = [
   { skill: "minipower-backend-authentication-dotnet", keys: ["jwt", "api key", "cognito", "bearer"] },
   { skill: "minipower-backend-caching-dotnet", keys: ["cache redis", "caching", "thêm cache"] },
   { skill: "minipower-backend-entityframework-dotnet", keys: ["entity framework", "ef core", "dbcontext"] },
+  { skill: "minipower-backend-entityframework-dotnet-auto-migrate", keys: ["auto migrate", "automigrate", "ensuremigratedb", "connectionstrings:automigrate"] },
   { skill: "minipower-backend-swashbuckle-dotnet", keys: ["swagger", "swashbuckle"] },
   { skill: "minipower-backend-healthcheck-dotnet", keys: ["healthcheck", "/health"] },
   { skill: "minipower-backend-telemetry-dotnet", keys: ["otel", "otlp", "telemetry"] },

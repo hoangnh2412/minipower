@@ -85,12 +85,15 @@ Placeholder `AppDbContext` khi dùng interceptor (connection thật từ Master 
 
 ## Migrate
 
+Chi tiết + quy tắc `ITenantEntity`: [patterns/auto-migrate/SKILL.md](../patterns/auto-migrate/SKILL.md).
+
 ```csharp
 app.EnsureMigrateDb<IMasterUnitOfWork>();
-app.EnsureMigrateDb<IAppUnitOfWork>();
+app.EnsureMigrateTemplateDb<TenantDbContext>((config, options) =>
+    options.UseNpgsql(config.GetConnectionString("TenantDbContext")!));
 ```
 
-`ConnectionStrings:AutoMigrate` = `true`. Dedicated/hybrid: migrate từng DB tenant ngoài placeholder.
+`ConnectionStrings:AutoMigrate` = `true`. Context **không** có `ITenantEntity` (Identity, …): thêm `EnsureMigrateDb<TUnitOfWork>` cho UoW của context đó — **không** `EnsureMigrateTemplateDb`.
 
 ## API tham chiếu
 
@@ -99,7 +102,8 @@ app.EnsureMigrateDb<IAppUnitOfWork>();
 | `AddEntityFramework()` | Repository + multitenancy |
 | `AddCoreDbContext<TDb>(configure)` | Connection cố định |
 | `AddCoreDbContext<TDb, TResolver>(configure)` | Per-tenant connection |
-| `EnsureMigrateDb<TUnitOfWork>(app)` | Auto migrate |
+| `EnsureMigrateDb<TUnitOfWork>(app)` | Auto migrate qua UoW |
+| `EnsureMigrateTemplateDb<TDb>(app, configure)` | Template tenant DB — **chỉ** khi model có `ITenantEntity` |
 | `SwitchDbContextAsync(tenantId)` | Job: pin tenant + connection scope |
 
 **Không** truyền `HeaderTenantIdResolver` vào `AddCoreDbContext` — đó là `ITenantIdResolver`.
