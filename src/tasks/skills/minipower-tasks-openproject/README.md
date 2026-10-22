@@ -12,6 +12,10 @@ Persona (tuỳ phiên): [agents/minipower-tasks-openproject.md](../../agents/min
 | L2 | Bảng đề xuất | Chờ một lần OK |
 | L3 | Tool ghi **nếu catalog có** | Chỉ dòng còn tick |
 
+## WP loại gì, log giờ đâu
+
+Luật phân rã việc là của `pm/` ([work-breakdown](../../../pm/skills/minipower-pm-plan/reference/work-breakdown.md)); [reference/openproject-mapping.md](reference/openproject-mapping.md) chỉ ánh xạ sang type / status / parent / time entry của OpenProject. Convention riêng của dự án (custom field, project id) nằm ở `docs/00-governance/` của dự án.
+
 ## Cài MCP (máy người)
 
 Skill [workflows/connect.md](workflows/connect.md) hướng dẫn khi MCP chưa sẵn sàng.

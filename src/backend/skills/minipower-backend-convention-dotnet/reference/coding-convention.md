@@ -30,6 +30,8 @@ Tuân thủ các mục dưới đây khi chỉnh sửa hoặc tạo mã C# trong
 
 ## 2. Tổ chức class
 
+**Một type công khai, một file.** Tên file khớp tên type (`Invoice.cs` → `Invoice`). Handler, command, DTO, entity, repository interface, error code class — mỗi cái một file; không gom `CreateInvoiceCommand` + `CreateInvoiceHandler`, hay hai DTO vào `Dtos.cs` chỉ vì "cùng feature". Ngoại lệ duy nhất: **cùng họ generic** (`IEntity` và `IEntity<TKey>` trong `IEntity.cs`). Type `private` / `file`-scoped lồng trong type cha được phép. **[máy]** StyleCop `SA1402` (nhiều type một file) + `SA1649` (tên file khác tên type) — mức `warning` trong [templates/editorconfig](../templates/editorconfig).
+
 Thứ tự gợi ý trong một class:
 
 1. Constants  
@@ -389,8 +391,9 @@ return bar;
 
 ### 9.4 Thời gian & múi giờ
 
-- “Một thời điểm trên timeline”: ưu tiên `DateTimeOffset` (hoặc `Instant`/thư viện chuyên dụng); lưu/trao đổi thường chuẩn hóa **UTC**.
-- Tránh dựa vào `DateTime` không rõ `Kind`; khi parse/format có văn hóa, chỉ định rõ `CultureInfo` / `IFormatProvider`.
+- Property map cột datetime: **`DateTime`, quy ước UTC+0** (`DateTimeKind.Utc`). DB lưu datetime **không timezone** nên không dùng `DateTimeOffset` cho các property đó — offset không có chỗ để lưu (ADR-041 QĐ-7). Múi giờ nghiệp vụ, nếu nghiệp vụ cần, là cột / field riêng (`issued_timezone`, định danh IANA).
+- Domain **không** gọi `DateTime.Now` — giờ máy, lệch theo server. Thời điểm đi vào Domain từ ngoài hoặc qua abstraction clock; Infrastructure / Host lấy `DateTime.UtcNow`.
+- Parse / format có văn hoá: chỉ định rõ `CultureInfo` / `IFormatProvider`. Literal thời điểm trong test, seed và SQL mẫu là UTC+0, không offset.
 
 ### 9.5 So sánh chuỗi
 
@@ -448,3 +451,47 @@ public sealed class OrderQueryService(IOrderRepository repository, ILogger<Order
 - **`IOptions<T>` / `IOptionsSnapshot<T>`** cho cấu hình typed; validate option lúc startup (`ValidateOnStart`, `DataAnnotations`) khi phù hợp.
 - **Không** tin input client: validate độ dài, phạm vi, format; parameterized query / EF (tránh nối SQL thủ công).
 - **Header bảo mật**, HTTPS, authentication/authorization middleware — cấu hình ở host, không rải logic lệch trong từng action nếu có thể gom filter/policy.
+
+---
+
+## 13. Jarvis — audit, tenant và phiên làm việc
+
+Nguồn chân lý: `Jarvis.DDD.Domain` (`Entities/`, `Services/`, `DataStorages/`). EF của Jarvis đọc **marker interface** trên entity và đăng ký DI cho tenant / user — **không** tự chế interface song song (`ICreatedInfo`, `IMyTenant`), **không** đọc `HttpContext` trong handler để lấy user / tenant nghiệp vụ.
+
+| Nhu cầu | Dùng (Jarvis) | Ghi chú |
+|---------|---------------|---------|
+| Audit tạo | `ILogCreatedEntity` — `CreatedAt`, `CreatedBy` | Không đặt `CreatedDate` / `CreatorId` song song |
+| Audit sửa | `ILogUpdatedEntity` — `UpdatedAt`, `UpdatedBy` | Cùng quy ước với tạo |
+| Audit xoá mềm | `ILogDeletedEntity<T>` — `DeletedAt`, `DeletedBy`, `DeletedId` | `T` = kiểu khoá xoá logic, thường trùng kiểu `Id` |
+| Dòng dữ liệu theo tenant | `ITenantEntity` — `TenantId` | Bảng nghiệp vụ tenant-scoped; chi tiết [entityframework](../../minipower-backend-entityframework-dotnet/SKILL.md) |
+| Registry tenant | `ITenantManagementEntity` — `ConnectionString` | Master / catalog tenant |
+| Setting theo tenant | `ISettingEntity` | Kế thừa `ITenantEntity` |
+| Resolve tenant id | `ITenantIdResolver` · `ITenantIdResolverFactory` | Header → claim → query → host |
+| **Tenant hiện tại** | `ICurrentTenant<TTenant>` — `GetIdAsync`, `GetAsync`, `Change` | Handler / domain service inject đây |
+| Ambient tenant (job, scope) | `ICurrentTenantAccessor` — `TenantId`, `BeginScope` | Worker set scope trước khi gọi handler |
+| **User hiện tại** | `ICurrentUser<TUser>` — `GetAsync` | Không parse claim thủ công trong Application |
+| Profile user / tenant | `ICurrentUserStore<TUser>` · `ICurrentTenantStore<TTenant>` | Host implement store |
+
+| Quy tắc | Chi tiết |
+|---------|----------|
+| Mặc định | Entity map cột audit / tenant đúng contract marker Jarvis để interceptor EF hoạt động |
+| Lấy tenant / user trong code | `ICurrentTenant<T>` / `ICurrentUser<T>` — không `IHttpContextAccessor` + string claim trong handler |
+| Tenant từ client | **Không** nhận / filter `TenantId` từ body hay query khi request đã authenticated và Jarvis đã resolve tenant phiên |
+| Ngoại lệ | Marker riêng hoặc bypass Jarvis chỉ khi đã chứng minh Jarvis không đủ và **người** duyệt (ghi DEC) |
+
+Phần *file đặt ở đâu* của các marker này thuộc [minipower-backend-architecture-dotnet](../../minipower-backend-architecture-dotnet/SKILL.md).
+
+---
+
+## 14. Mã lỗi nghiệp vụ — `IErrorCode`
+
+| Việc | Quy tắc |
+|------|---------|
+| Khai báo | Class implement `IErrorCode` (`Jarvis.DDD.Domain.Shared.ExceptionHandling`), hằng `const string`, `[Display(Description = "...")]`. Namespace `{Product}.ErrorCodes`. Mẫu: `Sample/ErrorCodes/SampleErrorCode.cs` trong repo Jarvis |
+| Ném | `BusinessException` kèm mã đã khai. Không ném chuỗi tự do thay mã; không `throw new Exception("...")` cho lỗi nghiệp vụ (mục 3) |
+| Giá trị `code` | Token mà API và UI dùng chung, theo họ: `{MOD}-VAL-NNN` (đầu vào không hợp lệ) · `{MOD}-BR-NN` (vi phạm business rule) · `{MOD}-API-NNN` (từ chối ở use case) · `SYS-NNN` (hệ thống, mất kết nối, không có quyền). Dự án thêm họ riêng cho đối tác ngoài khi cần |
+| Message | Tiếng Việt, câu đầy đủ, gắn với mã. Chi tiết kỹ thuật ghi log, không thay message |
+| Bọc lỗi kỹ thuật | `catch (Exception ex) { log kèm id / dữ liệu lỗi; throw new BusinessException(mã, message, ex); }` — stack gốc nằm ở `InnerException`. Không `throw new BusinessException(...)` tại `catch` mà bỏ inner |
+| Ra dây | API chỉ trả `code` + `message` (hình dạng body theo `BaseResponse` — [swashbuckle](../../minipower-backend-swashbuckle-dotnet/SKILL.md)); UI bọc `[code] message`. Không stack, không message exception của framework |
+
+Mã lỗi không phải chỗ để `NoWarn`: hằng chưa khai thì khai thêm, không nối chuỗi tạm.

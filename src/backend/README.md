@@ -88,6 +88,18 @@ Thiết lập observability OTEL → Prometheus → Grafana → alert cho servic
 
 Bản đồ Minipower: [README.md](../../README.md).
 
+## Dự án đích dùng thế nào
+
+Mẫu đã chạy thật (dự án e-invoice, 2026-10 — ADR-041 QĐ-9): dự án giữ convention **riêng** trong `docs/00-governance/` (ví dụ tên sản phẩm, họ mã lỗi đối tác, ngưỡng warning) và trỏ về skill minipower cho phần chung:
+
+| Việc ở dự án | Skill | Ghi chú |
+|---|---|---|
+| Viết / sửa `.cs` | `minipower-backend-convention-dotnet` | analyzer + StyleCop (2 rule) + `dotnet format` gác phần cứng |
+| Tạo file mới, thêm tính năng | `minipower-backend-architecture-dotnet` › `add-feature` | `ArchitectureTests` R1–R7 gác layer |
+| Trước khi **người đồng ý commit** diff có `.cs` | `minipower-backend-review-dotnet` trên diff sắp commit | Issue blocker → dừng commit, chờ xác nhận. Đây là **quy ước của dự án** viết trong `AGENTS.md` của họ — minipower không có hook ép |
+
+Kiểu thời điểm, marker audit / tenant, `IErrorCode`: convention mục 9.4, 13, 14 — chung cho mọi dự án Jarvis, dự án không viết lại.
+
 ## Publish skill sang repo consumer
 
 **Nguồn chính (source of truth):** thư mục `backend/skills/` trong repo **minipower** (repo này). Repo product (`{product}-backend`) **không** fork/sửa skill — chỉ nhận bản cập nhật từ minipower hoặc PR upstream.

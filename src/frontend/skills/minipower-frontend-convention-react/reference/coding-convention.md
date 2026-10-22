@@ -57,6 +57,7 @@ Toàn văn quy ước. Không load mặc định — mở khi cần tra một m�
 - Mọi thao tác ghi (lưu, xoá, đổi trạng thái) đi qua `handleAction` — giữ thứ tự `before → onSubmit → onSuccess của page → success → complete` và cho host thay API bằng `callback`.
 - Sau `handleAction`: `if (outcome.status === 'cancelled') return` **trước** toast thành công.
 - `catch (error)` ⇒ `notify.error(getErrorMessage(error, messages.x))` — fallback là câu tiếng Việt có nghĩa, không nuốt lỗi im lặng.
+- Thông báo lỗi người dùng thấy mang **mã**: dạng `[code] message`, `code` là token backend trả (họ `{MOD}-VAL-` · `{MOD}-BR-` · `{MOD}-API-` · `SYS-`) — người dùng đọc được mã để báo hỗ trợ, QA trace được về BR / API. Không hiện `error.message` thô của framework, không `alert()`. Một thao tác một toast — batch fail không bắn N toast.
 - Interceptor của kit reject bằng **body lỗi** (không phải AxiosError) — đừng đọc `error.response.status` trong catch; xem [api](../../minipower-frontend-api-react/SKILL.md).
 - Nút submit `disabled={isSubmitting}` — chặn bấm hai lần.
 
@@ -70,6 +71,7 @@ Toàn văn quy ước. Không load mặc định — mở khi cần tra một m�
 - Icon `lucide-react`, cỡ bằng class `size-4`; icon trang trí `aria-hidden`; nút chỉ có icon phải có `aria-label`.
 - Popup dùng Portal: lớp z đặt trên `Positioner` (`z-[120]` select, `z-[200]` popover) để nổi trên Dialog (`z-[110]`).
 - `<form noValidate>` — Zod lo validate, tắt bong bóng HTML5.
+- Bảng dữ liệu: cột **số** (tiền, số lượng, tỷ giá, %, STT) căn **phải** + class `tabular-nums` để số thẳng hàng; cột **chữ** (tên, mô tả, trạng thái) căn **trái**; header cột cùng quy tắc với ô.
 
 ## 7. Form
 

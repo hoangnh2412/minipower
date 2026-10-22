@@ -68,6 +68,8 @@ Dữ liệu & hiển thị:
 * ngày không giờ đi qua `Date` + `toISOString()` ⇒ lệch một ngày (+7); `toLocaleString()` không chỉ định locale
 * số tiền / thập phân làm tròn ở FE khác BE
 * `key` là index trong danh sách thêm / xoá / sắp xếp được
+* toast / inline hiện `error.message` thô hoặc câu không có mã — người dùng không báo được lỗi gì, QA không trace về BR / API (`[code] message`)
+* cột tiền / số lượng / % căn trái hoặc thiếu `tabular-nums` — số không thẳng hàng, đọc nhầm hàng nghìn
 
 Form:
 

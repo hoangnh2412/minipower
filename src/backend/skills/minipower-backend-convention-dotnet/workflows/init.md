@@ -55,6 +55,8 @@ dotnet format --verify-no-changes --severity warn
 
 Còn nhiều cảnh báo: **giữ nguyên** `$(WarningsAsErrors)` mặc định (IDE1006, CA2200, CS86xx), dọn dần rồi mới thêm mã rule mới vào danh sách.
 
+`SA1402` / `SA1649` (một type một file) ở mức `warning`: đếm riêng — codebase cũ thường nhiều; tách file là refactor cơ học, làm thành commit riêng như bước 3.
+
 ## Bước 6 — CI
 
 Thêm 2 lệnh bước 5 vào pipeline. Đây là chỗ convention thành điều kiện cứng — trước bước này mọi thứ vẫn chỉ là lời.

@@ -73,6 +73,10 @@ Publish sang repo product (`{product}-frontend/.opencode/skills/`): cùng cách 
 | Test strategy / autotest | [qa/](../qa/README.md) |
 | Sửa chính kit `@platform/core` | Repo kit — skill ở đây chỉ **dùng** kit; thiếu điểm mở rộng thì đề xuất lên kit, không fork |
 
+## Dự án đích dùng thế nào
+
+Dự án giữ convention UI / frontend **riêng** trong `docs/00-governance/` (màu thương hiệu, phím tắt, pattern màn hình sản phẩm) và trỏ về skill minipower cho phần chung: `[code] message`, số căn phải, một component chính một file, strict `tsc` + ESLint R1–R7 + M1. Review trước PR: `minipower-frontend-review-react` trên diff — mẫu như backend (ADR-041 QĐ-9).
+
 ## Prompt nhanh
 
 ```text

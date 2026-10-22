@@ -16,7 +16,7 @@ Skill cắt ngang mọi skill `minipower-backend-*-dotnet`: code sinh ra hoặc 
 | **convention** (skill này) | **Code trong file viết thế nào?** | `dotnet build` + `dotnet format` — analyzer |
 | **architecture** | **File nằm ở đâu? Reference thế nào?** | `dotnet test -c Debug` — architecture test |
 
-Toàn văn quy ước (12 mục): [reference/coding-convention.md](reference/coding-convention.md). Hướng dẫn người: [README.md](README.md).
+Toàn văn quy ước (14 mục): [reference/coding-convention.md](reference/coding-convention.md). Hướng dẫn người: [README.md](README.md).
 
 ## Khi nào dùng workflow nào
 
@@ -31,8 +31,8 @@ Toàn văn quy ước (12 mục): [reference/coding-convention.md](reference/cod
 
 | Tầng | Nội dung | Ai gác |
 |---|---|---|
-| **Cứng** — build/CI FAIL được | Đặt tên (mục 1) · nullable (9.1) · `throw ex;` (3) · `.Result`/`.Wait()` (4) · culture & so sánh chuỗi (9.4/9.5) · logging template (9.2) · dispose (9.3) | `.editorconfig` + analyzer + `dotnet format` |
-| **Mềm** — advisory, người quyết | Tổ chức class (2) · thiết kế exception (3) · LINQ readability (5) · DI lifetime (6) · refactoring (7) · code smells (8) · test (11) | Agent nhắc khi viết code · [review-dotnet](../minipower-backend-review-dotnet/SKILL.md) khi review PR |
+| **Cứng** — build/CI FAIL được | Đặt tên (mục 1) · một type một file (2, StyleCop) · nullable (9.1) · `throw ex;` (3) · `.Result`/`.Wait()` (4) · culture & so sánh chuỗi (9.4/9.5) · logging template (9.2) · dispose (9.3) | `.editorconfig` + analyzer + `dotnet format` |
+| **Mềm** — advisory, người quyết | Tổ chức class (2) · thiết kế exception (3) · LINQ readability (5) · DI lifetime (6) · refactoring (7) · code smells (8) · test (11) · marker Jarvis (13) · mã lỗi `IErrorCode` (14) | Agent nhắc khi viết code · [review-dotnet](../minipower-backend-review-dotnet/SKILL.md) khi review PR |
 
 Rule máy kiểm được thì **đừng nhắc bằng lời** — để analyzer báo. Rule máy không kiểm được thì **đừng viết "bắt buộc"** — nêu lý do, người quyết.
 
@@ -46,13 +46,16 @@ Phần mềm, hay quên nhất:
 - **Điều kiện tách dòng**: không nhồi nhiều `&&`/`||` hay ternary lồng một dòng; extract biến `bool` có tên (mục 7.6).
 - **DI lifetime**: Singleton stateless · Scoped theo request (`DbContext`, repository) · tránh Service Locator (mục 6).
 - **Secret không hard-code**: User Secrets / env / secret manager; `IOptions<T>` cho config typed (mục 12).
+- **Thời điểm**: property map cột datetime là `DateTime` UTC+0, **không** `DateTimeOffset`; Domain không `DateTime.Now` (mục 9.4).
+- **Audit / tenant / user qua marker Jarvis**: `ILogCreatedEntity` · `ITenantEntity` · `ICurrentTenant<T>` · `ICurrentUser<T>` — không tự chế interface song song, không đọc `HttpContext` trong handler, không nhận tenant từ body khi phiên đã có (mục 13).
+- **Lỗi nghiệp vụ ném bằng mã**: `BusinessException` + `IErrorCode` đã khai trong `{Product}.ErrorCodes`; `code` theo họ `{MOD}-VAL-` · `{MOD}-BR-` · `{MOD}-API-` · `SYS-` là token API và UI dùng chung (mục 14).
 
 ## Templates
 
 | Template | Đích trong repo product | Nhiệm vụ |
 |---|---|---|
-| [templates/editorconfig](templates/editorconfig) | `.editorconfig` (root) | Naming mục 1 → `error`; severity CA/IDE ánh xạ từng mục reference |
-| [templates/Directory.Build.props.xml](templates/Directory.Build.props.xml) | `src/Directory.Build.props` | `Nullable=enable`, `EnableNETAnalyzers`, `EnforceCodeStyleInBuild`, `WarningsAsErrors` chọn lọc |
+| [templates/editorconfig](templates/editorconfig) | `.editorconfig` (root) | Naming mục 1 → `error`; StyleCop `SA1402` + `SA1649` → `warning` (mục 2), mọi category StyleCop khác tắt; severity CA/IDE ánh xạ từng mục reference |
+| [templates/Directory.Build.props.xml](templates/Directory.Build.props.xml) | `src/Directory.Build.props` | `Nullable=enable`, `EnableNETAnalyzers`, `EnforceCodeStyleInBuild`, `WarningsAsErrors` chọn lọc, `PackageReference` StyleCop.Analyzers (chỉ 2 rule mục 2) |
 
 **Không** bật `TreatWarningsAsErrors=true` toàn cục trên codebase có sẵn — build đỏ vì code cũ là phạt lịch sử, không phải chặn lỗi mới. Nâng dần bằng cách thêm mã rule vào `$(WarningsAsErrors)`.
 

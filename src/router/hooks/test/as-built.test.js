@@ -77,3 +77,44 @@ test("#9 — docs/06-changes/incident/ có chỗ đứng + trỏ đủ 2 templat
     assert.ok(existsSync(join(ROUTER, "templates", tpl)), `thiếu templates/${tpl}`)
   }
 })
+
+
+// ─── ADR-042 — phương pháp đọc code + pattern theo stack ──────────────────────
+const AS_BUILT = join(SRC, "architecture", "skills", "minipower-architecture-as-built")
+
+test("ADR-042 — reference/reading-method.md + TPL-flow-map.tpl tồn tại, SKILL trỏ tới", () => {
+  assert.ok(existsSync(join(AS_BUILT, "reference", "reading-method.md")), "thiếu reference/reading-method.md")
+  assert.ok(existsSync(join(AS_BUILT, "templates", "TPL-flow-map.tpl")), "thiếu templates/TPL-flow-map.tpl")
+  assert.match(SKILL, /reference\/reading-method\.md/, "SKILL phải trỏ reading-method")
+  assert.match(SKILL, /TPL-flow-map\.tpl/, "SKILL phải trỏ Flow Map")
+})
+
+test("ADR-042 QĐ-4 — bốn nhãn bằng chứng + mâu thuẫn dẫn xuất", () => {
+  for (const label of ["Observed", "Documented", "Inferred", "Unknown"]) {
+    assert.match(SKILL, new RegExp(`\\*\\*${label}\\*\\*`), `SKILL thiếu nhãn ${label}`)
+  }
+  const method = readFileSync(join(AS_BUILT, "reference", "reading-method.md"), "utf8")
+  assert.match(method, /\[Suy luận\]/)
+  assert.match(method, /\[Chưa xác minh\]/)
+  assert.match(method, /quy tắc dẫn xuất/i, "mâu thuẫn phải là quy tắc dẫn xuất")
+})
+
+test("ADR-042 QĐ-3 — 4 pattern theo stack, name bắt đầu bằng tên lá cha, có description", () => {
+  const stacks = ["dotnet", "java", "react", "flutter"]
+  for (const st of stacks) {
+    const p = join(AS_BUILT, "patterns", st, "SKILL.md")
+    assert.ok(existsSync(p), `thiếu patterns/${st}/SKILL.md`)
+    const fm = (readFileSync(p, "utf8").match(/^---\r?\n([\s\S]*?)\r?\n---/) || [])[1] || ""
+    const name = (fm.match(/^name:\s*(\S+)/m) || [])[1]
+    assert.equal(name, `minipower-architecture-as-built-${st}`, `${st}: name lệch`)
+    assert.ok(name.length <= 64)
+    assert.match(fm, /^description:\s*\S/m, `${st}: thiếu description`)
+    assert.match(readFileSync(p, "utf8"), /reading-method\.md/, `${st}: pattern phải trỏ về phương pháp chung`)
+  }
+  assert.equal(readdirSync(join(AS_BUILT, "patterns")).sort().join(","), stacks.sort().join(","), "đúng 4 pattern")
+})
+
+test("ADR-042 QĐ-7 — Pass 1 chỉ ra bản đồ, không sinh DOC", () => {
+  assert.match(SKILL, /Pass 1/, "SKILL phải nêu ranh giới Pass 1")
+  assert.match(SKILL, /không sinh DOC/i)
+})

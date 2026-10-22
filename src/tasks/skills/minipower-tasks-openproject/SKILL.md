@@ -16,6 +16,7 @@ SOP MCP mặt **`tasks`**, provider OpenProject. Wrap tool, không copy schema A
 | MCP chưa có / lỗi / `needsAuth` | [workflows/connect.md](workflows/connect.md) |
 | Tìm / lọc / tóm tắt / WP #n / project | [workflows/l1-read.md](workflows/l1-read.md) |
 | Đề xuất tạo / sửa WP | [workflows/l2-preview.md](workflows/l2-preview.md) → OK → [workflows/l3-write.md](workflows/l3-write.md) |
+| Phân vân loại WP / parent / log giờ vào đâu | [reference/openproject-mapping.md](reference/openproject-mapping.md) ← luật gốc [pm-plan › work-breakdown](../../../pm/skills/minipower-pm-plan/reference/work-breakdown.md) |
 
 **Không dùng** cho Outline, GitLab MR, Lark, sửa `docs/` FR.
 
@@ -27,6 +28,7 @@ SOP MCP mặt **`tasks`**, provider OpenProject. Wrap tool, không copy schema A
 - Tìm WP = L1, không skill riêng.
 - L3 chỉ sau **một** bảng L2 đã OK. Không có tool ghi → L3 = hướng dẫn tay trên OpenProject.
 - Map `{MOD}-FR-` / `T-NNN` trong bảng; **không** copy body FR vào mô tả WP.
+- `type` / `parent` / chỗ log giờ theo [reference/openproject-mapping.md](reference/openproject-mapping.md): subject là danh từ sản phẩm, hoạt động (viết code, test, review, họp) không thành WP, Epic / Summary task không log spent.
 - Hỏi thiếu một lượt: `project` (id hoặc tên), trạng thái, assignee, cửa sổ thời gian, từ khóa, map ID Minipower.
 - (Opt) `memory/openproject.json` → `default_project_id`. Không ghi API token vào file git.
 - Back-ref `memory/memory.md` **chỉ khi** người yêu cầu một dòng.

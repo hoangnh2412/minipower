@@ -32,9 +32,11 @@
 
 ## 3. Phân rã Epic · Feature · Story
 
-| WBS ID | Epic | Feature | Story ID | Story title | FR trace | SP | Priority |
-|--------|------|---------|----------|-------------|----------|----|----------|
-| 1.1.1 | EP-01 | FE-01 | US-001 | As a … I want … | FR-001 | 5 | Must |
+| WBS ID | Epic | Feature | Story ID | Story title | FR trace | AC trace | SP | Priority |
+|--------|------|---------|----------|-------------|----------|----------|----|----------|
+| 1.1.1 | EP-01 | FE-01 | US-001 | As a … I want … | FR-001 | AC-001, AC-002 | 5 | Must |
+
+Story không có AC chưa phải story (DOC-07). Tách theo sản phẩm / luồng nghiệp vụ, không theo tầng kỹ thuật hay hoạt động; estimate ở story **hoặc** task con, không đếm đôi — luật đầy đủ: `minipower-pm-plan/reference/work-breakdown.md`.
 
 ## 4. Chi tiết story (mẫu)
 

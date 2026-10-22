@@ -21,6 +21,8 @@ SSOT máy đọc là `memory/profile.json`. Bảng trong file này chỉ là b�
 
 **Phạm vi một phiên** không phải phạm vi cả dự án. Phạm vi dự án là DOC-03. Phạm vi phiên là slice người vừa giao. Phase `discovery` chỉ nói việc đang ở chặng nào, không cho phép mở mọi DOC của chặng đó.
 
+**Chung và riêng.** Cách làm chung (quy trình, quy ước code, khung DOC) nằm ở skill `minipower-*` đã cài — không chép lại vào đây. Riêng dự án (tên sản phẩm, khách hàng, scope, họ mã nghiệp vụ, màu, phím tắt, ngưỡng) nằm ở `AGENTS.md`, DOC-03 và `docs/00-governance/*-convention.md` nếu dự án có. Hai bên lệch nhau: convention dự án là lớp áp **thêm** trên skill, không thay skill; muốn đổi phần chung thì sửa ở minipower, không sửa tay trong dự án.
+
 ## 1. Tổng quan
 
 Bốn nhánh ở gốc. Artifact đã chốt nằm trong `docs/`. `brainstorm/` là nháp. `memory.md` là sổ cá nhân. Lệch nhau thì ưu tiên `docs/` (nếu đã baseline thì ưu tiên `docs/02-baseline/`).
@@ -37,7 +39,7 @@ Bốn nhánh ở gốc. Artifact đã chốt nằm trong `docs/`. `brainstorm/` 
 
 | Tầng | Chứa | Điểm đọc |
 |------|------|----------|
-| `00-governance/` | Plan (DOC-15), sổ CR (DOC-18), glossary, versioning, lịch sử baseline | Quy tắc version và từ vựng chung |
+| `00-governance/` | Plan (DOC-15), sổ CR (DOC-18), glossary, versioning, lịch sử baseline, `*-convention.md` riêng dự án (nếu có) | Quy tắc version, từ vựng chung, quy ước kỹ thuật riêng dự án |
 | `01-project/` | DOC-01 vision, DOC-02 stakeholder, DOC-03 BRD | Vì sao làm, ai quyết, **scope** |
 | `02-baseline/` | Snapshot đã ký `vX.Y/` | **Chỉ đọc.** Sửa bản đang soạn, không sửa snapshot. |
 | `03-modules/{id}/` | DOC-04 BR, DOC-05 UC, DOC-06 FR, DOC-07 AC, DOC-16 test của module | Một module một owner |
@@ -130,6 +132,8 @@ Checklist ngày đầu, làm một lần rồi thôi:
 3. **Giữ cách làm, không giữ dữ liệu.** Quy trình nằm ở skill đã cài. Nghiệp vụ nằm ở `docs/` hoặc công cụ docs (`outline` khi provider là outline). Việc nằm ở provider task hoặc SQLite. Code nằm ở git / GitLab. `memory/` không trở thành kho SRS.
 4. **Một owner một artifact.** Một module một owner. Một boundary một producer. Consumer bắt đầu khi đủ input tối thiểu của **đúng module đó**.
 5. **Chi phí tương xứng.** `mvp`: bộ lõi, khoản bỏ qua ghi `doc-debt.md` ngay trong phiên. `standard`: đủ tiền đề trước khi thực thi; sau baseline mọi sửa đi qua CR. `maintain`: mô tả cái đang chạy; lệch tài liệu và thực tế là câu hỏi, không tự sửa cho "đúng". Chế độ đang chạy là `standard` — áp hàng đó.
+6. **Tài liệu — thảo luận trước, ghi sau.** Trong lúc đang trao đổi, agent phân tích và thảo luận trong chat (phương án, trade-off, nháp nội dung) cho đến khi người **xác nhận chốt**; sau đó mới cập nhật `docs/` hoặc artifact DOC. Không ghi vào file nội dung còn đang mở hoặc chưa được người duyệt.
+7. **Code — chưa chốt thì không sửa.** Khi người chỉ ra điểm chưa rõ và đặt câu hỏi, agent trả lời và thảo luận trong chat; **không** sửa `backend/`, `frontend/` hay artifact code cho đến khi người xác nhận hướng xử lý. Micro đã thống nhất (typo, format) vẫn theo mục 3 khi không nằm trong luồng làm rõ đang mở.
 
 | Chế độ | Tài liệu giữ | Khi bỏ bước |
 |--------|----------------|-------------|
@@ -161,6 +165,18 @@ Checklist ngày đầu, làm một lần rồi thôi:
 Phần thiếu ghi `TBD`. Không trả cả lô vì một module chưa xong.
 
 **Song song.** Sau DOC-03, nhiều phase có thể tiến. SA không chờ SRS đủ mới được ghi `TBD` trên platform. Review theo chiều hoặc theo module; agent chính gộp finding theo `{DOC}#{section/ID}`, không tự sửa DOC của owner khác.
+
+**Quy ước kỹ thuật.** Trước khi soạn hoặc sửa artifact kỹ thuật, đối chiếu bảng dưới — đọc dòng *Bảo mật* trước. Phần cứng do analyzer / lint / `ArchitectureTests` / `baseline-guard` gác; phần còn lại là lời, lệch có chủ đích ghi ADR hoặc DEC. Cột *Riêng dự án* chỉ điền khi dự án có file đó.
+
+| Việc | Chung (skill đã cài) | Riêng dự án |
+|------|----------------------|-------------|
+| Bảo mật — mọi slice | Mục 7 file này; review bảo mật thiết kế trong `minipower-architecture-review` | `docs/00-governance/design-security-convention.md` |
+| Code backend `.cs` | `minipower-backend-convention-dotnet` (code viết thế nào: `DateTime` UTC, marker Jarvis, `IErrorCode`) + `minipower-backend-architecture-dotnet` (file ở đâu) | `docs/00-governance/coding-backend-convention.md` — họ mã đối tác `TAX-`, ví dụ namespace `Billing.*` |
+| Code frontend `.ts` / `.tsx` | `minipower-frontend-convention-react` + `minipower-frontend-architecture-react` | — |
+| ERD, DOC-11 | Khung template DOC-11 (ba tầng tên, UUIDv7, audit, UTC+0, lý do thiết kế, dữ liệu mẫu, query mẫu); chiều ERD của `minipower-architecture-review` | _(điền)_ |
+| API, DOC-12 | Khung template DOC-12 (DTO ở ranh giới, camelCase, lỗi `code` + `message`); chiều API của `minipower-architecture-review` | _(điền)_ |
+| UI / prototype | `[code] message`, số căn phải — trong skill frontend | `docs/00-governance/design-ui-convention.md` — token màu, phím tắt F4/F3/F8 |
+| Phân rã việc, work package | `minipower-pm-plan` › `reference/work-breakdown.md`; ánh xạ công cụ trong lá kênh `tasks` | _(điền — custom field, project id)_ |
 
 **Ngôn ngữ.** Tiếng Việt trong tài liệu và hội thoại. ID, tên field, tên skill giữ nguyên tiếng Anh như trong file.
 

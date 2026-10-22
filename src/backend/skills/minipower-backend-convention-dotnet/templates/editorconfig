@@ -17,6 +17,23 @@ indent_size = 4
 # --- Mục 10: C# hiện đại -------------------------------------------------
 csharp_style_namespace_declarations = file_scoped:warning
 
+# --- Mục 2: Một type công khai, một file (StyleCop) ---------------------
+# Chỉ dùng 2 rule StyleCop. Tắt toàn bộ category trước để không kéo ~200 rule
+# style vào codebase; rule cụ thể khai sau sẽ thắng category.
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpecialRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpacingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.ReadabilityRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.MaintainabilityRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.LayoutRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.AlternativeRules.severity = none
+# SA1402: nhiều type công khai trong một file. SA1649: tên file khác tên type.
+# `warning` trước; nâng `error` khi codebase sạch (thêm vào $(WarningsAsErrors)).
+dotnet_diagnostic.SA1402.severity = warning
+dotnet_diagnostic.SA1649.severity = warning
+
 # --- Mục 1: Đặt tên (IDE1006) --------------------------------------------
 dotnet_diagnostic.IDE1006.severity = error
 
@@ -112,3 +129,5 @@ dotnet_diagnostic.CA2100.severity = warning
 [tests/**/*.cs]
 dotnet_diagnostic.CA1031.severity = none
 dotnet_diagnostic.CA2007.severity = none
+# Test fixture / theory data hay gom nhiều class nhỏ — không ép một type một file ở test.
+dotnet_diagnostic.SA1402.severity = none

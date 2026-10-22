@@ -28,6 +28,18 @@
   </PropertyGroup>
 
   <!--
+    Mục 2 (một type công khai, một file): StyleCop chỉ để bật SA1402 + SA1649;
+    mọi category khác đã tắt trong .editorconfig. Bản 1.2.0-beta.* là dòng
+    đang được bảo trì (1.1.118 từ 2019 không hiểu C# 10+).
+  -->
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!--
     Áp dần cho repo có sẵn: đặt Nullable=annotations (chỉ nhận annotation, chưa cảnh báo)
     ở project legacy, rồi nâng lên enable từng project.
 

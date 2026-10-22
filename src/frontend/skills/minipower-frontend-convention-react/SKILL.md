@@ -43,7 +43,8 @@ Phần mềm, hay sai nhất:
 - **PrimeReact 11 là API compound** (`Dialog.Root`, `Select.Root`, `DataTable.Root`…). API v10 (`<Column>`, `visible`/`onHide`, `value=` cho DataTable) không chạy — đối chiếu mục 6 trước khi viết UI.
 - **Control dùng `unstyled` + class** từ `components/fieldStyles.ts`; nút dùng skin `pr-btn-*` của kit.
 - **Dùng sẵn của kit trước khi tự viết** — toast `notify`, `ConfirmDialog`, `FeatureDialog`, `ListPagination`, `RowActions`, `FieldSelect` (bảng mục 9).
-- **Thao tác ghi đi qua `handleAction`**; kiểm `outcome.status === 'cancelled'` trước toast; lỗi ⇒ `notify.error(getErrorMessage(error, fallback))`.
+- **Thao tác ghi đi qua `handleAction`**; kiểm `outcome.status === 'cancelled'` trước toast; lỗi ⇒ `notify.error(getErrorMessage(error, fallback))` — thông báo mang mã `[code] message`, không `error.message` thô (mục 5).
+- **Cột số căn phải + `tabular-nums`**, cột chữ căn trái (mục 6).
 - **Text người dùng thấy qua `get{Feature}Messages(locale)`**, không hard-code trong JSX.
 - **Enum là object `as const`** + `…Value` + `…_LABEL` + `…_OPTIONS`, giá trị khớp backend.
 

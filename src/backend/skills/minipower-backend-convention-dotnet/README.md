@@ -18,8 +18,8 @@ Một file tài liệu chỉ có tác dụng khi có người nhớ mở nó. Sk
 
 | | Ai gác | Sai thì sao |
 |---|---|---|
-| **Cứng** — đặt tên, nullable, `throw ex;`, `.Result`, culture, logging template | `.editorconfig` + analyzer + `dotnet format` | Build/CI **đỏ** |
-| **Mềm** — tổ chức class, thiết kế exception, LINQ readability, DI lifetime, code smells | Agent nhắc lúc viết · người review | Nhắc, người quyết |
+| **Cứng** — đặt tên, một type một file, nullable, `throw ex;`, `.Result`, culture, logging template | `.editorconfig` + analyzer + StyleCop (2 rule) + `dotnet format` | Build/CI **đỏ** |
+| **Mềm** — tổ chức class, thiết kế exception, LINQ readability, DI lifetime, code smells, marker Jarvis (audit / tenant / user), mã lỗi `IErrorCode` | Agent nhắc lúc viết · người review | Nhắc, người quyết |
 
 Phần cứng không cần ai nhớ. Phần mềm không giả vờ là bắt buộc.
 
@@ -37,8 +37,8 @@ Khi viết code thì không cần gọi tên: mô tả việc như bình thườ
 
 | Template | Đích | Nội dung chính |
 |---|---|---|
-| [templates/editorconfig](./templates/editorconfig) | `.editorconfig` ở root | Naming mục 1 → `error` (interface `I`, field private instance `_camelCase` / static PascalCase, const PascalCase, param/local camelCase); severity CA/IDE ánh xạ từng mục reference |
-| [templates/Directory.Build.props.xml](./templates/Directory.Build.props.xml) | `src/Directory.Build.props` | `Nullable=enable` · `EnableNETAnalyzers` · `EnforceCodeStyleInBuild` · `WarningsAsErrors` chọn lọc (IDE1006, CA2200, CS86xx) |
+| [templates/editorconfig](./templates/editorconfig) | `.editorconfig` ở root | Naming mục 1 → `error` (interface `I`, field private instance `_camelCase` / static PascalCase, const PascalCase, param/local camelCase); StyleCop `SA1402` / `SA1649` → `warning` (một type một file), các category StyleCop khác tắt; severity CA/IDE ánh xạ từng mục reference |
+| [templates/Directory.Build.props.xml](./templates/Directory.Build.props.xml) | `src/Directory.Build.props` | `Nullable=enable` · `EnableNETAnalyzers` · `EnforceCodeStyleInBuild` · `WarningsAsErrors` chọn lọc (IDE1006, CA2200, CS86xx) · `PackageReference` StyleCop.Analyzers |
 
 ## Lệnh CI
 
@@ -47,7 +47,7 @@ dotnet format --verify-no-changes --severity warn
 dotnet build --configuration Release
 ```
 
-Đã kiểm trên .NET SDK 9.0.306: code theo convention build xanh; code sai sinh `error IDE1006` (đặt tên — gồm cả `_` thừa ở static field và thiếu `_` ở instance field), `error CA2200` (`throw ex;`), `error CS8618`/`CS8602` (nullable).
+Đã kiểm trên .NET SDK 9.0.306: code theo convention build xanh; code sai sinh `error IDE1006` (đặt tên — gồm cả `_` thừa ở static field và thiếu `_` ở instance field), `error CA2200` (`throw ex;`), `error CS8618`/`CS8602` (nullable). Hai rule StyleCop `SA1402` / `SA1649` thêm 2026-10-22 (ADR-041) **chưa chạy thử trên solution thật** — smoke T2 của ADR-041 do chủ repo chạy.
 
 ## Áp lên codebase có sẵn
 

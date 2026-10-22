@@ -74,6 +74,7 @@ Phần mềm, hay sai nhất khi viết tính năng mới:
 - **Aggregate tham chiếu aggregate khác bằng ID**, không bằng object.
 - **Một transaction ưu tiên sửa một aggregate root**; xuyên aggregate dùng domain event.
 - **`BackgroundService` đặt ở Host**, mỏng, gọi vào handler của Application — cùng vai Controller, chỉ khác cách kích hoạt.
+- **Tenant / user hiện tại lấy qua Jarvis** — `ICurrentTenant<T>` / `ICurrentUser<T>` inject vào handler và domain service; **không** `IHttpContextAccessor` trong Application, **không** nhận `TenantId` từ body / query khi phiên đã có danh tính. Worker: `ICurrentTenantAccessor.BeginScope` trước khi gọi handler. Bảng marker đầy đủ: [convention mục 13](../minipower-backend-convention-dotnet/reference/coding-convention.md#13-jarvis--audit-tenant-và-phiên-làm-việc).
 
 Chi tiết: [reference/clean-architecture.md](reference/clean-architecture.md) (quy tắc phụ thuộc) · [reference/ddd-tactical.md](reference/ddd-tactical.md) (entity, aggregate, repository, event, anti-pattern). Không load mặc định — mở khi cần tra một mục.
 
