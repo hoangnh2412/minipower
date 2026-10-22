@@ -8,7 +8,7 @@ Chạy từ **root workspace project docs**. `$REPO` là gốc repo factory; `$M
 
 Lời nhắc phiên (một slice, sửa DOC, đọc `profile.user.json`) ở `AGENTS.md` dự án — mẫu [SAMPLE-agents.md](../../src/router/templates/SAMPLE-agents.md). Không có rule IDE lặp các đoạn đó.
 
-`cli/cursor/rules/` còn `minipower-always-on.mdc` (workspace **chưa** có `.minipower/`). CLI `install` symlink mọi `.mdc` trong thư mục đó vào `.cursor/rules/` của project, và bản user-global `~/.cursor/rules/`. Xem [USER-RULES.md](USER-RULES.md).
+`cli/cursor/rules/` chứa rule always-on (`minipower-always-on.mdc`, `codegraph-when-indexed.mdc`, …). CLI `install` symlink **mọi** `.mdc` vào `.cursor/rules/` project và `~/.cursor/rules/`. Agent phải **verify marker/index trên disk** (`test -d` / `Read`), không suy từ Glob. Xem [USER-RULES.md](USER-RULES.md).
 
 ## Hooks
 
@@ -47,6 +47,8 @@ Biến môi trường tuỳ chọn: `MINIPOWER_ROOT` (mặc định `minipower/s
 Pack đã được symlink tại `.cursor/skills/minipower-router/` (xem [README chính](../../README.md)) → bin + lib đi kèm sẵn, **không cần symlink script riêng**. Chỉ cần merge một fragment.
 
 Merge [hooks.fragment.json](hooks/hooks.fragment.json) vào `.cursor/hooks.json` (giữ hook khác nếu đã có). Fragment gọi `node .cursor/skills/minipower-router/hooks/bin/*.js` — giống hệt trên Windows/macOS/Linux.
+
+**`minipower-router` = symlink cả `src/router/`** (có `hooks/bin/profile-guard.js`), không phải chỉ lá `skills/minipower-router/`. `minipower install` ghi đè link sau `installSkills`; smoke: `test -f .cursor/skills/minipower-router/hooks/bin/profile-guard.js`.
 
 > Nếu pack **không** nằm ở `.cursor/skills/minipower-router/` (vd. Claude/khác), sửa path trong fragment thành đường dẫn tới `…/src/router/hooks/bin/`.
 

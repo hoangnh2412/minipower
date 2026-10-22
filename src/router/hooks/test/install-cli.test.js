@@ -29,10 +29,12 @@ function run(args, cwd, envExtra = {}) {
   }
 }
 
-test("install --print-user-rules in always-on", () => {
+test("install --print-user-rules in always-on + codegraph", () => {
   const out = run(["install", "--print-user-rules"])
   assert.match(out, /Bước 0/)
   assert.match(out, /alwaysApply: true/)
+  assert.match(out, /test -d \.minipower/)
+  assert.match(out, /codegraph_explore/)
 })
 
 test("install --list-modules đọc registry", () => {
@@ -67,13 +69,21 @@ test("install --client cursor --with router", () => {
       MINIPOWER_CURSOR_HOME: home,
     })
     assert.ok(existsSync(join(dir, ".cursor", "hooks.json")))
-    assert.ok(existsSync(join(dir, ".cursor", "skills", "minipower-router")))
-    assert.ok(existsSync(join(dir, ".cursor", "skills", "minipower-router")))
+    const routerPack = join(dir, ".cursor", "skills", "minipower-router")
+    assert.ok(existsSync(routerPack))
+    const profileGuard = join(routerPack, "hooks", "bin", "profile-guard.js")
+    assert.ok(
+      existsSync(profileGuard),
+      "minipower-router phải symlink cả router pack (hooks/bin/profile-guard.js)",
+    )
     assert.ok(existsSync(join(dir, ".minipower", "clients.json")))
     assert.ok(existsSync(join(dir, ".minipower", "bin", "minipower")))
     const userRule = join(home, ".cursor", "rules", "minipower-always-on.mdc")
+    const userCodegraph = join(home, ".cursor", "rules", "codegraph-when-indexed.mdc")
     assert.ok(existsSync(userRule))
+    assert.ok(existsSync(userCodegraph))
     assert.match(readFileSync(userRule, "utf8"), /Bước 0/)
+    assert.match(readFileSync(userCodegraph, "utf8"), /codegraph_explore/)
     const launcher = readFileSync(join(dir, ".minipower", "bin", "minipower"), "utf8")
     assert.match(launcher, /"cli", "minipower\.mjs"/)
     assert.doesNotMatch(launcher, /sdlc\/install\/minipower\.mjs/)

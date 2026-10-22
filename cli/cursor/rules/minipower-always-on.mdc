@@ -5,7 +5,14 @@ alwaysApply: true
 
 # Minipower — always-on
 
-**Bước 0 — marker.** Chỉ tìm thư mục `.minipower/` từ CWD (workspace đang mở) đi lên **cùng một cây**. Không thấy → **không** dùng Minipower.
+**Bước 0 — verify marker (mỗi phiên, trước code/docs/route skill).** Chỉ xét CWD (workspace đang mở) đi lên **cùng một cây**.
+
+1. **Xác nhận trên disk** — bắt buộc một trong hai (không suy từ Glob/gitignore/transcript):
+   - Shell: `test -d .minipower && test -f .minipower/identity.json` (từ workspace root), hoặc
+   - `Read` đường dẫn `{workspaceRoot}/.minipower/identity.json`.
+2. **Cấm** kết luận “không có `.minipower/`” chỉ vì Glob/file search không thấy thư mục ẩn.
+3. Có marker → Minipower **ON**; đọc `memory/profile.json` (mode/provider). Slice code → đối chiếu `AGENTS.md` §5 / skill convention trước khi sửa.
+4. Không có marker (sau bước 1) → **không** dùng Minipower.
 
 Khi không có marker:
 

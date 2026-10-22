@@ -2,7 +2,7 @@
 
 Agent Chat trên Cursor **không luôn đọc** `~/.cursor/rules/*.mdc` (file CLI ghi). Chủ repo **chấp nhận setup thủ công** (2026-09-26, smoke T5 PASS): dán always-on vào **User Rules**.
 
-Nguồn chữ: [`rules/minipower-always-on.mdc`](rules/minipower-always-on.mdc).
+Nguồn chữ: mọi file trong [`rules/`](rules/) (`minipower-always-on.mdc`, `codegraph-when-indexed.mdc`, …). `install --print-user-rules` in **ghép** tất cả `.mdc` — dán một lần vào User Rules (hoặc dán từng file nếu Cursor tách rule).
 
 ## Cài
 

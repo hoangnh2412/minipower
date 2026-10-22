@@ -1,0 +1,20 @@
+---
+description: Có .codegraph/ trên workspace thì ưu tiên MCP codegraph_explore trước grep/read sâu nhiều file.
+alwaysApply: true
+---
+
+# Codegraph — khi có index
+
+**Bước 0 — verify index (cùng phiên với Minipower marker, trước phân tích luồng lớn).**
+
+1. **Xác nhận trên disk:** `test -d .codegraph` từ workspace root, hoặc `Read` một file trong `.codegraph/` nếu cần.
+2. **Cấm** kết luận “không có index” chỉ vì Glob không liệt kê thư mục ẩn.
+
+Khi **có** `.codegraph/`:
+
+- Luồng call path, blast radius, “ai gọi ai” → gọi MCP **`codegraph_explore`** với `projectPath` = **root workspace** (folder đang mở), trước vòng Grep + Read nhiều file.
+- Không có MCP / namespace lỗi → degrade Grep/Read; nói ngắn đã degrade.
+
+Khi **không** có `.codegraph/`:
+
+- Không gọi Codegraph; không nhắc cài trừ khi người hỏi.

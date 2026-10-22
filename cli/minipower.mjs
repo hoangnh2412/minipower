@@ -202,11 +202,16 @@ function resolveClaudeFrag() {
   return JSON.parse(raw)
 }
 
-function installSkills(target, skillsRel, withPacks) {
+function installSkills(target, skillsRel, withPacks, opts = {}) {
+  const skip = new Set(opts.skipSkillNames || [])
   const destRoot = join(target, skillsRel)
   const leaves = listLeafSkills().filter((s) => withPacks.includes(s.pack))
   const notes = []
   for (const s of leaves) {
+    if (skip.has(s.name)) {
+      notes.push(`${s.name}:skip(sdlc-pack-link)`)
+      continue
+    }
     const src = join(REPO, "src", s.pack, "skills", s.name)
     const dest = join(destRoot, s.name)
     notes.push(`${s.name}:${linkPath(src, dest)}`)
@@ -219,20 +224,37 @@ function cursorUserRulesDir() {
   return join(home, ".cursor", "rules")
 }
 
-function installCursorUserAlwaysOn() {
-  const src = join(HERE, "cursor", "rules", "minipower-always-on.mdc")
-  if (!existsSync(src)) die(`Thiếu ${src}`)
-  const dest = join(cursorUserRulesDir(), "minipower-always-on.mdc")
-  mkdirSync(dirname(dest), { recursive: true })
-  if (existsSync(dest)) {
-    try {
-      unlinkSync(dest)
-    } catch {
-      /* replace bên dưới */
+function cursorRulesSourceDir() {
+  return join(HERE, "cursor", "rules")
+}
+
+function listCursorRuleFiles() {
+  const rulesDir = cursorRulesSourceDir()
+  if (!existsSync(rulesDir)) return []
+  return readdirSync(rulesDir)
+    .filter((f) => f.endsWith(".mdc"))
+    .sort()
+}
+
+function installCursorUserRules() {
+  const rulesDir = cursorRulesSourceDir()
+  if (!existsSync(rulesDir)) die(`Thiếu ${rulesDir}`)
+  const files = listCursorRuleFiles()
+  if (!files.length) die(`Không có .mdc trong ${rulesDir}`)
+  mkdirSync(cursorUserRulesDir(), { recursive: true })
+  for (const f of files) {
+    const src = join(rulesDir, f)
+    const dest = join(cursorUserRulesDir(), f)
+    if (existsSync(dest)) {
+      try {
+        unlinkSync(dest)
+      } catch {
+        /* replace bên dưới */
+      }
     }
+    const how = linkPath(src, dest)
+    process.stdout.write(`✓ cursor user-rule ${dest} (${how})\n`)
   }
-  const how = linkPath(src, dest)
-  process.stdout.write(`✓ cursor user-rule ${dest} (${how})\n`)
 }
 
 function installClient(id, target, withPacks, dry, opts = {}) {
@@ -241,7 +263,9 @@ function installClient(id, target, withPacks, dry, opts = {}) {
   if (dry) {
     process.stdout.write(`[dry-run] ${id} → ${target}\n`)
     if (id === "cursor" && opts.userRules !== false) {
-      process.stdout.write(`[dry-run] cursor user-rule ${join(cursorUserRulesDir(), "minipower-always-on.mdc")}\n`)
+      for (const f of listCursorRuleFiles()) {
+        process.stdout.write(`[dry-run] cursor user-rule ${join(cursorUserRulesDir(), f)}\n`)
+      }
     }
     return
   }
@@ -263,8 +287,6 @@ function installClient(id, target, withPacks, dry, opts = {}) {
     mkdirSync(dirname(hooksPath), { recursive: true })
     const cur = existsSync(hooksPath) ? JSON.parse(readFileSync(hooksPath, "utf8")) : {}
     writeJson(hooksPath, mergeCursor(cur, frag))
-    const sdlcLink = join(target, spec.skillsRel, spec.sdlcLinkName)
-    process.stdout.write(`✓ cursor hooks; router:${linkPath(ROUTER, sdlcLink)}\n`)
     const rulesDir = join(HERE, "cursor", "rules")
     if (existsSync(rulesDir)) {
       mkdirSync(join(target, spec.rulesRel), { recursive: true })
@@ -274,7 +296,7 @@ function installClient(id, target, withPacks, dry, opts = {}) {
         linkPath(join(rulesDir, f), dest)
       }
     }
-    if (opts.userRules !== false) installCursorUserAlwaysOn()
+    if (opts.userRules !== false) installCursorUserRules()
   }
 
   if (spec.kind === "opencode") {
@@ -297,7 +319,14 @@ function installClient(id, target, withPacks, dry, opts = {}) {
     process.stdout.write(`✓ opencode config ${cfg}\n`)
   }
 
-  const notes = installSkills(target, spec.skillsRel, withPacks)
+  const skipSkillNames =
+    spec.kind === "cursor-hooks" && spec.sdlcLinkName ? [spec.sdlcLinkName] : []
+  const notes = installSkills(target, spec.skillsRel, withPacks, { skipSkillNames })
+  if (spec.kind === "cursor-hooks" && spec.sdlcLinkName) {
+    const sdlcLink = join(target, spec.skillsRel, spec.sdlcLinkName)
+    const how = linkPath(ROUTER, sdlcLink)
+    process.stdout.write(`✓ cursor hooks; router pack ${sdlcLink} (${how})\n`)
+  }
   process.stdout.write(`✓ ${id} skills ${notes.length} (${notes.filter((n) => n.endsWith(":copy")).length} copy)\n`)
 }
 
@@ -315,9 +344,10 @@ async function cmdInstall(flags) {
   }
 
   if (flags["print-user-rules"]) {
-    const p = join(HERE, "cursor", "rules", "minipower-always-on.mdc")
-    if (!existsSync(p)) die(`Thiếu ${p}`)
-    process.stdout.write(readFileSync(p, "utf8"))
+    const files = listCursorRuleFiles()
+    if (!files.length) die(`Không có .mdc trong ${cursorRulesSourceDir()}`)
+    const parts = files.map((f) => readFileSync(join(cursorRulesSourceDir(), f), "utf8"))
+    process.stdout.write(parts.join("\n\n"))
     return
   }
 

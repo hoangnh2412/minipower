@@ -109,4 +109,14 @@ Loader Cursor có thể tự gắn lá theo `description`; dispatcher vẫn bắ
 
 > Chế độ **không** nới hai thứ: `docs/02-baseline/` luôn deny, và `token-guard` luôn chặn `@` cả thư mục.
 
-Hướng dẫn người: [README.md](README.md).
+## Cursor — hooks (`profile-guard`, …)
+
+`minipower install --client cursor` ghi `.cursor/hooks.json` gọi:
+
+`node .cursor/skills/minipower-router/hooks/bin/*.js`
+
+**`.cursor/skills/minipower-router` phải trỏ cả pack `src/router/`** (có `hooks/`, `lib/`, `templates/`), **không** chỉ folder lá skill (`skills/minipower-router/` — chỉ `SKILL.md`).
+
+CLI: sau `installSkills`, symlink `sdlcLinkName` → factory `src/router`. Kiểm tra: `test -f .cursor/skills/minipower-router/hooks/bin/profile-guard.js`.
+
+Hướng dẫn người: [README.md](README.md) · [cli/cursor/README.md](../../../../cli/cursor/README.md).
