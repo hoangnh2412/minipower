@@ -1,20 +1,50 @@
 ---
-description: Có .codegraph/ trên workspace thì ưu tiên MCP codegraph_explore trước grep/read sâu nhiều file.
+description: Có .codegraph/ thì ưu tiên codegraph_explore. Chưa có, và việc là code, thì gợi ý cài một lần.
 alwaysApply: true
 ---
 
-# Codegraph — khi có index
+# Codegraph — khi có index, hoặc gợi ý một lần
 
-**Bước 0 — verify index (cùng phiên với Minipower marker, trước phân tích luồng lớn).**
+**Bước 0 — verify trên disk** (cùng phiên với marker Minipower, trước phân tích luồng lớn).
 
-1. **Xác nhận trên disk:** `test -d .codegraph` từ workspace root, hoặc `Read` một file trong `.codegraph/` nếu cần.
+1. `test -d .codegraph` từ workspace root, hoặc `Read` một file trong `.codegraph/` nếu cần.
 2. **Cấm** kết luận “không có index” chỉ vì Glob không liệt kê thư mục ẩn.
+3. Đọc `.minipower/codegraph-offer.json` khi file đó tồn tại. Không suy từ chat cũ.
 
 Khi **có** `.codegraph/`:
 
 - Luồng call path, blast radius, “ai gọi ai” → gọi MCP **`codegraph_explore`** với `projectPath` = **root workspace** (folder đang mở), trước vòng Grep + Read nhiều file.
 - Không có MCP / namespace lỗi → degrade Grep/Read; nói ngắn đã degrade.
+- Không gợi ý cài.
 
 Khi **không** có `.codegraph/`:
 
-- Không gọi Codegraph; không nhắc cài trừ khi người hỏi.
+- Không gọi Codegraph.
+- Việc **không** phải code (soạn DOC, hội thoại, tài liệu) → không gợi ý.
+- Việc **là code** (sửa, viết, debug, review source — `.cs` `.ts` `.tsx` `.js` `.py` `.go` `.java` và cây `backend/` `frontend/` `mobile/` `autotest/` `src/` `frameworks/` `modules/`) và có `.minipower/identity.json`:
+  1. `codegraph-offer.json` có `"status": "offered"` hoặc `"declined"` → không gợi ý. Làm tiếp bằng Grep/Read.
+  2. Chưa có file, hoặc status khác hai giá trị đó → gợi ý **một lần** trong cùng câu trả lời, rồi **ghi ngay** `.minipower/codegraph-offer.json` với nội dung `{"status":"offered"}`. Không dừng việc code đang làm. Không chạy lệnh cài khi người chưa đồng ý.
+  3. Người nói bỏ qua, không cài, hoặc làm tiếp mà không cài → ghi `{"status":"declined"}` nếu chưa có, và **không gợi ý lại** ở phiên sau.
+  4. Người yêu cầu cài → chạy hướng dẫn bên dưới. Hỏi lại là thừa.
+- Không có `.minipower/identity.json` → không gợi ý, không tạo `.minipower/`.
+
+**Lời gợi ý** (ngắn, một lần). Nêu lợi ích rồi lệnh cài từ [codegraph](https://github.com/colbymchenry/codegraph):
+
+- Graph symbol, lời gọi và blast radius nằm sẵn trên máy. `codegraph_explore` trả đúng đoạn code và đường gọi trong một lượt, thay vì grep rồi mở nhiều file.
+- Ít tool call hơn, ít token hơn, trả lời câu hỏi về code nhanh hơn. Index local, tự cập nhật khi file đổi, không đẩy source lên dịch vụ ngoài.
+- Cursor và Claude dùng chung MCP sau `codegraph install`.
+
+Lệnh (repo `https://github.com/colbymchenry/codegraph`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh
+```
+
+Đã có Node: `npm i -g @colbymchenry/codegraph`. Mở terminal mới, rồi:
+
+```bash
+codegraph install
+codegraph init
+```
+
+`codegraph install` chỉ nối MCP cho agent. `codegraph init` (tại root workspace) mới tạo `.codegraph/`.

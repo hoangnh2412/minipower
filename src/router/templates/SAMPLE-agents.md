@@ -55,7 +55,7 @@ Bề mặt đang có: `docs, backend`. Code backend nằm ở `backend/src/`. `f
 
 Thứ tự đầu phiên:
 
-0. Rule Cursor always-on đã **verify** `.minipower/` và (nếu có) `.codegraph/` trên disk — không dựa Glob. Có marker → tiếp các bước dưới.
+0. Rule Cursor always-on đã **verify** `.minipower/` và (nếu có) `.codegraph/` trên disk — không dựa Glob. Có marker → tiếp các bước dưới. Việc là code mà chưa có `.codegraph/`: gợi ý cài CodeGraph một lần theo rule `codegraph-when-indexed`; `.minipower/codegraph-offer.json` đã `offered` hoặc `declined` thì không nhắc lại.
 1. `memory/profile.json` — mode, phase, bốn provider.
 2. `memory/profile.user.json` — xưng hô và vai trò.
 3. `memory/memory.md` — hiện trạng của người này, nhắc việc, con trỏ. Thiếu thì copy từ `memory.md.example`. Không nhét nguyên văn SRS vào đây.

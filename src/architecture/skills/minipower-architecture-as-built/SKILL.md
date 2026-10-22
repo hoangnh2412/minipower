@@ -40,7 +40,7 @@ Wrap [codegraph](https://github.com/colbymchenry/codegraph) (tree-sitter → SQL
 | Hỏi symbol / call graph / impact trực tiếp | Degrade về `Grep` + `Read` theo vùng hẹp |
 | Rẻ token: trả đúng vùng liên quan | Đắt hơn — càng phải giữ vùng chạm hẹp |
 
-**Kiểm khả dụng trước, không giả định.** Không có → nói ra một câu rồi làm tiếp bằng Read/Grep, **không** dừng và **không** bắt người cài.
+**Kiểm khả dụng trước, không giả định.** Không có → nói ra một câu rồi làm tiếp bằng Read/Grep, **không** dừng và **không** bắt người cài. Việc đang là code và chưa ghi `.minipower/codegraph-offer.json` (`offered` hoặc `declined`) thì gợi ý cài **một lần** theo rule `codegraph-when-indexed` (lợi ích + lệnh từ repo), rồi ghi `offered`. Người bỏ qua → `declined`, không nhắc lại.
 
 **Index sống ở local + `.gitignore`** — không commit, không CI cache. Index là dẫn xuất từ code; commit nó là tạo thứ sẽ lệch.
 

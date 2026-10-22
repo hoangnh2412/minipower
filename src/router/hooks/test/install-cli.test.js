@@ -35,6 +35,9 @@ test("install --print-user-rules in always-on + codegraph", () => {
   assert.match(out, /alwaysApply: true/)
   assert.match(out, /test -d \.minipower/)
   assert.match(out, /codegraph_explore/)
+  assert.match(out, /codegraph-offer\.json/)
+  assert.match(out, /declined/)
+  assert.match(out, /colbymchenry\/codegraph/)
 })
 
 test("install --list-modules đọc registry", () => {
@@ -84,6 +87,8 @@ test("install --client cursor --with router", () => {
     assert.ok(existsSync(userCodegraph))
     assert.match(readFileSync(userRule, "utf8"), /Bước 0/)
     assert.match(readFileSync(userCodegraph, "utf8"), /codegraph_explore/)
+    assert.match(readFileSync(userCodegraph, "utf8"), /codegraph-offer\.json/)
+    assert.match(readFileSync(userCodegraph, "utf8"), /declined/)
     const launcher = readFileSync(join(dir, ".minipower", "bin", "minipower"), "utf8")
     assert.match(launcher, /"cli", "minipower\.mjs"/)
     assert.doesNotMatch(launcher, /sdlc\/install\/minipower\.mjs/)
