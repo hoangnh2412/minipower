@@ -157,6 +157,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-architecture-sad](src/architecture/skills/minipower-architecture-sad/SKILL.md)** | SAD, ADR, API, data | *Viết DOC-08/12 cho ORD* |
 | **[minipower-architecture-review](src/architecture/skills/minipower-architecture-review/SKILL.md)** | QC SAD/ADR | *Soi ADR header DOC-09* |
 | **[minipower-architecture-as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md)** | maintain, legacy, CodeGraph | *Khai quật bounded context thanh toán* — người trigger |
+| **[minipower-architecture-tenant-org](src/architecture/skills/minipower-architecture-tenant-org/SKILL.md)** | xếp Tenant, Org, OrgStructure | *Chi nhánh này là tenant con hay phòng ban* |
 
 ### PM — [`pm/`](src/pm/)
 
