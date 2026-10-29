@@ -768,3 +768,13 @@ Chữ §5.3 / một số hàng catalog vẫn mô tả cây `memory/tasks/T-NNN.m
 | Nhắc việc cá nhân | (không tách) | `memory/memory.md` khối «Nhắc việc» — không phải board đội |
 
 *Chữ lịch sử trong §5.3 / T1–T2 giữ nguyên để đọc ngữ cảnh; thi hành theo bảng trên.*
+
+## §12. Điều chỉnh 2026-10-29 — QĐ-1 / QĐ-11 "atomic" tính theo **task**, không theo phiên ([ADR-043](ADR-043-2026-10-28-router-triage-plan-nhieu-task-review-cuoi.md))
+
+| | Trước (2026-09-25) | Sau (ADR-043) |
+|---|---|---|
+| Đơn vị atomic | Một phiên = một pack, một lá | Một **task** = một lá đang load; một phiên chứa **chuỗi task** người đã OK trong kế hoạch |
+| "Không spawn chuỗi" | Không mở pack thứ hai trong phiên | **Không agent bàn giao agent** (ADR-022 QĐ-1 giữ nguyên); task độc lập `∥` fan-out qua harness, đích về agent chính |
+| `rules/dispatch.md` | một pack / phiên, không spawn | một task một lá; việc PHỨC → `minipower-router-plan` |
+
+*QĐ-1, QĐ-11, §5.1 giữ chữ lịch sử để đọc ngữ cảnh; thi hành theo bảng trên.*

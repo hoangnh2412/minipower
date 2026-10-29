@@ -8,8 +8,8 @@ Tài liệu mô tả **cách Minipower điều phối** giữa người dùng, h
 
 | Khái niệm | Vai trò |
 |-----------|---------|
-| **Router (pack `router/`)** | Dispatcher: gợi ý **đúng một** pack hoặc skill lá cho phiên hiện tại. **Không** orchestrator runtime, **không** spawn agent, **không** gọi MCP L3 thay pack nghề. |
-| **Route = LLM** | Agent chọn **đúng một** `name:` trong SKILL.md đã cài (ADR-034 QĐ-4). |
+| **Router (pack `router/`)** | Dispatcher: triage đơn hay phức, gợi ý **đúng một** skill lá **cho mỗi task**; việc PHỨC → `minipower-router-plan` (ADR-043). **Không** orchestrator runtime, **không** agent bàn giao agent, **không** gọi MCP L3 thay pack nghề. |
+| **Route = LLM** | Agent chọn **đúng một** `name:` trong SKILL.md đã cài cho mỗi task (ADR-034 QĐ-4). |
 | **`intent-dispatch.js`** | Bảng keyword → skill: **gợi ý / test vàng**, không thay bước chọn của LLM. |
 | **`rules.json`** | SSOT cho phase↔DOC, `project_mode`, `prereq_by_intent`, danh sách hook cài. Bảng generated trong SKILL.md: `npm run gen`. |
 | **Pack nghề / kênh** | Đơn vị cài (`discovery`, `analyst`, `backend`, `docs`, …). Manifest: `src/{pack}/PACK.md`. |
@@ -21,7 +21,7 @@ Triết lý bất biến: **con người là gatekeeper**; AI chuẩn bị và f
 
 Trên cây thư mục làm việc phải có marker `.minipower/` (sau `minipower init`). Không có marker → agent làm việc thường, không ép pack ([rules/dispatch.md](../rules/dispatch.md)).
 
-Một phiên làm việc: **một pack**, không mở pack thứ hai song song trong cùng phiên.
+Một task: **một lá**. Việc PHỨC → kế hoạch (`minipower-router-plan`), người OK một lần; task độc lập fan-out qua harness, đích về agent chính.
 
 ## 3. Luồng runtime (prompt → skill)
 
@@ -44,7 +44,9 @@ flowchart TB
     MR[minipower-router]
     CAT[Catalog skill lá]
     ID[intent-dispatch.js]
-    MR -->|1 skill| CAT
+    MR -->|1 skill / task| CAT
+    MR -->|PHỨC| PLAN[minipower-router-plan]
+    PLAN -->|mỗi task 1 lá| CAT
     ID -.-> gợi ý / test
   end
 

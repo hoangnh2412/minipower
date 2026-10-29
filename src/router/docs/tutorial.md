@@ -1,6 +1,6 @@
 # Tutorial — Từ file mô tả sơ đến bộ tài liệu dự án
 
-[← README](README.md) · Xem thêm: [pipeline.md](pipeline.md) · [handoff](../../contracts/handoff.md)
+[← README](README.md) · Xem thêm: [pipeline.md](pipeline.md) · [handoff](../../../contracts/handoff.md)
 
 Hướng dẫn này trả lời câu hỏi: **“Tôi chỉ có một file mô tả sơ (không phải URD chuẩn chỉnh) — dùng Minipower thì làm gì tiếp, mỗi bước ra tài liệu gì?”**
 
@@ -396,5 +396,5 @@ Agent sẽ thông báo: *Sẽ chạy `minipower-…` để xử lý …* trướ
 - [parallel-work.md](parallel-work.md) — nhiều module song song
 - [Template DOC-01→19](../templates/README.md) — khung copy-paste
 - [docs-skeleton](../docs-skeleton/README.md) — cấu trúc folder `docs/`
-- [handoff](../../contracts/handoff.md) — boundary H0–H6
-- [trace-spine](../../contracts/trace-spine.md) — quy tắc ID UC/FR/AC
+- [handoff](../../../contracts/handoff.md) — boundary H0–H6
+- [trace-spine](../../../contracts/trace-spine.md) — quy tắc ID UC/FR/AC

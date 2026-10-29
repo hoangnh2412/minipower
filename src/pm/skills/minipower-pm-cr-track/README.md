@@ -2,4 +2,4 @@
 
 CR thành việc + theo dõi
 
-Atomic pack `pm/`. Không spawn pack khác (ADR-033 QĐ-1).
+Atomic pack `pm/`. Không agent bàn giao agent (ADR-033 QĐ-1 · ADR-043).

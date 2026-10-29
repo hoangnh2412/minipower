@@ -1,6 +1,6 @@
 ---
 name: minipower-router
-description: Phân loại intent Minipower rồi gợi ý đúng một pack nghề hoặc kênh. Dùng khi làm gì tiếp, chọn skill, dispatcher, không biết mở pack nào — không tự gọi MCP L3, không spawn agent.
+description: Phân loại intent Minipower, triage đơn hay phức, rồi gợi ý đúng một lá cho mỗi task. Dùng khi làm gì tiếp, chọn skill, dispatcher, không biết mở pack nào — không tự gọi MCP L3, không agent bàn giao agent.
 metadata:
   workflow: github
 ---
@@ -9,27 +9,42 @@ metadata:
 
 Dispatcher, không orchestrator runtime. **Route = LLM** (ADR-034 QĐ-4). Keyword [`intent-dispatch.js`](../../lib/intent-dispatch.js) chỉ gợi ý / test vàng — *Khởi tạo dự án sample* → lá init **để nhắc CLI**, không để LLM ghi profile.
 
+## Triage — đơn hay phức
+
+Trước khi chọn lá, hỏi một câu: **một lá trong catalog có phủ trọn yêu cầu không?** Có → **ĐƠN**, đi thẳng theo § Cách chọn lá. Không → **PHỨC**, mở [minipower-router-plan](../minipower-router-plan/SKILL.md) lập kế hoạch.
+
+| | Dấu hiệu PHỨC (gặp một là đủ) | Ví dụ |
+|---|---|---|
+| a | Chạm ≥ 2 capability hoặc ≥ 2 pack | FR (analyst) + code (backend) |
+| b | Có từ nối chuỗi | *rồi · sau đó · và review · cuối cùng · xong thì* |
+| c | Đầu ra ≥ 2 artifact khác loại | DOC + code |
+| d | Đã là tầng Full | module mới, DOC mới, đụng baseline |
+| e | `matchIntents` gợi ý ≥ 2 lá | tín hiệu gợi ý, không phải verdict |
+
+**Không chắc → PHỨC** — kế hoạch ba dòng rẻ hơn bỏ sót một lá. Người gạt *"không cần plan"* → đi thẳng lá đầu, nhắc một dòng phần việc còn lại. Sau khi người OK kế hoạch, mỗi task là một lượt chọn lá như dưới, thêm nhãn `(task n/N)`.
+
 ## Cách chọn lá
 
 1. Đọc catalog lá đã cài (`minipower-*`, `name:` trong SKILL.md).
-2. LLM chọn **đúng một** lá khớp việc (đúng pack + đúng capability). Không bịa tên.
+2. LLM chọn **đúng một** lá **cho mỗi task** (đúng pack + đúng capability). Không bịa tên.
 3. **Thông báo rồi mới đọc SOP:**
 
    `Sẽ chạy \`minipower-…\` để xử lý {việc}.`
 
-4. Việc nhiều bước: kế hoạch, **chờ người OK** rồi mới làm. Không spawn pack thứ hai. Không L3 hộ nghề.
+4. Việc PHỨC (§ Triage): kế hoạch theo [minipower-router-plan](../minipower-router-plan/SKILL.md), **chờ người OK** rồi mới làm. Không agent bàn giao agent; task độc lập fan-out theo kế hoạch người đã OK, đích về agent chính. Không L3 hộ nghề.
 
 Hai lá ngang nhau → hỏi người.
 
 Bảng dưới là **gợi ý pack** khi LLM định hướng, không phải matcher máy thay bước 2.
 
-## Gợi ý pack (một phiên = một pack)
+## Gợi ý pack (một task = một lá)
 
 | Intent (gõ) | Pack / skill |
 |---|---|
 | init project, khởi tạo, project_mode | `minipower-router-init` |
 | premise, có nên làm, nghị luận | `minipower-router-deliberation` |
 | soát tiền đề trước code/test/deploy | `minipower-router-readiness` |
+| lập kế hoạch nhiều skill, chia task, plan trước khi làm | `minipower-router-plan` |
 | khảo sát, DOC-01/02/03, painpoint | `discovery/` |
 | UC FR BR AC SRS NFR prototype CR nội dung | `analyst/` |
 | SAD ADR API data integration giải pháp bán SOL | `architecture/` |
@@ -52,9 +67,9 @@ Thiếu input tối thiểu của pack → **hỏi một lượt**, không bịa
 
 Người không cần nhớ tên lá. Prompt kiểu *minipower* · *làm gì tiếp* · mô tả việc trong Agent là đủ.
 
-1. LLM map việc → **một** lá catalog (bảng pack chỉ định hướng).
+1. LLM map việc → **một** lá catalog cho mỗi task (bảng pack chỉ định hướng; nhiều task → § Triage).
 2. **Thông báo** — một dòng `Sẽ chạy \`minipower-…\` để xử lý {việc}.`
-3. Đọc `SKILL.md` của đúng lá. Không spawn pack thứ hai. Không L3 hộ nghề.
+3. Đọc `SKILL.md` của đúng lá. Không agent bàn giao agent. Không L3 hộ nghề.
 
 Loader Cursor có thể tự gắn lá theo `description`; dispatcher vẫn bắt buộc bước 2.
 

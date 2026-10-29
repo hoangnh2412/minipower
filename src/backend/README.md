@@ -1,6 +1,6 @@
 # Code backend .NET (backend) — framework Jarvis
 
-Module `backend` của **Minipower** — 14 skill **lá-rời** dạy dựng backend .NET theo framework Jarvis chuẩn công ty. Lá-rời nghĩa là: mô tả việc bằng lời (*"thêm cache Redis"*, *"API cần JWT"*) là skill tương ứng **tự kích hoạt** — không cần nhớ tên. Trong quy trình chung, module này nhận bàn giao từ **Quy trình phát triển** (`sdlc`) tại H4: DOC-08 (SAD) · DOC-11 (data model) · DOC-12 (API) + FR/AC theo module — xem [PACK.md](PACK.md).
+Module `backend` của **Minipower** — 17 skill **lá-rời** dạy dựng backend .NET theo framework Jarvis chuẩn công ty. Lá-rời nghĩa là: mô tả việc bằng lời (*"thêm cache Redis"*, *"API cần JWT"*) là skill tương ứng **tự kích hoạt** — không cần nhớ tên. Trong quy trình chung, module này nhận bàn giao từ **Quy trình phát triển** (`sdlc`) tại H4: DOC-08 (SAD) · DOC-11 (data model) · DOC-12 (API) + FR/AC theo module — xem [PACK.md](PACK.md).
 
 Mỗi skill có **README** (người dùng) và **SKILL.md** (agent).
 
@@ -69,6 +69,9 @@ Chi tiết publish sang repo product: [Publish skill sang repo consumer](#publis
 | **minipower-backend-realtime-dotnet** | [skills/minipower-backend-realtime-dotnet/README.md](./skills/minipower-backend-realtime-dotnet/README.md) | Jarvis.Realtime + SignalR, Redis backplane |
 | **minipower-backend-review-dotnet** | [skills/minipower-backend-review-dotnet/README.md](./skills/minipower-backend-review-dotnet/README.md) | Review PR C#/.NET |
 | **minipower-backend-convention-dotnet** | [skills/minipower-backend-convention-dotnet/README.md](./skills/minipower-backend-convention-dotnet/README.md) | Quy ước coding C#/.NET + `.editorconfig` / analyzer ép lúc build |
+| **minipower-backend-tenants-dotnet** | [skills/minipower-backend-tenants-dotnet/README.md](./skills/minipower-backend-tenants-dotnet/README.md) | Catalog tenant Jarvis — `Platform.Tenants`, route `/platform/tenants` |
+| **minipower-backend-orgs-dotnet** | [skills/minipower-backend-orgs-dotnet/README.md](./skills/minipower-backend-orgs-dotnet/README.md) | Catalog org Jarvis — `Platform.Orgs`, không seed, không xóa cứng |
+| **minipower-backend-orgstructure-dotnet** | [skills/minipower-backend-orgstructure-dotnet/README.md](./skills/minipower-backend-orgstructure-dotnet/README.md) | Cây tổ chức trong một org — `Platform.OrgStructure` |
 
 ## Prompt nhanh
 

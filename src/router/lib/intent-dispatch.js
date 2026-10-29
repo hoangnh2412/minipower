@@ -16,6 +16,7 @@ export const INTENT_RULES = [
   { skill: "minipower-router-init", keys: ["khởi tạo dự án", "init project", "init dự án", "khởi tạo project"] },
   { skill: "minipower-router-deliberation", keys: ["có nên làm", "premise check", "nghị luận"] },
   { skill: "minipower-router-readiness", keys: ["đủ tiền đề", "readiness", "soát tiền đề"] },
+  { skill: "minipower-router-plan", keys: ["plan trước khi làm", "chia task", "phân chia công việc", "kế hoạch nhiều bước", "nhiều skill", "lập plan"] },
   { skill: "minipower-discovery-survey", keys: ["khảo sát", "painpoint", "doc-01", "doc-02", "doc-03"] },
   { skill: "minipower-discovery-review", keys: ["review khảo sát", "soi doc-03"] },
   { skill: "minipower-analyst-srs", keys: ["viết fr", "viết uc", "srs", "acceptance criteria", "doc-06"] },
@@ -84,6 +85,27 @@ export function matchIntent(prompt) {
     }
   }
   return best
+}
+
+/** Lá dispatcher — không phải lá làm việc, không tính vào tín hiệu "chạm mấy skill". */
+const DISPATCHER = "minipower-router"
+
+/**
+ * Mọi skill có ≥ 1 khóa khớp, theo thứ tự INTENT_RULES, không trùng, bỏ dispatcher.
+ * Tín hiệu triage (ADR-043 QĐ-8): ≥ 2 phần tử → gợi ý PHỨC. Chỉ gợi ý / test vàng,
+ * không hook nào đọc để chặn. Khác `hooks/lib/rules.js#matchIntents` (trả intent
+ * prereq từ rules.json) — hai hàm, hai tầng.
+ * @param {string} prompt
+ * @returns {string[]}
+ */
+export function matchIntents(prompt) {
+  const t = fold(prompt)
+  const out = []
+  for (const rule of INTENT_RULES) {
+    if (rule.skill === DISPATCHER || out.includes(rule.skill)) continue
+    if (rule.keys.some((key) => t.includes(fold(key)))) out.push(rule.skill)
+  }
+  return out
 }
 
 export function announceLine(skill, task) {

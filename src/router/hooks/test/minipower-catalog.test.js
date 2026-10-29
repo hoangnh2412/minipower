@@ -30,7 +30,7 @@ test("catalog: đủ pack nghề/kênh có skills/", () => {
 })
 
 test("catalog: mọi lá minipower-* có SKILL.md + README.md + name ≡ thư mục + description", () => {
-  assert.equal(leaves.length, 55, `kỳ vọng 55 lá đăng ký, thấy ${leaves.length}`)
+  assert.equal(leaves.length, 59, `kỳ vọng 59 lá đăng ký, thấy ${leaves.length}`)
   for (const s of leaves) {
     assert.ok(existsSync(s.skillMd), `${s.name} thiếu SKILL.md`)
     assert.ok(existsSync(s.readme), `${s.name} thiếu README.md`)

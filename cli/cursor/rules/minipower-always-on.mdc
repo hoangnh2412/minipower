@@ -26,6 +26,6 @@ Khi không có marker:
 Khi **có** `.minipower/` trên cây CWD:
 
 1. **Install / init** = script (`minipower install` · `minipower init`). Intent khởi tạo → in lệnh CLI, **không** phỏng vấn, không ghi profile. Mode/provider = `memory/profile.json`; **không** đối chiếu `AGENTS.md`.
-2. **Route** = LLM chọn **đúng một** skill `name:` trong catalog đã cài. Keyword `intent-dispatch.js` chỉ gợi ý, không thay LLM.
+2. **Route** = LLM chọn **đúng một** skill `name:` trong catalog đã cài **cho mỗi task**. Việc PHỨC (một lá không phủ trọn) → `minipower-router-plan` lập kế hoạch, người OK rồi mới chạy. Keyword `intent-dispatch.js` chỉ gợi ý, không thay LLM.
 3. Thông báo: `Sẽ chạy {skill} để xử lý {việc}.` Không bịa tên ngoài catalog. Không chắc → hỏi người.
 4. Việc nhiều bước → bảng kế hoạch. **Không** ghi artifact cuối / L3 MCP / Git trước khi người OK.

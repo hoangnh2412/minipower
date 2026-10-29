@@ -2,7 +2,7 @@
 
 Khai quật hệ cũ thành tài liệu as-built — nhà `architecture/` (D2 chốt). Từ ADR-042 lá này cũng giữ **phương pháp đọc code** dùng chung mọi stack: [reference/reading-method.md](reference/reading-method.md) + bảng tra theo stack trong `patterns/` (.NET · Java · React · Flutter) + [Flow Map nháp](templates/TPL-flow-map.tpl).
 
-Atomic pack `architecture/`. Không spawn pack khác (ADR-033 QĐ-1). **Người trigger** — không hook nào tự gọi.
+Atomic pack `architecture/`. Không agent bàn giao agent (ADR-033 QĐ-1 · ADR-043). **Người trigger** — không hook nào tự gọi.
 
 ## Khi nào dùng
 

@@ -31,6 +31,7 @@ Dùng khi vận hành/quản trị, **không** đánh số DOC — không vào t
 | Template | File | Khi nào dùng |
 |----------|------|--------------|
 | Agent profile | [TPL-agent-profile.md](TPL-agent-profile.md) | Schema profile **v3** + khung `AGENTS.md` (mục 0–8). Bản đã điền: [SAMPLE-agents.md](SAMPLE-agents.md) |
+| Kế hoạch nhiều task | [TPL-plan.md](TPL-plan.md) | Yêu cầu PHỨC chạm ≥ 2 skill (ADR-043): task có tiêu chí đo được, sống trên chat, người OK rồi mới chạy |
 | RFC | [TPL-rfc.md](TPL-rfc.md) | Đề xuất thay đổi cần lấy ý kiến trước khi quyết; chốt → ADR (DOC-09) |
 | Meeting Minutes | [TPL-meeting-minutes.md](TPL-meeting-minutes.md) | Biên bản họp — quyết định + action item |
 | Incident Report | [TPL-incident-report.md](TPL-incident-report.md) | Ghi nhận sự cố vận hành (SEV1–3) |

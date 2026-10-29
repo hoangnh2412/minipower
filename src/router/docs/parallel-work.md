@@ -4,7 +4,7 @@
 
 Dự án lớn thường chia **theo bounded context (module)** và **theo vai trò**. Minipower hỗ trợ song song khi có **hợp đồng tại biên** (integration spec, entity dùng chung, API contract).
 
-> **Hai kiểu song song:** (1) **nhiều người** (multi-BA/SA/PM) — trang này; (2) **AI fan-out** theo module — harness client (1 subagent / chiều hoặc / module), **không** skill spawn. Cả hai **dùng chung** quy tắc bên dưới: một module = một owner, tránh sửa file chung đồng thời.
+> **Hai kiểu song song:** (1) **nhiều người** (multi-BA/SA/PM) — trang này; (2) **AI fan-out** theo module, hoặc theo task độc lập (`∥`) của kế hoạch người đã OK (ADR-043) — harness client (1 subagent / chiều, / module hoặc / task), đích về agent chính; Minipower không viết runtime fan-out. Cả hai **dùng chung** quy tắc bên dưới: một module = một owner, tránh sửa file chung đồng thời.
 >
 > **Mô hình: pipeline theo module, không phải barrier** (ADR-020 QĐ-14). Mỗi module một nhịp riêng; module xong trước đi tiếp trước, **không chờ nhau**. Con người mở từng nhánh — không agent bàn giao cho agent.
 >

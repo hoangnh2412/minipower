@@ -79,7 +79,7 @@ node cli/minipower.mjs init --target /path/toi/sample
 
 `--answers file.json` chỉ cho CI/script. `init --check` soát cây đã ghi.
 
-**3. Làm việc — một phiên một pack** (ADR-033 QĐ-1/QĐ-11)
+**3. Làm việc — một task một lá** (ADR-033 QĐ-1/QĐ-11 · ADR-043)
 
 | Cách | Khi nào | Ví dụ |
 |------|---------|--------|
@@ -94,14 +94,14 @@ Kênh MCP: **L1 đọc tự do · L3 chỉ sau bảng preview và một lần OK
 
 **Có.** Không cần gõ đúng tên lá. Hai lớp:
 
-1. **Dispatcher Minipower** — `/minipower-router` hoặc câu có *minipower* / *làm gì tiếp*. Agent đọc [bảng intent → pack](src/router/skills/minipower-router/SKILL.md), chọn **đúng một** pack/lá.
-2. **Loader Cursor** — chat Agent thường: mô tả việc; Cursor khớp `description` của skill đã symlink. Không phải runtime spawn; độ chính xác phụ thuộc skill đã cài.
+1. **Dispatcher Minipower** — `/minipower-router` hoặc câu có *minipower* / *làm gì tiếp*. Agent đọc [bảng intent → pack](src/router/skills/minipower-router/SKILL.md), triage đơn hay phức, chọn **đúng một** pack/lá cho mỗi task; việc PHỨC → [minipower-router-plan](src/router/skills/minipower-router-plan/SKILL.md) lập kế hoạch, người OK rồi mới chạy.
+2. **Loader Cursor** — chat Agent thường: mô tả việc; Cursor khớp `description` của skill đã symlink. Không phải runtime fan-out; độ chính xác phụ thuộc skill đã cài.
 
 **Trước khi đọc SOP / làm việc**, agent **thông báo một dòng** rồi mới chạy (không chờ OK trừ L3 MCP hoặc đụng Git):
 
 > Sẽ chạy **`minipower-…`** để xử lý **…** (pack `…`).
 
-Hai pack cùng lúc → hỏi người, không tự ghép. Không spawn agent khác. Hook `auto-routing` chỉ gắn **phase theo DOC** khi bạn `@` file DOC — không chọn lá nghề.
+Hai pack cùng lúc → kế hoạch (`minipower-router-plan`), người OK rồi mới chạy; task độc lập fan-out qua harness, đích về agent chính. Không agent bàn giao agent. Hook `auto-routing` chỉ gắn **phase theo DOC** khi bạn `@` file DOC — không chọn lá nghề.
 
 ### Chạy test (toàn Minipower)
 
@@ -133,6 +133,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-router-init](src/router/skills/minipower-router-init/SKILL.md)** | nhắc CLI init | `node cli/minipower.mjs init` (hoặc `.minipower/bin/minipower init`) |
 | **[minipower-router-deliberation](src/router/skills/minipower-router-deliberation/SKILL.md)** | có nên làm, premise | Trước việc Full; PROCEED/RESHAPE/STOP **do người** |
 | **[minipower-router-readiness](src/router/skills/minipower-router-readiness/SKILL.md)** | đủ chưa, trước code/test/deploy | Hỏi **một lượt** mọi thiếu; ghi nợ `doc-debt.md` |
+| **[minipower-router-plan](src/router/skills/minipower-router-plan/SKILL.md)** | nhiều skill, nhiều bước, chia task, plan trước khi làm | Router triage PHỨC → kế hoạch có tiêu chí đo được; người OK một lần; tự kiểm ≤ 3 lần, review ≤ 3 vòng; người ký PASS |
 
 ### Discovery — [`discovery/`](src/discovery/)
 
@@ -215,6 +216,9 @@ Lá-rời: **mô tả việc**. Provider/pattern con chỉ đọc khi skill cha 
 | **[minipower-backend-notification-dotnet](src/backend/skills/minipower-backend-notification-dotnet/README.md)** | email SMTP | *Gửi mail transactional Mailkit* |
 | **[minipower-backend-blobstoring-dotnet](src/backend/skills/minipower-backend-blobstoring-dotnet/README.md)** | MinIO / filesystem | *Upload chứng từ MinIO* |
 | **[minipower-backend-realtime-dotnet](src/backend/skills/minipower-backend-realtime-dotnet/README.md)** | SignalR | *AddCoreRealtime + Redis backplane* |
+| **[minipower-backend-tenants-dotnet](src/backend/skills/minipower-backend-tenants-dotnet/README.md)** | catalog tenant `Platform.Tenants` | *Thêm tenant cha-con, chuỗi kết nối tenant* |
+| **[minipower-backend-orgs-dotnet](src/backend/skills/minipower-backend-orgs-dotnet/README.md)** | catalog org `Platform.Orgs` | *Thêm người bán trên hóa đơn, header X-Org-Id* |
+| **[minipower-backend-orgstructure-dotnet](src/backend/skills/minipower-backend-orgstructure-dotnet/README.md)** | cây tổ chức `Platform.OrgStructure` | *Thêm phòng ban, gán PositionId cho user* |
 | **[minipower-backend-review-dotnet](src/backend/skills/minipower-backend-review-dotnet/README.md)** | review PR C# | *Review diff trước khi mở MR* |
 
 ### Frontend React — [`frontend/`](src/frontend/)
@@ -257,8 +261,8 @@ Lá-rời theo kit `@platform/core`: **mô tả việc**. Pattern con chỉ đ�
 |------|-----|
 | [survey](src/discovery/skills/minipower-discovery-survey/SKILL.md) · [srs](src/analyst/skills/minipower-analyst-srs/SKILL.md) · [sad](src/architecture/skills/minipower-architecture-sad/SKILL.md) | SOP khảo sát, SRS, SAD |
 | [pm-plan](src/pm/skills/minipower-pm-plan/SKILL.md) · [ops-deploy](src/ops/skills/minipower-ops-deploy/SKILL.md) · [analyst-cr](src/analyst/skills/minipower-analyst-cr/SKILL.md) | Kế hoạch · deploy · CR nội dung |
-| [deliberation](src/router/skills/minipower-router-deliberation/SKILL.md) · [readiness](src/router/skills/minipower-router-readiness/SKILL.md) | Gate mềm |
-| [parallel-work](src/router/docs/parallel-work.md) | Fan-out = pipeline theo module (harness, không skill spawn) |
+| [deliberation](src/router/skills/minipower-router-deliberation/SKILL.md) · [readiness](src/router/skills/minipower-router-readiness/SKILL.md) · [plan](src/router/skills/minipower-router-plan/SKILL.md) | Gate mềm · kế hoạch nhiều task |
+| [parallel-work](src/router/docs/parallel-work.md) | Fan-out = pipeline theo module, hoặc task độc lập của kế hoạch đã OK (harness, Minipower không viết runtime) |
 | [as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md) | Maintain / legacy |
 | `minipower-*-review` trong từng pack | QC — người ký |
 

@@ -18,7 +18,7 @@ Trước ký, giải pháp mức bán là [minipower-architecture-solution-lite]
 | DOC | Nội dung |
 |-----|----------|
 | 08 SAD | 4+1 views |
-| 09 ADR | 1 file / quyết định — không sửa Accepted |
+| 09 ADR | 1 file / quyết định — không sửa Accepted. **Viết cho người không chuyên đọc hiểu** (PM, khách, người ký); đoạn chuyên sâu kỹ thuật gắn nhãn `[Kỹ thuật]` ở đầu đoạn / đầu mục để người đọc bỏ qua được |
 | 10 Integration | Protocol, direction, SLA |
 | 11 Data Model | ERD, master data — theo khung template: ba tầng tên, UUIDv7, audit, UTC+0, **lý do thiết kế · dữ liệu mẫu · query mẫu** mỗi ERD |
 | 12 API | OpenAPI — DTO ở ranh giới, camelCase, lỗi `code` + `message` đúng họ mã |
@@ -31,6 +31,6 @@ Trước ký, giải pháp mức bán là [minipower-architecture-solution-lite]
 
 ## Anti-patterns
 
-- SAD trước SRS · sửa ADR cũ · API không trace FR · ERD không có dữ liệu mẫu / query mẫu · ghi chú thảo luận lẫn trong thân ERD
+- SAD trước SRS · sửa ADR cũ · ADR toàn thuật ngữ kỹ thuật không nhãn `[Kỹ thuật]` · API không trace FR · ERD không có dữ liệu mẫu / query mẫu · ghi chú thảo luận lẫn trong thân ERD
 
 Hướng dẫn người: [README.md](README.md).

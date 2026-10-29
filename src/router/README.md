@@ -1,6 +1,6 @@
 # router — dispatcher
 
-Pack **dispatcher** (ADR-033 QĐ-1/QĐ-14): gợi ý đúng một pack / phiên. Init = CLI `minipower init`, không phỏng vấn LLM. Hook máy neo `src/router/hooks/` (ADR-037).
+Pack **dispatcher** (ADR-033 QĐ-1/QĐ-14 · ADR-043): triage đơn hay phức, gợi ý một lá cho mỗi task; không agent bàn giao agent. Init = CLI `minipower init`, không phỏng vấn LLM. Hook máy neo `src/router/hooks/` (ADR-037).
 
 Manifest: [PACK.md](PACK.md).
 
@@ -8,7 +8,8 @@ Manifest: [PACK.md](PACK.md).
 
 | Skill | Tài liệu | Việc |
 |---|---|---|
-| **minipower-router** | [skills/minipower-router/README.md](./skills/minipower-router/README.md) | Intent → đúng một pack; không spawn |
+| **minipower-router** | [skills/minipower-router/README.md](./skills/minipower-router/README.md) | Intent → triage → một lá cho mỗi task; không agent bàn giao agent |
+| **minipower-router-plan** | [skills/minipower-router-plan/README.md](./skills/minipower-router-plan/README.md) | Yêu cầu PHỨC → kế hoạch có tiêu chí đo được, người OK một lần, tự kiểm ≤ 3 lần, review ≤ 3 vòng |
 | **minipower-router-init** | [skills/minipower-router-init/README.md](./skills/minipower-router-init/README.md) | Nhắc CLI `minipower init`; đã có marker thì không hỏi lại |
 | **minipower-router-deliberation** | [skills/minipower-router-deliberation/README.md](./skills/minipower-router-deliberation/README.md) | Premise gate mềm PROCEED/RESHAPE/STOP |
 | **minipower-router-readiness** | [skills/minipower-router-readiness/README.md](./skills/minipower-router-readiness/README.md) | Soát tiền đề trước thực thi, hỏi một lượt |
