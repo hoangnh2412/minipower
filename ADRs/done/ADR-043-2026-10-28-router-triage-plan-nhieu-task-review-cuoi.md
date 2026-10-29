@@ -3,10 +3,10 @@
 | | |
 |---|---|
 | **Ngày** | 2026-10-28 |
-| **Trạng thái** | 🟡 Doing — **Q1–Q12 chốt 2026-10-29**; **thi hành §7 bước 1–9 cùng ngày**, T4–T6 xanh (629/629 · `gen:check` · `link:check` 0 MỚI). Còn smoke T1–T3, T7–T11 (chủ repo tự chạy). Chưa commit |
+| **Trạng thái** | 🟢 **Done 2026-10-29** — Q1–Q12 chốt, §7 bước 1–9 thi hành, T4–T6 xanh (629/629 · `gen:check` · `link:check` 0 MỚI), smoke T1–T3 + T7–T11 chủ repo xác nhận cùng ngày. Chuyển `done/` 2026-10-29 |
 | **Phạm vi** | Pack `router/`: bước triage trong [minipower-router](../../src/router/skills/minipower-router/SKILL.md) · lá mới `minipower-router-plan` · khuôn kế hoạch `TPL-plan.md` (có tiêu chí hoàn thành, điều kiện cần, phụ thuộc) · bộ tiêu chí cơ bản dùng chung · hàm `matchIntents` · các chỗ đang viết "một lá / phiên", "không spawn" |
 | **Ngoài phạm vi** | Agent tự bàn giao agent (vẫn cấm theo ADR-022 QĐ-1) · viết lá `*-review` cho pack chưa có · hook máy chấm "phức/đơn" hay chấm tiêu chí · đổi `rules.json` · lưu kế hoạch vào DB `.minipower/` |
-| **Nối tiếp** | [ADR-034](../done/ADR-034-2026-09-26-minipower-marker-always-on-dispatch.md) QĐ-5 "kế hoạch rồi người điều phối" — ADR này là SOP thi hành · [ADR-033](ADR-033-2026-09-25-dispatcher-role-channel-ssot-provider.md) QĐ-1 "atomic" được điều chỉnh · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-11/13/14 gate mềm, review thuộc pack, pipeline theo module · [parallel-work](../../src/router/docs/parallel-work.md) fan-out theo module · Ba ADR đã huỷ cùng chủ đề: [ADR-003](../cancel/ADR-003-2026-07-20-minipower-gated-fanout-execution.md) · [ADR-009](../cancel/ADR-009-2026-07-25-minipower-orchestrator-analysis.md) · [ADR-013](../cancel/ADR-013-2026-07-26-minipower-senior-junior-execution.md) — xem §0 vì sao không lặp lại |
+| **Nối tiếp** | [ADR-034](ADR-034-2026-09-26-minipower-marker-always-on-dispatch.md) QĐ-5 "kế hoạch rồi người điều phối" — ADR này là SOP thi hành · [ADR-033](../doing/ADR-033-2026-09-25-dispatcher-role-channel-ssot-provider.md) QĐ-1 "atomic" được điều chỉnh · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-11/13/14 gate mềm, review thuộc pack, pipeline theo module · [parallel-work](../../src/router/docs/parallel-work.md) fan-out theo module · Ba ADR đã huỷ cùng chủ đề: [ADR-003](../cancel/ADR-003-2026-07-20-minipower-gated-fanout-execution.md) · [ADR-009](../cancel/ADR-009-2026-07-25-minipower-orchestrator-analysis.md) · [ADR-013](../cancel/ADR-013-2026-07-26-minipower-senior-junior-execution.md) — xem §0 vì sao không lặp lại |
 | **Mục đích** | Ghi lại: khi nào router đi thẳng, khi nào lập kế hoạch; kế hoạch phải có gì để người duyệt được; task độc lập chạy song song ra sao; agent tự kiểm và tự sửa được tới đâu; review cuối ở đâu |
 | **Ảnh hưởng** | `src/router/skills/minipower-router/` · `src/router/skills/minipower-router-plan/` (mới) · `src/router/templates/TPL-plan.md` (mới) · `src/router/lib/intent-dispatch.js` · `src/router/rules/dispatch.md` · `cli/cursor/rules/minipower-always-on.mdc` · `src/router/docs/router-and-skills.md` · `src/router/docs/parallel-work.md` · `src/router/README.md` · `README.md` gốc · `AGENTS.md` · test `minipower-catalog.test.js`, `intent-dispatch.test.js`, `router-plan.test.js` (mới) · ADR-033 thêm mục Điều chỉnh |
 
@@ -335,23 +335,23 @@ Chốt xong: ghi ngày vào **Trạng thái** + cập nhật ghi chú index.
 | 6 | ADR-033 mục *Điều chỉnh* | ✅ 2026-10-29 — §12 (bảng trước/sau: đơn vị atomic, "không spawn chuỗi", `rules/dispatch.md`) | Q1 |
 | 7 | `minipower-catalog.test.js` **58 → 59** *(ADR ghi 55 → 56 là số cũ; chủ repo đã thêm 3 lá backend trước đó)*; `router-plan.test.js` theo 5.10; README gốc + **`src/router/README.md`** liệt kê lá mới *(`role-pack.test.js` đếm dòng bảng Skill — ADR bỏ sót)* | ✅ 2026-10-29 — `router-plan.test.js` **16 test** | 2, 4 |
 | 8 | `npm test` → `gen:check` → `link:check` | ✅ 2026-10-29 — **629/629** · generated đồng bộ · 423 file / 2738 link / 0 MỚI | 1–7 |
-| 9 | Index: cập nhật ghi chú; chuyển `done/` khi T xanh | ✅ ghi chú 2026-10-29; **chưa** `done/` — còn T1–T3, T7–T11 smoke | 8 |
+| 9 | Index: cập nhật ghi chú; chuyển `done/` khi T xanh | ✅ 2026-10-29 — smoke chủ repo xác nhận; đã chuyển `done/` | 8 |
 
 ## §8. Xác minh
 
 | # | Loại | Case | Expect | Trạng thái |
 |---|---|---|---|---|
-| T1 | Smoke | Prompt ĐƠN *"viết FR cho module ORD"* | Đi thẳng `minipower-analyst-srs`, không kế hoạch | 🔴 chủ repo |
-| T2 | Smoke | Prompt PHỨC ở 5.11 | Kế hoạch đúng khuôn: mỗi task đủ mô tả / điều kiện cần / tiêu chí đo được / phụ thuộc; #2 #3 có `∥`; dòng cuối review; **dừng chờ OK**, chưa mở SOP nghề nào | 🔴 chủ repo |
-| T3 | Smoke | Sau OK, #2 thiếu DOC-03 | Gọi readiness, hỏi một lượt; không nhảy #3 | 🔴 chủ repo |
+| T1 | Smoke | Prompt ĐƠN *"viết FR cho module ORD"* | Đi thẳng `minipower-analyst-srs`, không kế hoạch | 🟢 2026-10-29 chủ repo xác nhận |
+| T2 | Smoke | Prompt PHỨC ở 5.11 | Kế hoạch đúng khuôn: mỗi task đủ mô tả / điều kiện cần / tiêu chí đo được / phụ thuộc; #2 #3 có `∥`; dòng cuối review; **dừng chờ OK**, chưa mở SOP nghề nào | 🟢 2026-10-29 chủ repo xác nhận |
+| T3 | Smoke | Sau OK, #2 thiếu DOC-03 | Gọi readiness, hỏi một lượt; không nhảy #3 | 🟢 2026-10-29 chủ repo xác nhận |
 | T4 | Mới | `router-plan.test.js` theo 5.10 (template, ví dụ README, SKILL lá plan nêu trần 3 và bốn điều kiện dừng) | xanh | 🟢 2026-10-29 — 16 test |
 | T5 | Mới | `matchIntents` prompt ghép | ≥ 2 skill; `matchIntent` một | 🟢 2026-10-29 — prompt nguyên văn ADR ra 2 lá ("và review" không khớp key); thêm "review PR" ra 3 |
 | T6 | Regression | `npm test` + `gen:check` + `link:check` 0 gãy mới; catalog **59**; grep "không spawn", "một pack / phiên" = 0 ngoài `ADRs/` | xanh | 🟢 2026-10-29 — 629/629 · đồng bộ · 0 MỚI · grep 0 |
-| T7 | Smoke | *"không cần plan"* với prompt PHỨC | Đi thẳng skill đầu, nhắc phần còn lại | 🔴 chủ repo |
-| T8 | Smoke | #2 và #3 chạy song song | Hai agent con, mỗi agent chỉ mở `minipower-analyst-srs`, báo về agent chính bảng tiêu chí đạt/chưa; agent chính tổng hợp rồi mới chạy #4 | 🔴 chủ repo |
-| T9 | Smoke | Trong #2, cố ý để một UC không có FR | Agent tự thấy tiêu chí *mỗi UC có ≥ 1 FR* chưa đạt, tự sửa, kiểm lại, nhật ký lần 1; không hỏi người | 🔴 chủ repo |
-| T10 | Smoke | Trong #2, cố ý để FR mâu thuẫn BR không sửa được | Dừng ở lần 2 (cùng cách) hoặc ngay khi thấy cần quyết định; báo về bảng *Lần · Tiêu chí · Cách · Kết quả* + đề xuất; agent chính trình người | 🔴 chủ repo |
-| T11 | Smoke | Review #4 ra finding | Chuyển về #2 hoặc #3 đúng module, sửa, review lại, nhật ký vòng 1; 0 finding → trình người ký | 🔴 chủ repo |
+| T7 | Smoke | *"không cần plan"* với prompt PHỨC | Đi thẳng skill đầu, nhắc phần còn lại | 🟢 2026-10-29 chủ repo xác nhận |
+| T8 | Smoke | #2 và #3 chạy song song | Hai agent con, mỗi agent chỉ mở `minipower-analyst-srs`, báo về agent chính bảng tiêu chí đạt/chưa; agent chính tổng hợp rồi mới chạy #4 | 🟢 2026-10-29 chủ repo xác nhận |
+| T9 | Smoke | Trong #2, cố ý để một UC không có FR | Agent tự thấy tiêu chí *mỗi UC có ≥ 1 FR* chưa đạt, tự sửa, kiểm lại, nhật ký lần 1; không hỏi người | 🟢 2026-10-29 chủ repo xác nhận |
+| T10 | Smoke | Trong #2, cố ý để FR mâu thuẫn BR không sửa được | Dừng ở lần 2 (cùng cách) hoặc ngay khi thấy cần quyết định; báo về bảng *Lần · Tiêu chí · Cách · Kết quả* + đề xuất; agent chính trình người | 🟢 2026-10-29 chủ repo xác nhận |
+| T11 | Smoke | Review #4 ra finding | Chuyển về #2 hoặc #3 đúng module, sửa, review lại, nhật ký vòng 1; 0 finding → trình người ký | 🟢 2026-10-29 chủ repo xác nhận |
 
 Icon: 🟢 xong · 🟡 có sẵn, cần giữ xanh · 🔴 chưa có. **Không 🟢 Done khi còn T đỏ.**
 

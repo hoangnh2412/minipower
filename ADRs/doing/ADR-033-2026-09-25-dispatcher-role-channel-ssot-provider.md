@@ -769,7 +769,7 @@ Chữ §5.3 / một số hàng catalog vẫn mô tả cây `memory/tasks/T-NNN.m
 
 *Chữ lịch sử trong §5.3 / T1–T2 giữ nguyên để đọc ngữ cảnh; thi hành theo bảng trên.*
 
-## §12. Điều chỉnh 2026-10-29 — QĐ-1 / QĐ-11 "atomic" tính theo **task**, không theo phiên ([ADR-043](ADR-043-2026-10-28-router-triage-plan-nhieu-task-review-cuoi.md))
+## §12. Điều chỉnh 2026-10-29 — QĐ-1 / QĐ-11 "atomic" tính theo **task**, không theo phiên ([ADR-043](../done/ADR-043-2026-10-28-router-triage-plan-nhieu-task-review-cuoi.md))
 
 | | Trước (2026-09-25) | Sau (ADR-043) |
 |---|---|---|
