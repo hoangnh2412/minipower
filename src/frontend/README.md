@@ -62,6 +62,7 @@ Publish sang repo product (`{product}-frontend/.opencode/skills/`): cùng cách 
 | **minipower-frontend-navigation-react** | [skills/minipower-frontend-navigation-react/README.md](./skills/minipower-frontend-navigation-react/README.md) | `*_ROUTES`, `configure*Navigate` + NavigateBridge, menu lọc quyền, AdminLayout |
 | **minipower-frontend-customization-react** | [skills/minipower-frontend-customization-react/README.md](./skills/minipower-frontend-customization-react/README.md) | Tuỳ biến page có sẵn của kit không fork — slot `content`, `callback`, controlled |
 | **minipower-frontend-review-react** | [skills/minipower-frontend-review-react/README.md](./skills/minipower-frontend-review-react/README.md) | Review PR TypeScript/React trước khi mở MR |
+| **minipower-frontend-plan-react** | [skills/minipower-frontend-plan-react/README.md](./skills/minipower-frontend-plan-react/README.md) | Breakdown kỹ thuật + độ phức tạp, input cho PM lập WBS |
 
 ## Không thuộc module này
 

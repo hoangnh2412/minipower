@@ -11,4 +11,6 @@ Kế hoạch / WBS / estimate (DOC-14/15). Rubric: [complexity-rubric.md](comple
 
 Phân rã Epic · Feature · Story · Task — luật loại việc, AC, estimate không đếm đôi, log giờ đúng cấp: [reference/work-breakdown.md](reference/work-breakdown.md) (tool-neutral; lá kênh `tasks/` dùng chung khi soạn bảng L2).
 
+Module có breakdown kỹ thuật từ [minipower-backend-plan-dotnet](../../../backend/skills/minipower-backend-plan-dotnet/SKILL.md)/[minipower-frontend-plan-react](../../../frontend/skills/minipower-frontend-plan-react/SKILL.md) → đọc thêm để size Story/Task sát hơn; không có vẫn lập WBS được như cũ (ADR-045).
+
 Hướng dẫn người: [README.md](README.md).
