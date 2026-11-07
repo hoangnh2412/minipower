@@ -60,6 +60,8 @@ Agent chính **tổng hợp** sau mỗi đợt: dedup finding theo `{DOC}#{secti
 
 Cho mọi task, tuần tự hay song song. Làm xong → đối chiếu từng tiêu chí (B1–B7 + riêng) → ghi đạt / chưa. Có tiêu chí chưa đạt → sửa → kiểm lại. **Tối đa 3 lần thử** = lần làm đầu + 2 lần sửa.
 
+Cơ chế này dùng gọi độc lập được qua [minipower-router-selfcheck](../minipower-router-selfcheck/SKILL.md) (khuôn nhật ký ở [minipower-router-mistake](../minipower-router-mistake/SKILL.md)) khi cần ngoài luồng plan — ví dụ trong [minipower-router-implement](../minipower-router-implement/SKILL.md).
+
 **Bốn điều kiện dừng** — gặp một là dừng, báo cáo, không thử tiếp:
 
 | | Điều kiện | Ghi chú |
