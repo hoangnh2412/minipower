@@ -3,6 +3,7 @@ name: minipower-backend-orgstructure-dotnet
 description: Thiết lập cây tổ chức Jarvis Platform.OrgStructure — đơn vị, pháp nhân, chức danh, vị trí, path. Dùng khi thêm phòng ban trong một org, gán OrganizationalUnitId hoặc PositionId cho user.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Platform.OrgStructure — Orchestrator

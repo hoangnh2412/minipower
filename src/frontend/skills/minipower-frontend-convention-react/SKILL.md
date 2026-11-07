@@ -3,6 +3,7 @@ name: minipower-frontend-convention-react
 description: Quy ước code TypeScript/React theo kit @platform/core — đặt tên (*Page, use*, call*, *Schema, *_ROUTES, configure*Navigate…), `as const` thay enum, PrimeReact 11 compound + `unstyled` + Tailwind, text qua get*Messages, dùng ConfirmDialog/FeatureDialog/ListPagination/notify của kit, xử lý lỗi qua handleAction + getErrorMessage. Dùng khi viết hoặc sửa file .ts/.tsx, và khi cần dựng tsconfig strict + ESLint để ép convention lúc CI.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Quy ước code TypeScript / React — Orchestrator

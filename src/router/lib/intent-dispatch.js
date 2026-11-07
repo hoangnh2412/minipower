@@ -17,6 +17,7 @@ export const INTENT_RULES = [
   { skill: "minipower-router-deliberation", keys: ["có nên làm", "premise check", "nghị luận"] },
   { skill: "minipower-router-readiness", keys: ["đủ tiền đề", "readiness", "soát tiền đề"] },
   { skill: "minipower-router-plan", keys: ["plan trước khi làm", "chia task", "phân chia công việc", "kế hoạch nhiều bước", "nhiều skill", "lập plan"] },
+  { skill: "minipower-router-retro", keys: ["làm chưa tốt", "rút kinh nghiệm", "báo lỗi skill", "chỗ này sai rồi"] },
   { skill: "minipower-discovery-survey", keys: ["khảo sát", "painpoint", "doc-01", "doc-02", "doc-03"] },
   { skill: "minipower-discovery-review", keys: ["review khảo sát", "soi doc-03"] },
   { skill: "minipower-analyst-srs", keys: ["viết fr", "viết uc", "srs", "acceptance criteria", "doc-06"] },

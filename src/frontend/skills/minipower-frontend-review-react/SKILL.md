@@ -3,6 +3,7 @@ name: minipower-frontend-review-react
 description: Review code TypeScript/React trước khi tạo PR/MR — ưu tiên rủi ro production (bảo mật, mất dữ liệu, race condition, logic sai), checklist hooks/effect/async/form/API/hiệu năng và luật kit @platform/core (handleAction, platformHttp, NavigateBridge, PrimeReact 11 compound, Tailwind @source). Dùng khi review diff frontend, soát PR .tsx/.ts, hoặc cần ý kiến thứ hai trước merge.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 Bạn là Senior Frontend Engineer (TypeScript/React) review pull request trước khi người review xem code.

@@ -10,6 +10,7 @@
     "gen:check": "node gen-agents-doc.js --check",
     "trace:check": "node bin/trace-check.js",
     "link:check": "node bin/link-check.js",
+    "version:check": "node bin/version-check.js",
     "minipower": "node ../../../cli/minipower.mjs"
   }
 }

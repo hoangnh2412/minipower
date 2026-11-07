@@ -3,6 +3,7 @@ name: minipower-toolbox-skill-author
 description: Viết và soát skill lá-rời Minipower (minipower-{module}-{capability}) — chọn module bằng 3 câu hỏi ADR-022, dựng cây SKILL.md/README.md/workflows/providers, đặt description kích hoạt được, cập nhật hub và test canh. Hỏi người xác nhận trước mọi quyết định, không tự chốt. Dùng khi tạo skill mới, thêm provider/pattern/workflow, mở module mới, hoặc soát skill có sẵn lệch chuẩn.
 metadata:
   workflow: github
+  version: 1.1.0
 ---
 
 # Viết skill Minipower — Orchestrator
@@ -20,6 +21,7 @@ Hướng dẫn người: [README.md](README.md) · giải phẫu đầy đủ: [
 | Chưa có skill cho việc này | [workflows/new-skill.md](workflows/new-skill.md) |
 | Đã có skill, thêm provider / pattern / workflow / template | [workflows/extend-skill.md](workflows/extend-skill.md) |
 | Skill có sẵn lệch chuẩn (thiếu README, `description` mơ hồ, SKILL.md phình) | [workflows/extend-skill.md § Soát skill có sẵn](workflows/extend-skill.md#soát-skill-có-sẵn) |
+| Nâng skill từ GitHub Issue nhãn `lesson` (ADR-044) | [workflows/upgrade-from-lesson.md](workflows/upgrade-from-lesson.md) |
 
 ## Gate người — xác nhận trước khi viết
 
@@ -87,6 +89,7 @@ Copy rồi thay placeholder — đừng viết lại khung từ đầu:
 | [templates/workflow-init.md.tpl](templates/workflow-init.md.tpl) | `workflows/init.md` |
 | [templates/workflow-add.md.tpl](templates/workflow-add.md.tpl) | `workflows/add.md` |
 | [templates/provider-SKILL.md.tpl](templates/provider-SKILL.md.tpl) | `providers/<name>/SKILL.md` |
+| [templates/CHANGELOG.md.tpl](templates/CHANGELOG.md.tpl) | `CHANGELOG.md` (mọi lá — ADR-044 §8.1) |
 
 ## Tham chiếu
 

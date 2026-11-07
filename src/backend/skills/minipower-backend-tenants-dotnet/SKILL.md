@@ -3,6 +3,7 @@ name: minipower-backend-tenants-dotnet
 description: Thiết lập catalog tenant Jarvis Platform.Tenants — ITenantManager, entity host trên Master, API /platform/tenants, UseAsCurrentTenantStore. Dùng khi thêm tenant cha-con, chuỗi kết nối tenant, hoặc màn vận hành nền tảng.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Platform.Tenants — Orchestrator

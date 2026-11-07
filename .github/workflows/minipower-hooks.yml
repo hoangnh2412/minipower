@@ -52,3 +52,19 @@ jobs:
           node-version: "22"
       - name: Check markdown links (npm run link:check)
         run: npm run link:check
+
+  version-check:
+    # WARN, không chặn pipeline (ADR-044 Q2) — nâng FAIL sau khi kiểm chứng qua 2 lần bump thật.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/router/hooks
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check skill metadata.version bump (npm run version:check)
+        run: npm run version:check -- --base ${{ github.event.pull_request.base.sha || github.event.before || 'HEAD~1' }}

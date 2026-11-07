@@ -3,6 +3,7 @@ name: minipower-chat-lark
 description: Đọc hội thoại Lark, soạn tin, gửi nhóm hoặc DM sau một lần chốt L3. Dùng khi nhắc việc trên chat, tóm tắt nhóm, im_v1, chat_provider lark — không dùng cho tasklist hay wiki.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-chat-lark

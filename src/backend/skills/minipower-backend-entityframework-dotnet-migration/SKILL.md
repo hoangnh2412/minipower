@@ -3,6 +3,7 @@ name: minipower-backend-entityframework-dotnet-migration
 description: Vòng đời EF Core migration ngoài Host start — tạo / xoá migration (dotnet ef migrations add, remove, --context), apply bằng dotnet ef database update hoặc CI, sinh script SQL idempotent cho production, vị trí thư mục Migrations theo DbContext / MigrationsAssembly. Dùng khi đổi entity, thêm cột, cần migration mới, migrations script, has-pending-model-changes, sửa nhầm migration cũ. Không phủ EnsureMigrateDb lúc Host start.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # EF Core Migration — Orchestrator

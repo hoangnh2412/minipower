@@ -3,6 +3,7 @@ name: minipower-docs-outline
 description: Tra cứu, tóm tắt, xuất bản và migrate tài liệu trên Outline (MCP mặt docs). Dùng khi wiki Outline, publish DOC, docs_provider outline, đồng bộ local markdown ↔ Outline — không dùng cho Lark wiki hay Git.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-docs-outline

@@ -3,6 +3,7 @@ name: minipower-router-readiness
 description: Soát tiền đề trước khi viết code/test/deploy: liệt kê mọi thiếu một lượt, hoãn có ghi nợ. Dùng khi readiness-gate, thực thi, đủ chưa — không tự BLOCK máy.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-router-readiness

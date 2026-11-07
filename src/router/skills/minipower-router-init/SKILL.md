@@ -3,6 +3,7 @@ name: minipower-router-init
 description: Init dự án bằng CLI minipower init, không phỏng vấn LLM. Đã có .minipower thì nói CLI đã xong. Chưa có thì in lệnh init. Dùng khi init project, khởi tạo dự án — support không init.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-router-init

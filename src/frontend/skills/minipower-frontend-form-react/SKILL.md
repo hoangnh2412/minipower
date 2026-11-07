@@ -3,6 +3,7 @@ name: minipower-frontend-form-react
 description: Form theo kit @platform/core — Zod schema + *FormDefaultValues + map entity→form ở validation/, hook use{Feature}Form (react-hook-form + zodResolver, mode onChange), component form chỉ có trường nhận register/control/errors, Controller cho FieldSelect/SearchableSelect/KitDatePicker/ToggleSwitch/PasswordInput, submit qua handleAction + notify. Dùng khi thêm form tạo/sửa, thêm validation hoặc trường bắt buộc, chọn ngày / chọn bản ghi liên kết, form trong dialog, hoặc form sửa không nạp dữ liệu cũ.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Form (@platform/core) — Orchestrator

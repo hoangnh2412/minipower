@@ -3,6 +3,7 @@ name: minipower-frontend-crud-react
 description: Màn CRUD theo kit @platform/core — trang danh sách (DataTable compound, useListPagination + ListPagination, tìm kiếm debounce, lọc trạng thái, RowActions, xoá qua ConfirmDialog, đổi trạng thái), trang tạo/sửa, trang chi tiết; chọn mẫu theo route (List/Form/Detail riêng) hoặc theo dialog (FeatureDialog). Mọi thao tác ghi qua handleAction, page hỗ trợ controlled + slot content + callback. Dùng khi làm màn quản lý danh mục / hồ sơ, bảng có phân trang, form thêm-sửa-xoá, trang chi tiết bản ghi.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Màn CRUD (@platform/core) — Orchestrator

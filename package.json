@@ -8,6 +8,7 @@
     "gen:check": "npm run gen:check --prefix src/router/hooks",
     "link:check": "npm run link:check --prefix src/router/hooks",
     "trace:check": "npm run trace:check --prefix src/router/hooks",
+    "version:check": "npm run version:check --prefix src/router/hooks",
     "minipower": "node cli/minipower.mjs"
   }
 }

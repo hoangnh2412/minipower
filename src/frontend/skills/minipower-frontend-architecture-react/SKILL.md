@@ -3,6 +3,7 @@ name: minipower-frontend-architecture-react
 description: Kiến trúc frontend React theo kit @platform/core — cây feature module (pages · components · hooks · services · validation · types · routes · menu · permission · localization), file đặt ở folder nào, folder nào được import folder nào, barrel public API, lát cắt dọc khi thêm feature mới, luật ESLint R1–R7 chặn import sai chiều + M1 chặn merge khi page còn gọi mock. Dùng khi thêm feature/màn hình/module mới, phân vân đặt code ở đâu, hoặc dựng lint kiến trúc cho repo frontend.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Kiến trúc frontend React (@platform/core) — Orchestrator

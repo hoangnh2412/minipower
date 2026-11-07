@@ -3,6 +3,7 @@ name: minipower-backend-realtime-dotnet
 description: Thiết lập Jarvis.Realtime + SignalR — AddCoreRealtime, UseSignalR, UseRedisBackplane, MapRealtimeHub. Dùng khi host cần hub/publish realtime. Không dạy inbox list/mark.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Jarvis.Realtime — Orchestrator

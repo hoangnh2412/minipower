@@ -3,6 +3,7 @@ name: minipower-discovery-survey
 description: Khảo sát painpoint stakeholder scope BRD DOC-01 DOC-02 DOC-03. Dùng khi discovery, khảo sát, brainstorm, vision — không viết FR AC, không báo giá.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-discovery-survey

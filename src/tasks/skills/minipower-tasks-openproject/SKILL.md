@@ -3,6 +3,7 @@ name: minipower-tasks-openproject
 description: Đọc, lọc, tìm, soạn nháp và ghi work package OpenProject theo L1–L3; hướng dẫn cài MCP nếu chưa kết nối. Dùng khi việc trên OpenProject, work package, WP, tasks_provider openproject — không dùng cho Outline hay GitLab.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-tasks-openproject

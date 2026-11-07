@@ -3,6 +3,7 @@ name: minipower-architecture-as-built
 description: Đọc source để khai quật hệ đang chạy thành tài liệu as-built — trace một luồng theo 6 tầng / 5 câu hỏi, bằng chứng path:line với 4 nhãn, pattern theo stack .NET · Java · React · Flutter, CodeGraph tuỳ chọn. Dùng khi maintain, legacy, hệ cũ không tài liệu, đọc source, reverse-engineer, hiểu luồng, trace flow, codebase lạ — người trigger.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-architecture-as-built

@@ -3,6 +3,7 @@ name: minipower-frontend-scaffold-react
 description: Dựng app frontend React (Vite + TypeScript + Tailwind v4 + PrimeReact 11) gắn kit @platform/core từ folder trống — npm run dev ra AdminLayout có sidebar; hoặc gắn kit vào app Vite có sẵn; hoặc mount module có sẵn của kit (đăng nhập, tenant, vai trò, dashboard, planner, timesheet, craft PDF/DOCX, file manager, import). Dùng khi tạo frontend mới, cài @platform/core, cấu hình configurePlatformHttp / PrimeReactProvider / Tailwind @source / Vite proxy, hoặc gặp UI trắng, Invalid hook call, lỗi kiểu trùng bản React sau khi link kit.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # App host React + @platform/core — Orchestrator

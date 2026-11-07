@@ -3,6 +3,7 @@ name: minipower-architecture-tenant-org
 description: Phân loại mô hình khách vào Root, Tenant, Org và OrgStructure của Jarvis. Dùng khi triển khai hệ thống mới, mô tả chi nhánh, đại lý, phòng ban, khách xuất hóa đơn, multi-tenant, multi-org, tenant con.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Phân cấp Tenant / Org / OrgStructure — Orchestrator

@@ -3,6 +3,7 @@ name: minipower-backend-orgs-dotnet
 description: Thiết lập catalog org Jarvis Platform.Orgs — IOrgManager, ICurrentOrg, không seed org, không xóa cứng, list theo cây tenant. Dùng khi thêm người bán trên hóa đơn, header X-Org-Id, hoặc API org.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Platform.Orgs — Orchestrator

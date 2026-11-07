@@ -3,6 +3,7 @@ name: minipower-router
 description: Phân loại intent Minipower, triage đơn hay phức, rồi gợi ý đúng một lá cho mỗi task. Dùng khi làm gì tiếp, chọn skill, dispatcher, không biết mở pack nào — không tự gọi MCP L3, không agent bàn giao agent.
 metadata:
   workflow: github
+  version: 1.0.1
 ---
 
 # minipower-router
@@ -45,6 +46,7 @@ Bảng dưới là **gợi ý pack** khi LLM định hướng, không phải mat
 | premise, có nên làm, nghị luận | `minipower-router-deliberation` |
 | soát tiền đề trước code/test/deploy | `minipower-router-readiness` |
 | lập kế hoạch nhiều skill, chia task, plan trước khi làm | `minipower-router-plan` |
+| chưa tốt, sai rồi, rút kinh nghiệm, báo lỗi skill | `minipower-router-retro` |
 | khảo sát, DOC-01/02/03, painpoint | `discovery/` |
 | UC FR BR AC SRS NFR prototype CR nội dung | `analyst/` |
 | SAD ADR API data integration giải pháp bán SOL | `architecture/` |

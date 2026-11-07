@@ -29,7 +29,8 @@ import { readFileSync } from "node:fs"
  *   profile_providers: Record<string,string[]>,
  *   project_surfaces: {id:string,label:string,path:string,default:boolean,role:string}[],
  *   prereq_by_intent: {id:string,label:string,keywords:string[],requires:string[]}[],
- *   install_hooks: {shim:string,slot:"prompt"|"pre_tool",cursor_timeout?:number,matcher?:string}[]
+ *   install_hooks: {shim:string,slot:"prompt"|"pre_tool",cursor_timeout?:number,matcher?:string}[],
+ *   feedback: {repo:string,labels:{name:string,description:string}[]}
  * }} Rules */
 
 /** @type {Rules} */
@@ -207,3 +208,10 @@ export function matchIntents(norm) {
 
 /** Thứ tự + slot 6 hook IDE — SSOT sinh fragment Claude/Cursor (ADR-031 Q5 cách B). */
 export const INSTALL_HOOKS = RULES.install_hooks
+
+/**
+ * @type {{repo:string,labels:{name:string,description:string}[]}}
+ * Repo GitHub của minipower + nhãn issue "bài học" (ADR-044 §7). Nhãn `skill:<tên-lá>`
+ * KHÔNG nằm trong danh sách này — nó động theo catalog skill, gắn lúc tạo issue.
+ */
+export const FEEDBACK = RULES.feedback

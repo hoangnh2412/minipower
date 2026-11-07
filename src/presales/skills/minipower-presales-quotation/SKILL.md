@@ -3,6 +3,7 @@ name: minipower-presales-quotation
 description: Ước lượng BA phân tích & thiết kế data model logical 3 tầng (Bronze · Silver · Gold) rồi dựng báo giá — estimate JSON → Excel công thức sống (hiệu chỉnh tay) → báo giá nội bộ (md/html đầy đủ) → báo giá khách hàng (html lược bỏ phần nội bộ). Dùng khi báo giá dự án lakehouse/data platform ở vai trò BA, không phải phát triển phần mềm.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-presales-quotation

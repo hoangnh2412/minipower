@@ -3,6 +3,7 @@ name: minipower-qa-strategy
 description: Viết test strategy DOC-16, scenario testcase suite, id TEST trỏ AC. Dùng khi QA, kiểm thử, test strategy — không fake pass, không viết FR.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-qa-strategy

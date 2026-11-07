@@ -3,6 +3,7 @@ name: minipower-frontend-navigation-react
 description: Điều hướng, menu và quyền theo kit @platform/core — hằng {FEATURE}_ROUTES + get{Feature}*Path(id), configure{Feature}Navigate/navigate{Feature} để feature không import react-router, NavigateBridge ở host, route :id qua wrapper useParams, trang trong/ngoài AdminLayout, mainNav/secondaryNav thay menu demo của kit, {feature}MenuItems lọc theo has{Feature}Permission. Dùng khi thêm route / màn hình vào app, thêm mục sidebar, ẩn menu theo quyền, hoặc nút trong page bấm không chuyển trang.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Điều hướng · menu · quyền (@platform/core) — Orchestrator

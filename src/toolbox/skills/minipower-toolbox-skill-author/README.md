@@ -12,6 +12,7 @@ Skill để **viết và soát skill Minipower**. Agent đọc [SKILL.md](./SKIL
 | Thêm provider / pattern / workflow / template vào skill có sẵn | [workflows/extend-skill.md](./workflows/extend-skill.md) |
 | Nghi một skill cũ lệch chuẩn | [workflows/extend-skill.md § Soát skill có sẵn](./workflows/extend-skill.md#soát-skill-có-sẵn) |
 | Muốn mở **module** mới, không phải skill | [workflows/new-skill.md § Module mới](./workflows/new-skill.md#module-mới) — cần ADR trước |
+| Nâng skill từ GitHub Issue nhãn `lesson` (ADR-044) — chủ repo chạy định kỳ hoặc gọi tay | [workflows/upgrade-from-lesson.md](./workflows/upgrade-from-lesson.md) |
 
 **Không dùng cho:** viết SOP dispatcher/gate (xem [minipower-router](../../../router/skills/minipower-router/SKILL.md)) · viết ADR (theo [ADRs/TEMPLATE.md](../../../../ADRs/TEMPLATE.md)) · viết tài liệu nền không phải skill (→ [`staging/`](../../../../staging/), kho tạm đang rút).
 

@@ -3,6 +3,7 @@ name: minipower-backend-authentication-dotnet
 description: Thiết lập Jarvis Authentication — JWT Bearer, API Key, HTTP Basic, AWS Cognito qua AddJarvisAuthentication + Composite scheme. Dùng khi API ASP.NET Core cần xác thực Bearer, header API key, Basic hoặc Cognito qua Jarvis.Authentications.*.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Jarvis.Authentication — Orchestrator

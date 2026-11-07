@@ -38,6 +38,20 @@ flowchart LR
 - Bump có chủ đích: `DOCS_REF=v1.4.0` (tag repo docs) — giống `JARVIS_SKILLS_REF` hiện có.
 - Đổi spec sau baseline → CR ở repo docs → bump ref ở repo code, không sửa lệch.
 
+## 4. Bài học ↔ skill (ADR-044) — cầu khác, đang chạy
+
+**Trạng thái mục này:** 🟢 Active — khác §1–3 (vẫn ⚪ thiết kế, chờ tách repo docs). Đây là cầu giữa **repo dự án đích** (nơi phản hồi "làm chưa tốt" phát sinh) và **repo tác giả `hoangnh2412/minipower`** (nơi skill sống), qua GitHub Issue — không cần tách repo, không cần MCP riêng ngoài `feedback`.
+
+Back-ref **hai chiều**, không chỉ một hướng:
+
+| Lúc | Ghi ở đâu | Ghi gì |
+|---|---|---|
+| Phát hiện lỗi (retro, [minipower-router-retro](../src/router/skills/minipower-router-retro/SKILL.md)) | GitHub Issue, trường 6 | `{tên-lá}@{version lúc đó}` — version **trước khi sửa** |
+| Nâng skill ([upgrade-from-lesson](../src/toolbox/skills/minipower-toolbox-skill-author/workflows/upgrade-from-lesson.md) chế độ thi hành) | `CHANGELOG.md` của lá | Dòng mới kèm `(#NNN)` — số issue vừa đóng |
+| Đóng issue | Comment trên issue, trước khi đóng | *"đã nâng `{tên-lá}@{version mới}"* |
+
+Nhờ vậy, từ một dòng CHANGELOG lần ra đúng issue gây ra nó; từ một issue đã đóng lần ra đúng version đã sửa — không cần hệ thống trace riêng.
+
 ---
 
-*Liên quan:* [handoff.md](handoff.md) (H4/H6) · [trace-spine.md](trace-spine.md) (`CMP` trace về FR) · [backend/README.md](../src/backend/README.md) (cơ chế publish submodule/rsync)
+*Liên quan:* [handoff.md](handoff.md) (H4/H6) · [trace-spine.md](trace-spine.md) (`CMP` trace về FR) · [backend/README.md](../src/backend/README.md) (cơ chế publish submodule/rsync) · [minipower-router-retro](../src/router/skills/minipower-router-retro/SKILL.md) + [upgrade-from-lesson](../src/toolbox/skills/minipower-toolbox-skill-author/workflows/upgrade-from-lesson.md) (§4, ADR-044)

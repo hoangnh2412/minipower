@@ -53,6 +53,11 @@ export function fmName(fm) {
   return (fm.match(/^name:\s*(\S+)/m) || [])[1]
 }
 
+/** `metadata.version` (ADR-044 §8.1) — chuỗi thô, chưa kiểm semver. */
+export function fmVersion(fm) {
+  return (fm.match(/^\s*version:\s*(\S+)/m) || [])[1]
+}
+
 export function listLeafSkills() {
   const out = []
   for (const pack of SKILL_PACKS) {

@@ -3,6 +3,7 @@ name: minipower-analyst-srs
 description: Viết use case FR BR AC SRS NFR prototype DOC-04 đến 07 13 19. Dùng khi requirements, SRS, acceptance criteria, business rules — không viết code, không SAD.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-analyst-srs

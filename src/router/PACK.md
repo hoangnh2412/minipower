@@ -16,5 +16,5 @@ produces: ["tên pack gợi ý", "profile.json"]
 handoff-in: []
 handoff-out: []
 memory: memory/
-mcp: []
+mcp: [feedback]
 ```

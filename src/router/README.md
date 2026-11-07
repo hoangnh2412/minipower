@@ -13,6 +13,7 @@ Manifest: [PACK.md](PACK.md).
 | **minipower-router-init** | [skills/minipower-router-init/README.md](./skills/minipower-router-init/README.md) | Nhắc CLI `minipower init`; đã có marker thì không hỏi lại |
 | **minipower-router-deliberation** | [skills/minipower-router-deliberation/README.md](./skills/minipower-router-deliberation/README.md) | Premise gate mềm PROCEED/RESHAPE/STOP |
 | **minipower-router-readiness** | [skills/minipower-router-readiness/README.md](./skills/minipower-router-readiness/README.md) | Soát tiền đề trước thực thi, hỏi một lượt |
+| **minipower-router-retro** | [skills/minipower-router-retro/README.md](./skills/minipower-router-retro/README.md) | Bắt bài học "làm chưa tốt" → sổ dự án + nháp GitHub Issue ẩn danh, người OK rồi mới đăng |
 
 ## Tài liệu
 

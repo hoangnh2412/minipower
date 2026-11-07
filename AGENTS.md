@@ -46,6 +46,7 @@ Repo này **là bản thân bộ công cụ** (source of truth của skill), kh�
 - **Trong** `src/router/`**:** `skills/minipower-router`* · `agents/*.md` · `hooks/{bin,lib,test}/` · `roles/` · `templates/` (TPL) · skeleton · plugin. DOC templates theo pack nghề `src/{pack}/templates/`. Fragment IDE: `cli/{cursor,claude,opencode}/`.
 - **ID artifact dự án đích:** `{MOD}-{UC|FR|BR|AC|NFR}-NNN`, `DEC-{PHASE}-NNN`, `ADR-NNN`, `DOC-NN`. Cross-ref bằng ID, **không** copy nội dung FR giữa module.
 - **ADR:** đặt tại `ADRs/{doing|todo|pending|done|cancel}/`, tên file `ADR-NNN-yyyy-MM-dd-slug.md` — **mã** `ADR-NNN` **bất biến**; **thư mục = trạng thái** (cùng bộ với [ADRs/README.md](ADRs/README.md): Pending 🔴 / Todo ⚪ / Doing 🟡 / Done 🟢 / Cancel 🟣). Đổi trạng thái = `git mv` sang folder kia + sửa dòng index **cùng commit**. Thêm ADR = tạo file (thường `todo/`) + một dòng index. Mỗi ADR tự khai **Ảnh hưởng**; file cụ thể **không** trỏ ngược về ADR. **Nội dung ADR viết cho con người đọc hiểu** (người không chuyên nắm được Bối cảnh · Quyết định · Lý do · Hệ quả); đoạn chuyên sâu kỹ thuật tách riêng và gắn nhãn `[Kỹ thuật]` ở đầu để bỏ qua được.
+- **Version lá (ADR-044 §8.1):** mọi lá `minipower-*` có `metadata.version` (semver) + `CHANGELOG.md` cạnh `SKILL.md` — **cứng**, `npm test` đỏ nếu thiếu. Bump: **patch** câu chữ/link · **minor** thêm workflow/provider/template, mở rộng `description` · **major** đổi output/ID/hợp đồng consumer dựa vào. `npm run version:check` **cảnh báo** (chưa chặn) khi thư mục lá đổi mà version không đổi — nâng FAIL sau khi kiểm chứng qua ≥2 lần bump thật. `PACK.md version` độc lập, không trộn với version lá.
 
 
 
@@ -59,6 +60,7 @@ Toàn bộ Minipower (mọi pack skill + hook + catalog): từ **gốc repo** `n
 - **Vòng lặp bắt buộc khi chạm** `rules.json` **/** `lib/*.js`**:** sửa → `npm run gen` → `npm test` → `npm run gen:check` (cả ba xanh) trước khi coi là xong. CI: [.github/workflows/minipower-hooks.yml](.github/workflows/minipower-hooks.yml).
 - Kiểm trace ID dự án đích (CI): `npm run trace:check` — FAIL khi ID trỏ sai/trùng, WARN khi FR thiếu AC. **Không** phạt vì tài liệu chưa viết.
 - Kiểm link markdown (CI): `npm run link:check` — FAIL khi có link gãy **mới** ngoài `hooks/link-check.baseline.txt`; sau khi cố ý đổi cấu trúc, soát diff rồi `npm run link:check -- --update-baseline`.
+- Kiểm bump version lá (CI, ADR-044 §8.1): `npm run version:check -- --base <ref>` — **WARN**, chưa chặn. Báo lá nào đổi thư mục mà `metadata.version` không đổi so với `<ref>` (mặc định `HEAD~1`).
 - Cài pipeline: `node cli/minipower.mjs install` (hỏi client/pack). Flag `--client` cho CI. Alias `npm run minipower`. `cli/{cursor,claude,opencode}/` vẫn là dữ liệu fragment.
 
 

@@ -3,6 +3,7 @@ name: minipower-vcs-gitlab
 description: Tra GitLab (search, issue, pipeline, MR), soạn MR/comment, tạo MR và commit/push sau L2. Dùng khi merge request, GitLab MCP, code_provider gitlab — không scaffold .NET, không force-push.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-vcs-gitlab

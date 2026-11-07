@@ -3,6 +3,7 @@ name: minipower-backend-healthcheck-dotnet
 description: Thiết lập Jarvis.HealthChecks cho ASP.NET Core — init liveness/startup/readiness, HealthChecks UI, thêm provider readiness. Dùng khi tích hợp healthcheck .NET, /health/live, /health/ready, /healthchecks-ui, hoặc thêm dependency (PostgreSQL, MySQL, SQL Server, Redis, …).
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Jarvis.HealthChecks — Orchestrator

@@ -102,6 +102,17 @@ test("INIT.md — có README chuẩn cho folder chưa dùng (QĐ-2) + migrate AD
   assert.match(text, /memory\.md\.example|decision-log\.md/, "INIT phải mô tả memory phẳng ADR-035")
 })
 
+test("ADR-044 — docs-skeleton có 00-governance/lessons.md (sổ bài học retro)", () => {
+  const p = join(DOCS_SKELETON, "00-governance", "lessons.md")
+  assert.ok(existsSync(p), "thiếu 00-governance/lessons.md")
+  const text = readFileSync(p, "utf8")
+  for (const col of ["LSN", "Skill@version", "Bài học", "Loại", "Trạng thái"]) {
+    assert.match(text, new RegExp(col), `lessons.md thiếu cột "${col}"`)
+  }
+  const readme = readFileSync(join(DOCS_SKELETON, "README.md"), "utf8")
+  assert.match(readme, /lessons\.md/, "docs-skeleton/README.md phải trỏ tới lessons.md")
+})
+
 test("ADR-035 — DOC-06/14/15 không dùng làm task board; tasks=none → SQLite", () => {
   const srs = readFileSync(join(SRC, "analyst", "templates", "DOC-06-srs.md"), "utf8")
   assert.match(srs, /Không.*task board|không dùng SRS làm task board/i)

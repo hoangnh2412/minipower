@@ -1,0 +1,110 @@
+name: "Bài học (lesson)"
+description: "Bài học từ retro một dự án dùng Minipower — gửi về tác giả để đánh giá nâng skill. Mọi thông tin PHẢI ẩn danh trước khi gửi (mục 11)."
+labels: [lesson]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Trước khi gửi:** issue này công khai trên GitHub. Không ghi tên dự án, tên khách, tên người —
+        gọi đối tượng bằng X, Y, A, B. Xem [`minipower-router-retro`](https://github.com/hoangnh2412/minipower/blob/main/src/router/skills/minipower-router-retro/SKILL.md).
+
+  - type: textarea
+    id: context
+    attributes:
+      label: "1. Bối cảnh"
+      description: "Loại dự án, project_mode, pack đang dùng, stack — KHÔNG tên dự án / khách / người"
+    validations:
+      required: true
+
+  - type: textarea
+    id: task
+    attributes:
+      label: "2. Công việc"
+      description: "Yêu cầu gì, skill nào được gọi, đầu vào tóm tắt bằng X/Y/A/B"
+    validations:
+      required: true
+
+  - type: textarea
+    id: symptom
+    attributes:
+      label: "3. Hiện tượng"
+      description: "Sai ở đâu — trích đoạn đã ẩn danh"
+    validations:
+      required: true
+
+  - type: textarea
+    id: cause
+    attributes:
+      label: "4. Nguyên nhân"
+      description: "Dòng/mục nào của SKILL.md, workflow, template gây ra; hoặc ghi \"không rõ\""
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: "5. Giải pháp đề xuất"
+      description: "Sửa gì, ở đâu; kèm bài học rút ra trong một câu"
+    validations:
+      required: true
+
+  - type: input
+    id: skill-version
+    attributes:
+      label: "6. Skill@version"
+      placeholder: "minipower-{module}-{capability}@x.y.z"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: "7. Loại"
+      description: "Nguyên nhân thuộc loại nào"
+      options:
+        - skill
+        - prereq
+        - model
+        - other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "8. Ưu tiên"
+      description: "p1 = artifact sai mà người không thấy ngay · p2 = sai nhưng dễ thấy · p3 = chỉ câu chữ"
+      options:
+        - p1
+        - p2
+        - p3
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: "9. Mức ảnh hưởng"
+      description: "high = ≥2 pack hoặc contract/hook · medium = một lá · low = một workflow/provider"
+      options:
+        - high
+        - medium
+        - low
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact-paths
+    attributes:
+      label: "10. Phần ảnh hưởng"
+      description: "Đường dẫn trong repo minipower, một dòng một mục"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: anonymized
+    attributes:
+      label: "11. Checklist ẩn danh"
+      options:
+        - label: "Tôi đã kiểm tra: không còn tên dự án, tên khách, tên người, hay secret nào trong issue này — đã đổi hết thành X/Y/A/B"
+          required: true

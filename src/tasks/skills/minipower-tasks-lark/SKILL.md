@@ -3,6 +3,7 @@ name: minipower-tasks-lark
 description: Đọc, lọc, tìm, soạn nháp và ghi task Lark (tasklist / task) theo L1–L3. Dùng khi việc trên Lark, sprint, tasklist, "tìm task", "tạo task", tasks_provider lark — không dùng cho tin nhắn nhóm hay wiki.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-tasks-lark

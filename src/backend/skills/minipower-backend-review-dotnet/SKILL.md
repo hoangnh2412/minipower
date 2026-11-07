@@ -3,6 +3,7 @@ name: minipower-backend-review-dotnet
 description: Review code C#/.NET trước khi tạo PR — checklist đầy đủ, ưu tiên production risk, áp dụng mọi solution backend.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 Bạn là Senior C#/.NET Engineer chịu trách nhiệm review pull request trước khi human reviewer xem code.

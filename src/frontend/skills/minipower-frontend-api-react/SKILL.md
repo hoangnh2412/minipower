@@ -3,6 +3,7 @@ name: minipower-frontend-api-react
 description: Tích hợp API backend cho frontend kit @platform/core — configurePlatformHttp một lần, services/req.ts dùng chung platformHttp, hàm call* path tương đối, tham số danh sách khớp PagedListRequest (page/size/search/filter/sort/columns), unwrap { items, total }, lỗi qua getErrorMessage, gắn Bearer token bằng interceptor; mock tạm khi DOC-12 đã có mà backend chưa chạy (không phải prototype). Dùng khi thêm service gọi REST, nối màn hình với endpoint DOC-12, đổi mock sang API thật, hoặc gặp lỗi baseURL / proxy / API key / 401.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # Tích hợp API (@platform/core) — Orchestrator

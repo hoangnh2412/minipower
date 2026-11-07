@@ -3,6 +3,7 @@ name: minipower-router-plan
 description: Lập kế hoạch cho yêu cầu PHỨC chạm nhiều skill — chia task có tiêu chí hoàn thành đo được, trình người OK một lần, rồi điều phối tuần tự / song song và gọi review cuối. Dùng khi lập kế hoạch nhiều skill, nhiều bước, plan trước khi làm, chia task, phân chia công việc — không phải WBS/DOC-14 (minipower-pm-plan), không thực thi hộ, không agent bàn giao agent.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-router-plan

@@ -6,7 +6,7 @@
 import test from "node:test"
 import assert from "node:assert/strict"
 import { existsSync, readFileSync } from "node:fs"
-import { join } from "node:path"
+import { join, dirname } from "node:path"
 import {
   ROOT,
   SRC,
@@ -17,6 +17,7 @@ import {
   frontmatter,
   fmName,
   fmHasDescription,
+  fmVersion,
 } from "../lib/skill-catalog.js"
 import { INTENT_RULES } from "../../../router/lib/intent-dispatch.js"
 
@@ -30,7 +31,7 @@ test("catalog: đủ pack nghề/kênh có skills/", () => {
 })
 
 test("catalog: mọi lá minipower-* có SKILL.md + README.md + name ≡ thư mục + description", () => {
-  assert.equal(leaves.length, 60, `kỳ vọng 60 lá đăng ký, thấy ${leaves.length}`)
+  assert.equal(leaves.length, 61, `kỳ vọng 61 lá đăng ký, thấy ${leaves.length}`)
   for (const s of leaves) {
     assert.ok(existsSync(s.skillMd), `${s.name} thiếu SKILL.md`)
     assert.ok(existsSync(s.readme), `${s.name} thiếu README.md`)
@@ -38,6 +39,15 @@ test("catalog: mọi lá minipower-* có SKILL.md + README.md + name ≡ thư m�
     assert.equal(fmName(fm), s.name, `${s.name}: name lệch thư mục`)
     assert.ok(fmHasDescription(fm), `${s.name}: thiếu description`)
     assert.ok(s.name.length <= 64, `${s.name}: >64`)
+  }
+})
+
+test("catalog: mọi lá có metadata.version semver + CHANGELOG.md (ADR-044 §8.1)", () => {
+  for (const s of leaves) {
+    const fm = frontmatter(s.skillMd)
+    const version = fmVersion(fm)
+    assert.match(version || "", /^\d+\.\d+\.\d+$/, `${s.name}: metadata.version thiếu hoặc không phải semver`)
+    assert.ok(existsSync(join(dirname(s.skillMd), "CHANGELOG.md")), `${s.name}: thiếu CHANGELOG.md`)
   }
 })
 

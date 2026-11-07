@@ -134,6 +134,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-router-deliberation](src/router/skills/minipower-router-deliberation/SKILL.md)** | có nên làm, premise | Trước việc Full; PROCEED/RESHAPE/STOP **do người** |
 | **[minipower-router-readiness](src/router/skills/minipower-router-readiness/SKILL.md)** | đủ chưa, trước code/test/deploy | Hỏi **một lượt** mọi thiếu; ghi nợ `doc-debt.md` |
 | **[minipower-router-plan](src/router/skills/minipower-router-plan/SKILL.md)** | nhiều skill, nhiều bước, chia task, plan trước khi làm | Router triage PHỨC → kế hoạch có tiêu chí đo được; người OK một lần; tự kiểm ≤ 3 lần, review ≤ 3 vòng; người ký PASS |
+| **[minipower-router-retro](src/router/skills/minipower-router-retro/SKILL.md)** | chưa tốt, sai rồi, rút kinh nghiệm, báo lỗi skill | Ghi `docs/00-governance/lessons.md` + nháp GitHub Issue ẩn danh qua MCP `feedback`, người OK rồi mới đăng |
 
 ### Discovery — [`discovery/`](src/discovery/)
 

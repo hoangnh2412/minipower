@@ -3,6 +3,7 @@ name: minipower-presales-estimation-ulnl
 description: Ước lượng ULNL — điền số đếm được, máy chọn mã và cộng MH. Dùng khi báo giá trước ký, catalog chức năng, man-hour, estimate-v1 — không khảo sát lại, không nhân đơn giá.
 metadata:
   workflow: github
+  version: 1.0.0
 ---
 
 # minipower-presales-estimation-ulnl
