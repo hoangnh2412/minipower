@@ -74,4 +74,4 @@ handoff-in: [H5]
 
 ---
 
-*Liên quan:* [handoff.md](handoff.md) (định nghĩa H1–H6) · [trace-spine.md](trace-spine.md) (ID trong consumes/produces) · [lingua-franca.md](lingua-franca.md) (`memory:` namespace)
+*Liên quan:* [handoff.md](handoff.md) (định nghĩa H1–H6) · [trace-spine.md](trace-spine.md) (ID trong consumes/produces) · [shared-conventions.md](shared-conventions.md) (`memory:` namespace)

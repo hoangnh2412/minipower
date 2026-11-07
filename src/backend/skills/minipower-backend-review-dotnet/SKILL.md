@@ -93,6 +93,7 @@ Khi phát hiện issue:
 * DI lifetime mismatch
 * logging structured template
 * exception handling
+* fallback mới thêm không có DEC / người OK — default im lặng, `catch` rồi đi tiếp, retry / đường phụ tự chế ([shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent))
 * allocation không cần thiết
 * boxing/unboxing
 * memory leak

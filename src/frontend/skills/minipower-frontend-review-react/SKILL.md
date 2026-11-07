@@ -58,6 +58,7 @@ Bất đồng bộ:
 * promise trôi (không `await`, không `void`, không `catch`) ⇒ lỗi im lặng
 * bấm hai lần ⇒ gửi hai lần (nút không `disabled` khi `isSubmitting` / `loading`)
 * `finally` không trả `loading` về false trên mọi nhánh
+* fallback mới thêm không có DEC / người OK — default im lặng, `catch` nuốt lỗi, gọi endpoint phụ / cache cũ thay dữ liệu hỏng ([shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent))
 
 Dữ liệu & hiển thị:
 

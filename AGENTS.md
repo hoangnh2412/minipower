@@ -75,7 +75,7 @@ Toàn bộ Minipower (mọi pack skill + hook + catalog): từ **gốc repo** `n
 
 - `README.md` — bản đồ toàn repo; `src/router/README.md`, `src/backend/README.md`, `src/frontend/README.md`, `src/ops/README.md` — hub từng module.
 - `[minipower-router](src/router/skills/minipower-router/SKILL.md)` — dispatcher + bảng `project_mode` / phân tầng (generated).
-- `contracts/` — hợp đồng liên-pack, tách theo chủ đề, **mỗi file tự khai trạng thái** (đọc trạng thái trước khi dẫn chiếu): [trace-spine](contracts/trace-spine.md) (luật ID + trace) · [handoff](contracts/handoff.md) (H0 + H1–H6) · [lingua-franca](contracts/lingua-franca.md) (quy ước chung) · [cross-repo-bridge](contracts/cross-repo-bridge.md) (pin + back-ref) · [pack-manifest](contracts/pack-manifest.md) (schema `PACK.md`) · [doc-mode](contracts/doc-mode.md) (DOC×pack).
+- `contracts/` — hợp đồng liên-pack, tách theo chủ đề, **mỗi file tự khai trạng thái** (đọc trạng thái trước khi dẫn chiếu): [trace-spine](contracts/trace-spine.md) (luật ID + trace) · [handoff](contracts/handoff.md) (H0 + H1–H6) · [shared-conventions](contracts/shared-conventions.md) (quy ước chung) · [cross-repo-bridge](contracts/cross-repo-bridge.md) (pin + back-ref) · [pack-manifest](contracts/pack-manifest.md) (schema `PACK.md`) · [doc-mode](contracts/doc-mode.md) (DOC×pack).
 - `src/router/hooks/lib/rules.json` — SSOT; generator: `src/router/hooks/gen-agents-doc.js`.
 
 Khi được yêu cầu thêm/sửa feature: xác định đúng skill/hook/template chịu trách nhiệm, kiểm tra tài liệu liên quan trong `ADRs/` + `src/router/docs/`, tôn trọng triết lý bất biến (mục Bối cảnh) và mô hình gatekeeper + fan-out trước khi viết. Kéo repo về phía "agent tự động hoá" → **dừng và hỏi tôi**.
@@ -114,6 +114,11 @@ Trước khi implement:
 - Không thêm "flexibility" hay "configurability" nếu không được yêu cầu.
 - Không xử lý error cho scenario bất khả thi.
 - Nếu bạn viết 200 dòng mà có thể viết 50 dòng, hãy viết lại.
+- Thang chọn giải pháp, lấy bậc đầu tiên chạy trọn: có cần tồn tại? → codebase đã có? → thư viện chuẩn / nền tảng? → dependency đã cài? → một dòng? → mới viết tối thiểu.
+- **Không thêm logic fallback khi người chưa đồng ý** — giá trị mặc định im lặng, `catch` rồi đi tiếp, rẽ sang đường / nguồn khác khi đường chính hỏng, hardcode thay cấu hình thiếu. Thiếu điều kiện ⇒ fail rõ và hỏi; người OK mới viết.
+- Không cắt: validation ở biên tin cậy, error handling chống mất dữ liệu, bảo mật, accessibility, điều người đã yêu cầu.
+- Đường tắt có giới hạn ⇒ comment `shortcut: <giới hạn>, <khi nào nâng>`.
+- Cuối lượt: một–hai dòng điều đã bỏ qua / chưa kiểm và rủi ro. Toàn văn: [shared-conventions § Viết code](contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent).
 
 Tự hỏi: "Một senior engineer có nói cái này overcomplicated không?" Nếu có, hãy đơn giản hóa.
 

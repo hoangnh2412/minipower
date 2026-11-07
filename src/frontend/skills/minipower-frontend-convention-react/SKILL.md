@@ -40,6 +40,7 @@ Rule máy kiểm được thì **đừng nhắc bằng lời** — để `tsc`/l
 
 Phần mềm, hay sai nhất:
 
+- **Ít nhất mà trọn, không tự thêm fallback** — thang 6 bậc + 7 luật ứng xử ở [shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent) cắt ngang mọi mục dưới: không default im lặng, không `catch` nuốt lỗi, không gọi endpoint phụ / cache cũ thay dữ liệu hỏng khi người chưa OK. Tham số `fallback` của `getErrorMessage` là **câu thông báo** đã chốt trong convention, không phải logic dự phòng.
 - **PrimeReact 11 là API compound** (`Dialog.Root`, `Select.Root`, `DataTable.Root`…). API v10 (`<Column>`, `visible`/`onHide`, `value=` cho DataTable) không chạy — đối chiếu mục 6 trước khi viết UI.
 - **Control dùng `unstyled` + class** từ `components/fieldStyles.ts`; nút dùng skin `pr-btn-*` của kit.
 - **Dùng sẵn của kit trước khi tự viết** — toast `notify`, `ConfirmDialog`, `FeatureDialog`, `ListPagination`, `RowActions`, `FieldSelect` (bảng mục 9).

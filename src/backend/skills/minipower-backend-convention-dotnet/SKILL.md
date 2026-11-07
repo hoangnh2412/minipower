@@ -40,6 +40,7 @@ Rule máy kiểm được thì **đừng nhắc bằng lời** — để analyze
 
 Phần mềm, hay quên nhất:
 
+- **Ít nhất mà trọn, không tự thêm fallback** — thang 6 bậc + 7 luật ứng xử ở [shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent) cắt ngang mọi mục dưới: không default im lặng, không `catch` rồi đi tiếp, không retry / đường phụ tự chế khi người chưa OK — thiếu điều kiện thì ném `BusinessException` có mã và hỏi.
 - **Đặt tên field**: instance `_camelCase`, **static PascalCase không `_`**, const PascalCase (mục 1).
 - **CancellationToken** xuyên suốt API async công khai → truyền xuống EF/HTTP, không nuốt (mục 4).
 - **Exception cụ thể**, không `throw new Exception(...)`; không dùng exception để điều khiển luồng — `TryParse` (mục 3).

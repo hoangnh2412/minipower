@@ -7,7 +7,7 @@
 | **Phạm vi** | Tên **pack / thư mục / skill** của pack `jarvis/`. **Không** đụng nội dung kỹ thuật .NET, **không** đụng pack lõi (việc `minipower/` → `sdlc/` thuộc [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-3; `rules.json` 0 hit `"jarvis"`), **không** đụng framework Jarvis hay repo code của nó |
 | **Nối tiếp** | **Tuân theo hệ tên [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md)** (QĐ-2 hai tầng · QĐ-4 tiền tố `minipower-{module}-…`) · **Giữ** [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) · **Giữ** [ADR-011](../done/ADR-011-2026-07-26-minipower-claude-code-plugin.md) (plugin — việc SAU) · **Kế thừa bài học** [ADR-001](../done/ADR-001-2026-07-17-danh-gia-minipower-va-chien-luoc-phat-trien.md) §2.2 + §3.1 (bốn bản cài lệch nhau; parity đa nền tảng là bẫy) |
 | **Mục đích** | Tách bạch **tên sản phẩm ngoài** (framework Jarvis) khỏi **tên gói skill trong repo**; đặt tên pack theo **chức năng** (`backend`) và tên skill theo hệ `minipower-backend-*`, để repo mở sang stack khác không phải đổi tên lần hai và gõ `minipower` là thấy toàn bộ |
-| **Ảnh hưởng** | `jarvis/` (→ `backend/`, 15 skill `minipower-backend-*`) · [README.md](../README.md) §bản đồ pack · [AGENTS.md](../../AGENTS.md) §Quy ước đặt tên & thư mục · hợp đồng liên-pack (sau tách theo ADR-022 QĐ-10: `contracts/lingua-franca.md` anatomy · `contracts/pack-manifest.md` §5.3–5.4 · `contracts/README.md` checklist) · [fundamentals/template-skill.md](../../src/toolbox/skills/minipower-toolbox-skill-author/SKILL.md) · `fundamentals/tutorial-index.md`. **Không ảnh hưởng:** ruột pack lõi · 7 điều kiện cứng · `rules.json` · CI hooks |
+| **Ảnh hưởng** | `jarvis/` (→ `backend/`, 15 skill `minipower-backend-*`) · [README.md](../README.md) §bản đồ pack · [AGENTS.md](../../AGENTS.md) §Quy ước đặt tên & thư mục · hợp đồng liên-pack (sau tách theo ADR-022 QĐ-10: `contracts/shared-conventions.md` anatomy · `contracts/pack-manifest.md` §5.3–5.4 · `contracts/README.md` checklist) · [fundamentals/template-skill.md](../../src/toolbox/skills/minipower-toolbox-skill-author/SKILL.md) · `fundamentals/tutorial-index.md`. **Không ảnh hưởng:** ruột pack lõi · 7 điều kiện cứng · `rules.json` · CI hooks |
 
 ---
 
@@ -176,7 +176,7 @@ Init Jarvis EF + single DB cho MyApp
 
 | Vị trí (file gốc → file đích) | Nội dung | Hành động |
 |---|---|---|
-| §3 anatomy → `contracts/lingua-franca.md` — `jarvis + minipower` | Tên pack | Đổi → `backend + sdlc` |
+| §3 anatomy → `contracts/shared-conventions.md` — `jarvis + minipower` | Tên pack | Đổi → `backend + sdlc` |
 | §5.3 → `contracts/pack-manifest.md` — `pack: jarvis` | Tên pack | Đổi → `pack: backend`; `roles: [backend-dotnet]` giữ |
 | §2 dòng 70, 85 → `contracts/handoff.md` — *"repo code (Jarvis)"*, *"repo consumer (Jarvis)"* | **Repo ngoài** | **Giữ** — QĐ-1 |
 | §4 + mermaid → `contracts/cross-repo-bridge.md` — `subgraph CODE["repo code (Jarvis)"]` | **Repo ngoài** | **Giữ** |

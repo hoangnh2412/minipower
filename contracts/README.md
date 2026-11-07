@@ -10,7 +10,7 @@ Tách từ `COORDINATION.md` (draft v0.1) ngày 2026-08-25 — **mỗi chủ đ�
 |---|---|---|---|
 | [trace-spine.md](trace-spine.md) | **Luật** | 🟡 Một phần sống | Xương sống ID; kéo dài xuống `CMP`/`TEST`/`DEPLOY`; luật "mọi artifact trace về FR/AC" |
 | [handoff.md](handoff.md) | **Giao thức** | 🟢 Per-module **đã sống** | 6 boundary H1–H6, input tối thiểu, bàn giao theo module |
-| [lingua-franca.md](lingua-franca.md) | **Quy ước** | 🟡 Sống trong `sdlc/` | memory · decision-log · versioning · ownership dùng chung |
+| [shared-conventions.md](shared-conventions.md) | **Quy ước** | 🟡 Sống trong `sdlc/` | memory · decision-log · versioning · ownership dùng chung · luật ứng xử của agent (bảo mật artifact, viết code) |
 | [cross-repo-bridge.md](cross-repo-bridge.md) | **Cơ chế** | ⚪ Thiết kế | Pin `docs@tag` + back-reference; kích hoạt khi docs tách repo |
 | [pack-manifest.md](pack-manifest.md) | **Schema** | 🟢 **Load-bearing** | Khuôn `PACK.md` mỗi pack tự khai consumes/produces/handoff |
 | [doc-mode.md](doc-mode.md) | **Bảng** | 🟢 Sinh từ `rules.json` | DOC × phase × pack nghề (ADR-033 E) |

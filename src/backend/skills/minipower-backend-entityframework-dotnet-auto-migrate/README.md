@@ -20,4 +20,5 @@ Thêm auto migrate Host cho MyApp — App UoW + tenant DbContext có ITenantEnti
 ## Liên quan
 
 - Orchestrator: [minipower-backend-entityframework-dotnet](../minipower-backend-entityframework-dotnet/README.md)
+- Vòng đời migration ngoài Host: [minipower-backend-entityframework-dotnet-migration](../minipower-backend-entityframework-dotnet-migration/README.md)
 - SSOT Jarvis: `jarvis/frameworks/Platform.ORM.EntityFramework/AppBuilderExtension.cs`, `jarvis/Sample/Program.cs`

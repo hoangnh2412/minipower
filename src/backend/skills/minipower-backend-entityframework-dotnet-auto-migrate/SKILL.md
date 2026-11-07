@@ -101,6 +101,7 @@ app.EnsureMigrateDb<IIdentityUnitOfWork>();
 
 - [reference/setup.md](../minipower-backend-entityframework-dotnet/reference/setup.md) — UoW, `AddCoreDbContext`  
 - [patterns/separate-tenant-db](../minipower-backend-entityframework-dotnet/patterns/separate-tenant-db/SKILL.md) — tenant DB + template migrate
+- [minipower-backend-entityframework-dotnet-migration](../minipower-backend-entityframework-dotnet-migration/SKILL.md) — tạo migration / apply ngoài Host / script production
 
 ## Output bắt buộc
 

@@ -44,6 +44,7 @@ Skill điều phối `Jarvis.EntityFramework` trên ASP.NET Core. Hướng dẫn
 | Hybrid | [patterns/hybrid/SKILL.md](patterns/hybrid/SKILL.md) |
 | Custom DI resolver | [patterns/custom-di/SKILL.md](patterns/custom-di/SKILL.md) |
 | Auto migrate Host (`EnsureMigrateDb` / `EnsureMigrateTemplateDb`) | [minipower-backend-entityframework-dotnet-auto-migrate](../minipower-backend-entityframework-dotnet-auto-migrate/SKILL.md) |
+| Vòng đời migration ngoài Host (add / update / script / layout) | [minipower-backend-entityframework-dotnet-migration](../minipower-backend-entityframework-dotnet-migration/SKILL.md) |
 
 **Luôn đọc:** [reference/setup.md](reference/setup.md).
 

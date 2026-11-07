@@ -173,7 +173,7 @@ test("T8 — không SKILL.md nào đăng ký name minipower-sdlc", () => {
 })
 
 test("#13 — contracts/ đủ 5 file chủ đề + README; mỗi file chủ đề tự khai Trạng thái (QĐ-10)", () => {
-  const topics = ["trace-spine", "handoff", "lingua-franca", "cross-repo-bridge", "pack-manifest"]
+  const topics = ["trace-spine", "handoff", "shared-conventions", "cross-repo-bridge", "pack-manifest"]
   assert.ok(existsSync(join(ROOT, "contracts", "README.md")), "thiếu contracts/README.md")
   for (const f of topics) {
     const p = join(ROOT, "contracts", `${f}.md`)
@@ -184,7 +184,7 @@ test("#13 — contracts/ đủ 5 file chủ đề + README; mỗi file chủ đ�
 
 test("#13 — AGENTS.md index đủ 5 link contracts (QĐ-10: thay 3 chỗ đã gỡ)", () => {
   const t = read("AGENTS.md")
-  for (const f of ["trace-spine", "handoff", "lingua-franca", "cross-repo-bridge", "pack-manifest"]) {
+  for (const f of ["trace-spine", "handoff", "shared-conventions", "cross-repo-bridge", "pack-manifest"]) {
     assert.ok(t.includes(`contracts/${f}.md`), `AGENTS.md thiếu link contracts/${f}.md`)
   }
 })

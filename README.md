@@ -209,6 +209,7 @@ Lá-rời: **mô tả việc**. Provider/pattern con chỉ đọc khi skill cha 
 | **[minipower-backend-caching-dotnet](src/backend/skills/minipower-backend-caching-dotnet/README.md)** | Redis / memory cache | *Thêm cache Redis service đơn hàng* |
 | **[minipower-backend-entityframework-dotnet](src/backend/skills/minipower-backend-entityframework-dotnet/README.md)** | EF, multitenancy | *Init CoreDbContext hybrid tenant* |
 | **[minipower-backend-entityframework-dotnet-auto-migrate](src/backend/skills/minipower-backend-entityframework-dotnet-auto-migrate/README.md)** | EF migrate khi start Host | *Bật AutoMigrate EnsureMigrateDb / Template* |
+| **[minipower-backend-entityframework-dotnet-migration](src/backend/skills/minipower-backend-entityframework-dotnet-migration/README.md)** | đổi model → migration mới, script SQL | *Tạo migration AddOrderStatus cho AppDbContext* |
 | **[minipower-backend-swashbuckle-dotnet](src/backend/skills/minipower-backend-swashbuckle-dotnet/README.md)** | Swagger | *Bọc BaseResponse + JWT trên Swagger* |
 | **[minipower-backend-healthcheck-dotnet](src/backend/skills/minipower-backend-healthcheck-dotnet/README.md)** | `/health/*` | *Thêm readiness Redis + SQL* |
 | **[minipower-backend-telemetry-dotnet](src/backend/skills/minipower-backend-telemetry-dotnet/README.md)** | OTEL | *Bật OTLP + enrich* |

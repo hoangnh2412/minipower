@@ -83,7 +83,7 @@ Khi trích dẫn nội dung DOC dependency (vd. *"theo DOC-06 v0.3"*) — dùng 
 
 ## 6. Bảo mật tài liệu
 
-Áp khi soạn hoặc sửa artifact trong `docs/`, `brainstorm/` và nội dung đẩy ra ngoài (Outline, Lark, …). Luật ứng xử chung của agent: minipower `contracts/lingua-franca.md` § Bảo mật artifact.
+Áp khi soạn hoặc sửa artifact trong `docs/`, `brainstorm/` và nội dung đẩy ra ngoài (Outline, Lark, …). Luật ứng xử chung của agent: minipower `contracts/shared-conventions.md` § Bảo mật artifact.
 
 | # | Quy tắc | Chi tiết |
 |---|---------|----------|
