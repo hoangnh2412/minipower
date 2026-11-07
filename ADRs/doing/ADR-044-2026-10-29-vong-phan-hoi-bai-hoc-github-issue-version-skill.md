@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Ngày** | 2026-10-29 (viết lại theo khuôn người-đọc 2026-11-07) |
-| **Trạng thái** | ⚪ Todo — hướng chốt với chủ repo 2026-10-28→30; Q1–Q5 ở mục [Kỹ thuật] §9 là giả định |
+| **Trạng thái** | 🟡 Doing — Q1–Q5 §9 chốt 2026-11-07 (theo đề xuất); chưa thi hành §10 |
 | **Phạm vi** | Skill mới `minipower-router-retro` · sổ bài học `docs/00-governance/lessons.md` · GitHub Issue trên repo minipower · số phiên bản cho mọi skill · workflow `upgrade-from-lesson` trong `skill-author` |
 | **Ngoài phạm vi** | Tự cải thiện (auto improve) ở mọi mức · công thức đánh giá chất lượng skill (ADR riêng của chủ repo) · cài `gh` / CLI · file bài học ngoài skeleton · hook máy chấm "tốt / chưa tốt" · đổi `profile.json` |
 | **Nối tiếp** | [ADR-026](../doing/ADR-026-2026-08-27-phuong-phap-danh-gia-chat-luong-minipower.md) P4 · [ADR-001](../done/ADR-001-2026-07-17-danh-gia-minipower-va-chien-luoc-phat-trien.md) §3.5 · [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-1 · QĐ-7 · QĐ-9 · QĐ-12 · [ADR-038](../done/ADR-038-2026-09-26-init-be-mat-docs-va-code.md) · [ADR-043](../done/ADR-043-2026-10-28-router-triage-plan-nhieu-task-review-cuoi.md) QĐ-7 · [cross-repo-bridge](../../contracts/cross-repo-bridge.md) · [shared-conventions](../../contracts/shared-conventions.md) §Bảo mật · [l1-l2-l3](../../src/tasks/rules/l1-l2-l3-tasks.md) |
@@ -145,9 +145,9 @@ Back-ref hai chiều theo `cross-repo-bridge`: issue ghi `skill@version` lúc l�
 
 Cron, lịch, tài khoản là của chủ repo (ADR-022 QĐ-12); repo chỉ cung cấp workflow và prompt mẫu trong README skill-author. Cron có quyền ghi repo thì chỉ mở PR.
 
-## §9. [Kỹ thuật] Confirm — giả định đang dùng
+## §9. [Kỹ thuật] Confirm — chốt 2026-11-07, theo đề xuất
 
-| # | Câu hỏi | Giả định |
+| # | Câu hỏi | Quyết |
 |---|---|---|
 | Q1 | Version ban đầu | `1.0.0` lá đã commit · `0.1.0` ba lá chưa commit (`orgs` · `orgstructure` · `tenants`) |
 | Q2 | `version:check` | WARN; nâng FAIL sau 2 lần nâng skill thật |
