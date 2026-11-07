@@ -16,7 +16,7 @@ Skill cắt ngang mọi skill `minipower-backend-*-dotnet`: code sinh ra hoặc 
 | **convention** (skill này) | **Code trong file viết thế nào?** | `dotnet build` + `dotnet format` — analyzer |
 | **architecture** | **File nằm ở đâu? Reference thế nào?** | `dotnet test -c Debug` — architecture test |
 
-Toàn văn quy ước (14 mục): [reference/coding-convention.md](reference/coding-convention.md). Hướng dẫn người: [README.md](README.md).
+Toàn văn quy ước (15 mục): [reference/coding-convention.md](reference/coding-convention.md). Hướng dẫn người: [README.md](README.md).
 
 ## Khi nào dùng workflow nào
 
@@ -50,6 +50,7 @@ Phần mềm, hay quên nhất:
 - **Thời điểm**: property map cột datetime là `DateTime` UTC+0, **không** `DateTimeOffset`; Domain không `DateTime.Now` (mục 9.4).
 - **Audit / tenant / user qua marker Jarvis**: `ILogCreatedEntity` · `ITenantEntity` · `ICurrentTenant<T>` · `ICurrentUser<T>` — không tự chế interface song song, không đọc `HttpContext` trong handler, không nhận tenant từ body khi phiên đã có (mục 13).
 - **Lỗi nghiệp vụ ném bằng mã**: `BusinessException` + `IErrorCode` đã khai trong `{Product}.ErrorCodes`; `code` theo họ `{MOD}-VAL-` · `{MOD}-BR-` · `{MOD}-API-` · `SYS-` là token API và UI dùng chung (mục 14).
+- **Không tạo/sửa bảng trong logic**: cấm `CREATE`/`ALTER`/`DROP` (SQL thô hoặc `ExecuteSql*`) trong service, handler, controller, seed nghiệp vụ. Đổi schema bằng EF migration, áp lúc khởi động qua `Database.Migrate` (mục 15).
 
 ## Templates
 
