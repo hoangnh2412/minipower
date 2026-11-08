@@ -150,6 +150,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-analyst-srs](src/analyst/skills/minipower-analyst-srs/SKILL.md)** | UC, FR, BR, AC, SRS, NFR, prototype | *Viết FR luồng đặt hàng, ORD, DOC-06* |
 | **[minipower-analyst-review](src/analyst/skills/minipower-analyst-review/SKILL.md)** | QC BA, trace UC→FR→AC | *Review SRS ORD trước baseline* |
 | **[minipower-analyst-cr](src/analyst/skills/minipower-analyst-cr/SKILL.md)** | CR **nội dung** đổi FR/AC | *Soạn CR đổi ORD-FR-012* — ticket = PM |
+| **[minipower-analyst-impact](src/analyst/skills/minipower-analyst-impact/SKILL.md)** | impact thay đổi, góc nghiệp vụ | *Đánh giá impact nghiệp vụ trước khi soạn CR* |
 
 ### Architecture — [`architecture/`](src/architecture/)
 
@@ -160,6 +161,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-architecture-review](src/architecture/skills/minipower-architecture-review/SKILL.md)** | QC SAD/ADR | *Soi ADR header DOC-09* |
 | **[minipower-architecture-as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md)** | maintain, legacy, CodeGraph | *Khai quật bounded context thanh toán* — người trigger |
 | **[minipower-architecture-tenant-org](src/architecture/skills/minipower-architecture-tenant-org/SKILL.md)** | xếp Tenant, Org, OrgStructure | *Chi nhánh này là tenant con hay phòng ban* |
+| **[minipower-architecture-impact](src/architecture/skills/minipower-architecture-impact/SKILL.md)** | impact thay đổi, góc kỹ thuật | *Đánh giá impact kỹ thuật trước khi sửa DOC-08/12* |
 
 ### PM — [`pm/`](src/pm/)
 
