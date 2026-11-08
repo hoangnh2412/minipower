@@ -224,6 +224,7 @@ Lá-rời: **mô tả việc**. Provider/pattern con chỉ đọc khi skill cha 
 | **[minipower-backend-orgs-dotnet](src/backend/skills/minipower-backend-orgs-dotnet/README.md)** | catalog org `Platform.Orgs` | *Thêm người bán trên hóa đơn, header X-Org-Id* |
 | **[minipower-backend-orgstructure-dotnet](src/backend/skills/minipower-backend-orgstructure-dotnet/README.md)** | cây tổ chức `Platform.OrgStructure` | *Thêm phòng ban, gán PositionId cho user* |
 | **[minipower-backend-review-dotnet](src/backend/skills/minipower-backend-review-dotnet/README.md)** | review PR C# | *Review diff trước khi mở MR* |
+| **[minipower-backend-plan-dotnet](src/backend/skills/minipower-backend-plan-dotnet/README.md)** | input kỹ thuật cho PM lập WBS | *Breakdown kỹ thuật backend cho module BILLING theo BILL-FR-021* |
 
 ### Frontend React — [`frontend/`](src/frontend/)
 
@@ -240,6 +241,7 @@ Lá-rời theo kit `@platform/core`: **mô tả việc**. Pattern con chỉ đ�
 | **[minipower-frontend-navigation-react](src/frontend/skills/minipower-frontend-navigation-react/README.md)** | route, bridge, menu, quyền | *Gắn route + menu lọc quyền* |
 | **[minipower-frontend-customization-react](src/frontend/skills/minipower-frontend-customization-react/README.md)** | tuỳ biến page kit không fork | *RoleListPage nối API thật* |
 | **[minipower-frontend-review-react](src/frontend/skills/minipower-frontend-review-react/README.md)** | review PR TS/React | *Review diff frontend so với develop* |
+| **[minipower-frontend-plan-react](src/frontend/skills/minipower-frontend-plan-react/README.md)** | input kỹ thuật cho PM lập WBS | *Breakdown kỹ thuật frontend cho module HRM theo HRM-UC-003* |
 
 ### Toolbox — [`toolbox/`](src/toolbox/) (chỉ repo minipower)
 

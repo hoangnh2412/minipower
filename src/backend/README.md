@@ -73,6 +73,7 @@ Chi tiết publish sang repo product: [Publish skill sang repo consumer](#publis
 | **minipower-backend-tenants-dotnet** | [skills/minipower-backend-tenants-dotnet/README.md](./skills/minipower-backend-tenants-dotnet/README.md) | Catalog tenant Jarvis — `Platform.Tenants`, route `/platform/tenants` |
 | **minipower-backend-orgs-dotnet** | [skills/minipower-backend-orgs-dotnet/README.md](./skills/minipower-backend-orgs-dotnet/README.md) | Catalog org Jarvis — `Platform.Orgs`, không seed, không xóa cứng |
 | **minipower-backend-orgstructure-dotnet** | [skills/minipower-backend-orgstructure-dotnet/README.md](./skills/minipower-backend-orgstructure-dotnet/README.md) | Cây tổ chức trong một org — `Platform.OrgStructure` |
+| **minipower-backend-plan-dotnet** | [skills/minipower-backend-plan-dotnet/README.md](./skills/minipower-backend-plan-dotnet/README.md) | Breakdown kỹ thuật + độ phức tạp, input cho PM lập WBS |
 
 ## Prompt nhanh
 

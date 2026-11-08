@@ -9,7 +9,7 @@ Tổng quát bảng *"Mức tối thiểu để dev bắt đầu"* của [parall
 | **H0** | Discovery → Architecture lite → Presales | (1) Gói khảo sát (pain, in/out scope, cây phân hệ, nguồn) → (2) `SOL-*` mức bán (`minipower-architecture-solution-lite`) → (3) estimate + quotation. Presales không khảo sát lại và không vẽ giải pháp | — |
 | **H1** | Discovery → Requirements | DOC-03 scope đã review; module đăng ký trong BRD | — |
 | **H2** | Requirements → Architecture | DOC-06 + DOC-13 draft (theo module thiết kế) | — |
-| **H3** | Requirements → Planning | DOC-06 Must-have (từng module) | — |
+| **H3** | Requirements → Planning | DOC-06 Must-have (từng module). Có breakdown kỹ thuật từ `minipower-backend-plan-dotnet`/`minipower-frontend-plan-react` → dùng thêm để size chính xác hơn; không bắt buộc, không thay DOC-06 làm input tối thiểu chính (ADR-045) | — |
 | **H4** | Architecture → **Implementation** | DOC-08 + DOC-11 + DOC-12 API slice (theo module) | **✅ docs→code** |
 | **H5** | Requirements/Delivery → **QA** | DOC-07 AC + DOC-16 test strategy | tùy |
 | **H6** | Implementation → **Delivery/Ops** | build artifact + DOC-17 deployment guide | **✅ code→ops** |
