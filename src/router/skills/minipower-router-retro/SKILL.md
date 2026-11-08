@@ -3,7 +3,7 @@ name: minipower-router-retro
 description: Bắt bài học từ phản hồi "làm chưa tốt" thành dòng ghi trong sổ dự án (lessons.md) và nháp GitHub Issue ẩn danh gửi về tác giả Minipower qua MCP feedback, người OK rồi mới đăng. Dùng khi người nói chưa tốt, sai rồi, rút kinh nghiệm, báo lỗi skill — không tự sửa SKILL.md, không tự đăng khi chưa người OK, không auto improve.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # minipower-router-retro
@@ -37,28 +37,15 @@ Issue công khai trên GitHub. Không tên dự án, không tên khách, không 
 
 ## Nhãn GitHub Issue
 
-<!-- BEGIN generated: feedback-labels (nguồn: hooks/lib/rules.json — chạy `npm run gen`) -->
+Nhãn là **nguồn chân lý trên GitHub**, không khai trong repo này. Trước khi gắn: **đọc nhãn thật** của repo đích rồi chọn trong số đó. Nhãn chưa tồn tại → đưa vào bảng nháp cho người quyết, **không tự tạo**.
 
-| Nhãn | Ý nghĩa |
-|------|---------|
-| `lesson` | Mọi issue bài học từ retro đều gắn nhãn này |
-| `kind:skill` | Nguyên nhân: SKILL.md viết sai/thiếu |
-| `kind:prereq` | Nguyên nhân: dự án thiếu tiền đề |
-| `kind:model` | Nguyên nhân: model hiểu sai, không phải lỗi skill |
-| `kind:other` | Nguyên nhân khác, chưa rõ loại |
-| `priority:p1` | Artifact sai mà người không thấy ngay |
-| `priority:p2` | Sai nhưng dễ thấy |
-| `priority:p3` | Chỉ câu chữ |
-| `impact:high` | Ảnh hưởng ≥2 pack hoặc contract/hook |
-| `impact:medium` | Ảnh hưởng một lá |
-| `impact:low` | Ảnh hưởng một workflow/provider |
-| `status:batched` | Gom lại, chưa xử lý ngay |
-| `status:assessed` | Agent định kỳ đã đánh giá, chờ người quyết |
-| `status:decided` | Người đã quyết, chờ thi hành |
+Nhóm nhãn dùng cho bài học: loại thẻ `lesson` · nguyên nhân · mức ưu tiên · mức ảnh hưởng · trạng thái xử lý · `skill:<tên-lá>` gắn động theo catalog. Đây là ý nghĩa, không phải bản sao danh sách — bộ nhãn thật do chủ repo quản trên GitHub.
 
-<!-- END generated: feedback-labels -->
+## Repo đích — hằng số
 
-Nhãn `skill:<tên-lá>` **không** nằm trong bảng trên — gắn động theo catalog skill lúc tạo issue, không hardcode.
+Bài học luôn gửi về **repo tác giả**: `hoangnh2412/minipower`.
+
+Khác với [minipower-tasks-github](../../../tasks/skills/minipower-tasks-github/SKILL.md) lấy repo từ `git remote`: skill này chạy **trong dự án khách hàng**, nơi remote trỏ về repo của khách. Đích vì vậy là hằng số, không suy ra từ môi trường.
 
 ## Ranh giới
 

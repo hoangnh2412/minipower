@@ -31,7 +31,6 @@ import {
   docLabel,
   docScope,
   PHASE_BY_DOC,
-  FEEDBACK,
 } from "./lib/rules.js"
 import {
   claudeSettingsFragment,
@@ -115,13 +114,6 @@ function docModeTable() {
   return rows.join("\n")
 }
 
-function feedbackLabelsTable() {
-  const rows = ["| Nhãn | Ý nghĩa |", "|------|---------|"]
-  for (const l of FEEDBACK.labels) {
-    rows.push(`| \`${l.name}\` | ${l.description} |`)
-  }
-  return rows.join("\n")
-}
 
 function rolesTable() {
   const rows = ["| Vai trò | Chức danh | Phase liên quan | File |", "|---------|-----------|-----------------|------|"]
@@ -136,7 +128,6 @@ const TARGETS = [
   { file: rt("roles", "README.md"), id: "roles-index", build: rolesTable },
   { file: rt("skills", "minipower-router", "SKILL.md"), id: "project-modes", build: projectModesTable },
   { file: rel("../../../contracts/doc-mode.md"), id: "doc-mode", build: docModeTable },
-  { file: rt("skills", "minipower-router-retro", "SKILL.md"), id: "feedback-labels", build: feedbackLabelsTable },
 ]
 
 function escape(s) {

@@ -11,6 +11,7 @@ Manifest máy-đọc: [PACK.md](PACK.md).
 | Skill | Tài liệu | Việc |
 |---|---|---|
 | **minipower-toolbox-skill-author** | [skills/minipower-toolbox-skill-author/README.md](./skills/minipower-toolbox-skill-author/README.md) | Viết và soát skill lá-rời Minipower — chọn module, dựng cây file, đặt `description` kích hoạt được, cập nhật hub + test |
+| **minipower-toolbox-backlog** | [skills/minipower-toolbox-backlog/README.md](./skills/minipower-toolbox-backlog/README.md) | Tạo và quản lý issue của chính repo Minipower theo khuôn riêng — form và nhãn đọc sống, ghi qua `minipower-tasks-github` |
 
 ## Sẽ có — viết dần, không tạo folder rỗng (ADR-022 QĐ-7 luật 2)
 

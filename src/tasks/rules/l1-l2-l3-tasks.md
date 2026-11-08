@@ -1,6 +1,6 @@
 # L1 / L2 / L3 — pack `tasks/`
 
-Dùng chung mọi lá kênh việc (`minipower-tasks-openproject` · `minipower-tasks-lark`).
+Dùng chung mọi lá kênh việc (`minipower-tasks-openproject` · `minipower-tasks-lark` · `minipower-tasks-github`).
 
 | Tầng | Agent được | Cổng người |
 |------|------------|------------|

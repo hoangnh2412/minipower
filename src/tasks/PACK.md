@@ -1,6 +1,6 @@
 # PACK — tasks
 
-Manifest máy-đọc (schema: [contracts/pack-manifest.md](../../contracts/pack-manifest.md)). Module **kênh** — SOP MCP mặt `tasks`, không luật UC/FR (ADR-033 QĐ-5).
+Manifest máy-đọc (schema: [contracts/pack-manifest.md](../../contracts/pack-manifest.md)). Module **kênh** — SOP MCP mặt `tasks`, không luật UC/FR (ADR-033 QĐ-5). Provider: OpenProject · Lark · GitHub.
 
 ```yaml
 pack: tasks

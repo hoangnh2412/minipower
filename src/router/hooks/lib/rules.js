@@ -209,9 +209,3 @@ export function matchIntents(norm) {
 /** Thứ tự + slot 6 hook IDE — SSOT sinh fragment Claude/Cursor (ADR-031 Q5 cách B). */
 export const INSTALL_HOOKS = RULES.install_hooks
 
-/**
- * @type {{repo:string,labels:{name:string,description:string}[]}}
- * Repo GitHub của minipower + nhãn issue "bài học" (ADR-044 §7). Nhãn `skill:<tên-lá>`
- * KHÔNG nằm trong danh sách này — nó động theo catalog skill, gắn lúc tạo issue.
- */
-export const FEEDBACK = RULES.feedback

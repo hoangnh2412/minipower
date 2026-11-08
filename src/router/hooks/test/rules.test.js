@@ -275,7 +275,7 @@ test("project_surfaces (ADR-038) — docs mặc định, code opt-in, path = id"
 
 test("profile_providers (ADR-033) — enum bốn mặt", () => {
   assert.deepEqual(PROFILE_PROVIDERS.docs, ["local", "outline"])
-  assert.deepEqual(PROFILE_PROVIDERS.tasks, ["openproject", "lark", "none"])
+  assert.deepEqual(PROFILE_PROVIDERS.tasks, ["openproject", "lark", "github", "none"])
   assert.deepEqual(PROFILE_PROVIDERS.chat, ["slack", "lark", "none"])
   assert.deepEqual(PROFILE_PROVIDERS.code, ["gitlab", "local"])
 })
