@@ -495,3 +495,17 @@ Phần *file đặt ở đâu* của các marker này thuộc [minipower-backend
 | Ra dây | API chỉ trả `code` + `message` (hình dạng body theo `BaseResponse` — [swashbuckle](../../minipower-backend-swashbuckle-dotnet/SKILL.md)); UI bọc `[code] message`. Không stack, không message exception của framework |
 
 Mã lỗi không phải chỗ để `NoWarn`: hằng chưa khai thì khai thêm, không nối chuỗi tạm.
+
+---
+
+## 15. Schema — chỉ qua migration
+
+Không viết code tạo hoặc sửa bảng trong logic ứng dụng. Service, handler, controller, hosted service và seed nghiệp vụ không được chạy DDL.
+
+| Cấm trong logic | Dùng thay thế |
+|-----------------|---------------|
+| `CREATE` / `ALTER` / `DROP` `TABLE` hoặc `INDEX` | EF migration (`dotnet ef migrations add`) |
+| `ExecuteSql` / `ExecuteSqlRaw` / `ExecuteSqlInterpolated` để đổi schema | `migrationBuilder.CreateTable`, `AddColumn`, `CreateIndex`, … |
+| `EnsureCreated` để “vá” bảng mới vào database đã tồn tại | `Database.Migrate` khi host khởi động |
+
+Migration nằm cạnh `DbContext` của host (thư mục `Migrations/`). Entity và `OnModelCreating` mô tả model; file migration là chỗ duy nhất sinh DDL. Trong file đó dùng API `migrationBuilder`. `migrationBuilder.Sql` chỉ khi builder không diễn được thao tác (ví dụ áp lên database đã có bảng nhưng chưa có `__EFMigrationsHistory`). Database đã có từ trước khi có history thì migration mới phải áp được bằng `Migrate`, không vá bằng SQL trong request.
