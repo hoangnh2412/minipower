@@ -1,243 +1,438 @@
-# Phương pháp đánh giá chất lượng Minipower — khung 4 tầng + eval hành vi cho 3 gate
+# Phương pháp đánh giá chất lượng Minipower — nhóm script + nhóm LLM, đo theo version từng skill
 
 | | |
 |---|---|
-| **Ngày** | 2026-08-27 |
-| **Trạng thái** | chốt 2026-08-29 (§6) — đang triển khai Đợt 0 |
-| **Phạm vi** | Định nghĩa *phương pháp luận đánh giá chất lượng* của toàn bộ minipower (sdlc · backend · ops · hooks · contracts) — cái gì đo, đo bằng gì, nhịp nào. Đợt triển khai đầu chỉ đụng `evals/` (**mới, ở gốc repo** — Q5) + `sdlc/hooks/` (advisory check mới) |
-| **Ngoài phạm vi** | Đánh giá *một lần* hiện trạng (đã có tiền lệ ADR-001); xây hạ tầng eval ngoài repo (dashboard, DB metric — trái ADR-022 QĐ-12); eval cho dự án đích cụ thể |
-| **Nối tiếp** | [ADR-001](../done/ADR-001-2026-07-17-danh-gia-minipower-va-chien-luoc-phat-trien.md) (tiền lệ đánh giá + bài học §3.5) · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (QĐ-11 gate mềm, "cứng bằng máy mềm bằng lời") · [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) (QĐ-1 model là engine thay được) |
-| **Mục đích** | Biến "minipower có tốt không?" từ câu hỏi cảm tính / đánh giá one-off thành quy trình đo lặp lại được, đúng triết lý repo |
-| **Ảnh hưởng** | `evals/` (**mới — tầng gốc**, ngang `contracts/` · `ADRs/`; kịch bản golden + rubric cho **mọi** module) · `sdlc/hooks/` (QĐ-2b: check advisory độ dài SKILL / chữ "bắt buộc") · `AGENTS.md` §thư mục · `ADRs/` (khuôn ADR đánh giá định kỳ) |
+| **Ngày** | 2026-08-27 · **viết lại 2026-11-09** (issue [#5](https://github.com/hoangnh2412/minipower/issues/5)) |
+| **Trạng thái** | khung 2026-08-29 giữ ý; **bản 2026-11-09 chốt §11** — chưa triển khai (`evals/` chưa tồn tại), kế tiếp Đ0 |
+| **Phạm vi** | Tiêu chí đánh giá + cơ sở phương pháp luận + bộ script + bộ test case cho **toàn bộ** minipower (`src/*` · hooks · `rules.json` · contracts). So sánh chất lượng **trước/sau mỗi version của từng skill** |
+| **Ngoài phạm vi** | Hạ tầng ngoài repo (dashboard, DB metric — ADR-022 QĐ-12); eval cho một dự án đích cụ thể; biến điểm LLM thành gate cứng |
+| **Nối tiếp** | [ADR-001](../done/ADR-001-2026-07-17-danh-gia-minipower-va-chien-luoc-phat-trien.md) (§3.5 bài học scorer lệch) · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (QĐ-11 gate mềm) · [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) (QĐ-1 model là engine thay được) · [ADR-044](ADR-044-2026-10-29-vong-phan-hoi-bai-hoc-github-issue-version-skill.md) (`metadata.version` semver + CHANGELOG mỗi lá; Q4 giao thước đo cho ADR đánh giá — chính ADR này) |
+| **Mục đích** | Trước đợt refactor lớn: có thước đo lặp lại được để biết refactor làm minipower **tốt lên hay tệ đi**, theo từng skill |
+| **Ảnh hưởng** | `evals/` (**mới — tầng gốc**, ngang `contracts/` · `ADRs/`) · `package.json` gốc (script `check`, `eval:*`) · `src/router/hooks/` (lint SKILL, routing tĩnh, `trace:check --stats`) · `.gitignore` (`evals/.runs/`) · `AGENTS.md` §thư mục |
 
 ---
 
 ## §1. Bối cảnh
 
-Hiện trạng năng lực kiểm định của repo (đối chiếu 2026-08-27):
-
-- **Đã mạnh ở tầng máy:** 23 test file trong `sdlc/hooks/test/`, 432 test; 4 gate CI (`gen:check` · `trace:check` · `link:check` · install-parity); cả 7 điều kiện cứng đều có test canh.
-- **Đã có tiền lệ đánh giá:** ADR-001 là một lần đánh giá toàn diện (so với superpowers-optimized) — nhưng là **one-off**, không có khung lặp lại; và chủ yếu đánh giá *cấu trúc*, không đánh giá *hành vi agent khi chạy skill*.
-- **Chưa có gì đo tầng giá trị lõi:** toàn bộ giá trị của minipower tập trung ở 3 gate (deliberation · readiness-gate · doc-review) và kỷ luật quy trình — nhưng chưa có bất kỳ cơ chế nào kiểm *agent thật có làm đúng như skill dạy không* (có hỏi trọn gói một lượt không, có nhảy giải pháp sớm không, verdict có ra trước artifact không).
-- **Bài học định hình (ADR-001 §3.5):** superpowers chết vì eval script **re-implement** logic production rồi hai bản lệch nhau — họ tune keyword chống lại một scorer không phải thứ đang chạy. Repo này đã né đúng bẫy đó ở tầng hook (test `import` hàm production); phương pháp đánh giá mới phải giữ nguyên luật ấy ở mọi tầng.
-- **Công cụ sẵn có:** Claude Code có `claude plugin eval` (eval suite cho plugin, chạy sandbox, có report JSON, chạy được CI) — repo đã là plugin (`minipower-sdlc`, ADR-011 🟢).
+- **Tầng máy đã mạnh:** 37 file test trong `src/router/hooks/test/` (109 SKILL.md, đối chiếu `develop` 2026-11-09); CI chạy `gen:check` · `trace:check` · `link:check`; 7 điều kiện cứng có test canh.
+- **Tầng hành vi agent chưa đo gì:** giá trị lõi nằm ở 3 gate mềm — premise ([deliberation](../../src/router/skills/minipower-router-deliberation/SKILL.md)) · execution ([readiness](../../src/router/skills/minipower-router-readiness/SKILL.md)) · QC (`minipower-*-review` trong pack nghề) — và ở việc dispatcher chọn đúng skill. Không có cơ chế nào kiểm *agent thật có làm đúng như skill dạy không*.
+- **Sắp refactor lớn:** đổi tên, dời thư mục, sửa `description` hàng loạt. Không có baseline đo trước thì sau refactor không có gì để so.
+- **Bản 2026-08-29 đã lỗi thời:** trỏ `sdlc/`, `readiness-gate`, `doc-review` — nay là `src/router/`, `minipower-router-readiness`, `minipower-{pack}-review`. Plugin root = `src/router` (`plugin.json` `name: "minipower"`).
+- **Bài học định hình (ADR-001 §3.5):** superpowers chết vì eval script **re-implement** logic production rồi hai bản lệch nhau. Mọi scorer ở đây phải chạy artifact thật.
 
 ## §2. Vấn đề
 
 | # | Vấn đề | Hệ quả |
 |---|---|---|
-| P1 | Không có định nghĩa "chất lượng minipower" đo được — mỗi lần hỏi lại đánh giá cảm tính từ đầu | Không biết một thay đổi (sửa SKILL, đổi rules.json, đổi model) làm pack tốt lên hay tệ đi |
-| P2 | Giá trị lõi (3 gate, kỷ luật quy trình) hoàn toàn không được đo — chỉ tầng hook có test | Sửa SKILL.md của gate là "bay mù": regression ngữ nghĩa không ai phát hiện cho đến khi dự án đích trả giá |
-| P3 | Định vị "model là engine thay được" (ADR-022 QĐ-1) chưa có bằng chứng | Đổi model = rủi ro không định lượng được; tuyên bố model-agnostic chỉ là lời nói |
-| P4 | Không có tín hiệu ngược từ dự án đích (gate có bắt được lỗi thật không, nợ doc có được trả không) | Quy trình có thể "đẹp trên giấy" mà không ai biết |
+| P1 | Không có định nghĩa "chất lượng" đo được | Mỗi lần hỏi lại đánh giá cảm tính từ đầu |
+| P2 | Hành vi 3 gate + routing không được đo | Sửa SKILL.md là "bay mù"; regression ngữ nghĩa lộ ra ở dự án đích |
+| P3 | Không có đơn vị version cho skill | Không biết skill nào đã đổi mà chưa được kiểm lại; không so được trước/sau |
+| P4 | Tuyên bố model-agnostic (ADR-022 QĐ-1) chưa có bằng chứng | Đổi model là rủi ro không định lượng |
 
 ## §3. Ràng buộc
 
 | # | Ràng buộc |
 |---|---|
-| C1 | **"Cứng bằng máy, mềm bằng lời"** (ADR-020) áp cho chính việc đánh giá: chỉ máy-chấm cái máy kiểm được không cần phán đoán; tiêu chí ngữ nghĩa → rubric cho người/LLM-judge, kết quả là **advisory**, không thành điều kiện chặn CI |
-| C2 | Gate mềm (ADR-020 QĐ-11) không mở lại — eval đo *chất lượng* gate, không biến kết quả eval thành gate cứng mới |
-| C3 | **Eval phải chạy chính artifact production** (bài học ADR-001 §3.5): import hàm thật, load skill thật, chạy plugin thật — cấm mọi scorer re-implement logic |
-| C4 | Không xây hạ tầng ngoài repo (ADR-022 QĐ-12): metric tầng outcome sinh từ artifact có sẵn của dự án đích (`trace:check`, `doc-debt.md`, DEC), không dựng dashboard/DB |
-| C5 | Chi phí tương xứng (phân tầng micro/light/full): eval hành vi tốn LLM call — không chạy mỗi commit |
+| C1 | **"Cứng bằng máy, mềm bằng lời"** áp lên chính eval: chỉ cái máy kiểm được mới chặn CI; tiêu chí ngữ nghĩa → advisory |
+| C2 | Không mở lại gate cứng trên verdict (ADR-020 QĐ-11) — eval đo *chất lượng* gate, không biến điểm eval thành gate |
+| C3 | **Eval chạy artifact production**: import hàm thật, nạp plugin thật (`--plugin-dir src/router`), fixture copy từ skeleton thật. Cấm scorer re-implement routing/gate |
+| C4 | Không hạ tầng ngoài repo: kết quả là file JSON trong `evals/` |
+| C5 | Chi phí tương xứng: test LLM tốn tiền + có nhiễu → không chạy mỗi commit |
+| C6 | **Test LLM không bao giờ tự chạy**: không gắn CI, hook, `npm test`. AI chỉ in lệnh; **người tự chạy**. Điều này máy canh được (QĐ-7) |
+| C7 | Node ESM plain, không dependency, Node ≥ 18 — như `src/router/hooks/` |
 
 ## §4. Phương án
 
+### 4.1 Chia bộ đánh giá
+
 | # | Phương án | Ưu | Nhược | |
 |---|---|---|---|---|
-| O1 | Đánh giá định kỳ thủ công (lặp lại kiểu ADR-001 mỗi quý) | Không tốn hạ tầng | Cảm tính, không so sánh được giữa hai lần, không bắt regression theo commit | ❌ |
-| O2 | Máy-hoá tối đa: đưa mọi tiêu chí vào CI chặn | Khách quan bề ngoài | Trái C1 — ép tiêu chí ngữ nghĩa thành số là giả khách quan; lặp lại sai lầm "gate cứng trên verdict" mà QĐ-11 đã bỏ | ❌ |
-| O3 | **Khung 4 tầng**: tầng nào máy kiểm được thì CI, tầng ngữ nghĩa thì golden scenario + rubric (advisory), tầng outcome thì đo từ artifact dự án đích, tổng hợp theo nhịp thành ADR đánh giá | Đúng triết lý repo, mỗi loại chất lượng có thước đo đúng bản chất | Nhiều mảnh, cần kỷ luật nhịp; tầng 3 tốn LLM call | ✅ chọn |
+| O1 | Đánh giá thủ công định kỳ (lặp ADR-001) | Không tốn hạ tầng | Cảm tính, không so được giữa hai lần | ❌ |
+| O2 | Máy-hoá mọi tiêu chí, chặn CI | Khách quan bề ngoài | Trái C1/C2 — ép phán đoán ngữ nghĩa thành gate cứng | ❌ |
+| O3 | Khung 4 tầng T1–T4 (bản 2026-08-29) | Đúng triết lý | Tầng không khớp cách người dùng chạy (chạy gì, khi nào, ai chạy) | ⚠️ giữ ý |
+| O4 | **Hai nhóm theo cách chạy**: **A** script (luôn toàn bộ, chặn CI) · **B** LLM (chỉ gợi ý, người chạy, hai mức B1/B2) — T1–T4 trở thành *loại tiêu chí* bên trong | Khớp thao tác thật; ranh giới "máy chặn / người quyết" trùng ranh giới nhóm | Hai bộ công cụ | ✅ chọn |
+
+### 4.2 Harness cho nhóm B
+
+| # | Phương án | | Lý do |
+|---|---|---|---|
+| H1 | `claude plugin eval` | ❌ | Early access (thực nghiệm 2026-08-29); `--eval-dir` đòi thư mục dưới plugin, trái vị trí `evals/` ở gốc |
+| H2 | Framework ngoài (promptfoo, DeepEval…) | ❌ | Kéo dependency (trái C7); thường gọi API trực tiếp, không nạp plugin + hook thật (trái C3) |
+| H3 | **Runner tự viết** spawn `claude -p --plugin-dir src/router --output-format stream-json` | ✅ | Nạp đúng skill + hook production; transcript có `tool_use` để chấm bằng máy; có `total_cost_usd` |
+
+Giữ **schema** gần với `plugin eval` (`case.yaml` + `prompt.md`) để đổi harness sau này rẻ.
+
+### 4.3 Version của skill
+
+| # | Phương án | Ưu | Nhược | |
+|---|---|---|---|---|
+| V1 | `metadata.version` semver trong frontmatter ([ADR-044](ADR-044-2026-10-29-vong-phan-hoi-bai-hoc-github-issue-version-skill.md) — **đã có**, giữ nguyên) | Dễ đọc; có CHANGELOG | Người tự tăng: nội dung đổi mà quên bump thì vẫn cùng số (`version:check` chỉ WARN) → **không đủ chính xác làm khoá kết quả eval** | ⚠️ giữ làm **nhãn**, không làm khoá |
+| V2 | Commit SHA của repo | Có sẵn | Một commit đổi 1 skill làm "đổi version" cả 109 skill → B1 vô nghĩa | ❌ |
+| V3 | **Hash nội dung thư mục skill** | Máy tự phát hiện đổi; không cần nhớ; đổi skill A không đụng version skill B | Khó đọc → hiển thị kèm semver V1 | ✅ **khoá chính** (§11-Q2) |
+
+### 4.4 Chọn case cho B1 (theo phạm vi)
+
+| # | Phương án | | Lý do |
+|---|---|---|---|
+| S1 | `git diff --name-only` → map path → case | ❌ | Refactor đổi path là mất ánh xạ đúng lúc cần nhất |
+| S2 | **Case khai `covers:` theo `name` skill; so hash hiện tại với hash trong kết quả gần nhất** | ✅ | Sống qua đổi thư mục; không cần ref git |
+
+### 4.5 Chấm điểm
+
+| # | Phương án | | Lý do |
+|---|---|---|---|
+| J1 | LLM-judge chấm toàn bộ | ❌ | Nhiễu, đắt, có thiên lệch (Zheng 2023); phần lớn hành vi gate tất định trên transcript |
+| J2 | **Máy trước, judge sau**: tiêu chí quan sát được → grader máy; chỉ tiêu chí ngữ nghĩa → judge + người soát mẫu | ✅ | Ổn định, rẻ, judge được hiệu chỉnh bằng κ |
 
 ## §5. Quyết định
 
 | # | Quyết định | Chi tiết |
 |---|---|---|
-| QĐ-1 | **Khung 4 tầng** là định nghĩa chính thức của "chất lượng minipower" | **T1 Kỹ thuật** (máy, mỗi commit) · **T2 Nội dung skill** (lint tĩnh + rubric) · **T3 Hành vi agent** (golden scenario, theo thay đổi Full + đổi model) · **T4 Outcome dự án đích** (từ artifact, theo mốc). Chi tiết từng tầng: QĐ-2…QĐ-5 |
-| QĐ-2 | **Tầng 1 — duy trì, không mở rộng**: mọi điều kiện cứng mới phải kèm test trong cùng commit (đã là thực hành, nay thành luật) | Metric: CI xanh + tỉ lệ điều kiện cứng có test canh = 100%. **QĐ-2b (tuỳ chọn, Q3):** thêm 2 check *advisory* vào `npm run gen:check` hoặc script riêng: (a) SKILL.md > 150 dòng → WARN (giữ lợi thế kỷ luật token, ADR-001 §1.4); (b) chữ "bắt buộc" trong markdown không kèm tham chiếu check máy → WARN (phép thử QĐ-3 ADR-020 tự động hoá một nửa) |
-| QĐ-3 | **Tầng 3 — bộ kịch bản golden cho 3 gate**, đặt tại **`evals/{module}/{skill}/{case}/`** ở gốc repo (Q5) | Mỗi kịch bản = 3 phần: **(1) fixture** — skeleton dự án giả lập + `profile.json` (đủ 3 mode) + prompt đầu vào; **(2) hành vi kỳ vọng** — checklist quan sát được trên transcript, viết dạng CÓ/KHÔNG (vd readiness-gate: "liệt kê ≥ N thiếu sót đã gài trong MỘT lượt trả lời", "không sinh artifact trước verdict", "thiếu sót được hoãn có ghi vào `doc-debt.md`"); **(3) bẫy** — mỗi kịch bản gài lỗi biết trước để đo recall. Đợt đầu: **readiness-gate làm mẫu** (~6–8 kịch bản × 3 mode), sau đó nhân ra deliberation + doc-review. Chấm: LLM-as-judge theo checklist + **người soát xác suất ~20%**; điểm là advisory (C1, C2) |
-| QĐ-4 | **Nhịp chạy tầng 3 theo phân tầng chi phí + theo model** | Chạy khi: (a) thay đổi **Full** đụng SKILL.md của gate / router / `rules.json` routing; (b) **đổi model engine** — chạy toàn bộ suite, kết quả là bằng chứng cho tuyên bố model-agnostic (P3); (c) trước khi tag release plugin. KHÔNG chạy cho micro/light (C5). Harness: ưu tiên `claude plugin eval` (đã có sandbox + report + CI); nếu thực nghiệm cho thấy không khớp (Q2) thì rơi về harness `node --test` tự viết gọi `claude -p` — nhưng luôn chạy plugin thật (C3) |
-| QĐ-5 | **Tầng 4 — 4 metric outcome, sinh từ artifact dự án đích, không hạ tầng mới** (C4) | (1) **Trace coverage**: % FR có AC, % chuỗi UC→FR→AC→Test nối thông — nâng `trace:check` từ pass/fail thành in số liệu (thêm `--stats`, không đổi hành vi exit code); (2) **Gate precision**: tỉ lệ finding doc-review được người review chấp nhận / tỉ lệ verdict RESHAPE·STOP thật sự đổi hướng (đếm tay từ DEC — nếu 100% PROCEED thì gate đang là hình thức); (3) **Tuổi nợ doc**: tuổi trung bình mục mở trong `doc-debt.md` / `open-questions.md`; (4) **Rework sau baseline**: số CR mở vì thiếu sót lẽ ra gate phải bắt. Tổng hợp khi dự án đích qua mốc baseline hoặc theo quý |
-| QĐ-6 | **Kết quả đánh giá định kỳ ghi thành ADR** — biến tiền lệ ADR-001 từ one-off thành nhịp | Mỗi kỳ (quý, hoặc sau mốc baseline đầu tiên của một dự án đích dùng minipower): một ADR ngắn ghi số liệu 4 tầng + kết luận + việc rút ra. So sánh được giữa hai kỳ vì cùng khung QĐ-1 |
+| QĐ-1 | **Hai nhóm đánh giá A/B** (O4) | §7 tiêu chí · §8 giải pháp |
+| QĐ-2 | **Nhóm A — script, luôn chạy toàn bộ, chặn CI** | Một lệnh `npm run check`. FAIL = chặn. WARN lint không chặn |
+| QĐ-3 | **Nhóm B — LLM, chỉ gợi ý, người tự chạy** | `eval:plan` in kế hoạch + lệnh; người chạy `eval:run`. Hai mức: **B1** theo phạm vi (skill có hash đổi) · **B2** toàn bộ (refactor lớn · đổi model · trước release) |
+| QĐ-4 | **Khoá version của eval = hash nội dung từng skill** (V3); `metadata.version` của ADR-044 **giữ nguyên trong frontmatter**, ghi kèm làm nhãn | §8.3. ADR này **không** đổi gì của ADR-044 |
+| QĐ-5 | **Bộ chấm = nguyên tắc N1–N8 + tiêu chí chung C1–C7 + tiêu chí riêng S theo skill + đúng 1 judge J** | Grader chung viết một lần, dùng mọi skill; chi tiết §7.3 (chủ repo duyệt cấu trúc 2026-11-09) |
+| QĐ-6 | **So sánh theo cặp version của cùng skill, cùng model** | Công thức §7.5; verdict 🟢/⚪/🔴 là advisory, người ký |
+| QĐ-7 | **C6 được máy canh**: test nhóm A assert `npm test`, CI workflow, hook không gọi `eval:run` / `claude -p` | Đúng phép thử "cái gì FAIL được bằng máy" |
+| QĐ-8 | **Baseline trước refactor**: chạy A + B2 trên code hiện tại, commit kết quả | Không có baseline thì QĐ-6 vô dụng |
+| QĐ-9 | **Điểm dừng sau spike** (giữ Đ1.4 cũ): variance quá lớn → hạ nhóm B về checklist người tự soát; **không** tăng số run để mua ổn định | §9 |
 
-**Sơ đồ — khung 4 tầng: mỗi loại chất lượng một thước đo, một nhịp**
+## §6. Cơ sở phương pháp luận
+
+ADR **không** tuyên bố "research-backed" (AGENTS.md §Định vị). Bảng dưới ghi các phương pháp chuẩn mà thiết kế dựa vào, để người đọc biết *vì sao* từng công thức có hình dạng như vậy.
+
+| # | Phương pháp | Nguồn | Áp vào |
+|---|---|---|---|
+| M1 | Test pyramid | Cohn 2009; Google Testing | A rẻ, chạy toàn bộ mỗi commit · B đắt, chạy chọn lọc |
+| M2 | Fault seeding / mutation testing | Mills 1972; DeMillo, Lipton, Sayward 1978 | Mỗi case gài **bẫy biết trước** → đo recall (§7.3.2 C4) |
+| M3 | Behavioral testing theo năng lực | Ribeiro et al. 2020, *CheckList* | Mỗi grader kiểm **một hành vi** của skill, không đo "câu trả lời hay" chung chung |
+| M4 | Đánh giá đa chỉ số, không gộp | Liang et al. 2022, *HELM* | Scorecard nhiều cột; **không** có điểm tổng có trọng số (§7.4) |
+| M5 | pass@k / pass^k | Chen et al. 2021 (*Codex*); Yao et al. 2024 (*τ-bench*) | Gate cần **nhất quán** → dùng pass^k (mọi run đều đạt), không dùng pass@k |
+| M6 | LLM-as-a-judge + thiên lệch | Zheng et al. 2023, *MT-Bench* | Judge chỉ cho J; rubric 3 mức; không cho judge thấy tên version |
+| M7 | Độ đồng thuận người chấm | Cohen 1960 (κ); Landis & Koch 1977 | κ giữa judge và người soát quyết định có tin điểm J không |
+| M8 | Kiểm định cặp cho dữ liệu nhị phân | McNemar 1947 | So hai version trên **cùng** bộ case (§7.5) |
+| M9 | Goodhart's law | Goodhart 1975; Strathern 1997 | Scorer không re-implement production (C3); điểm B advisory (C2) |
+| M10 | Goal–Question–Metric | Basili, Caldiera, Rombach 1994 | Metric outcome dự án đích (§7.6) |
+
+## §7. Tiêu chí & công thức đánh giá
+
+Ký hiệu chung: `|X|` = số phần tử; `1[đk]` = 1 nếu điều kiện đúng, 0 nếu sai; `k` = số run mỗi case.
+
+### 7.1 Nhóm A — script (chặn CI)
+
+| ID | Tiêu chí | Công thức | Ngưỡng | Loại |
+|---|---|---|---|---|
+| A1 | Toàn bộ test | `A1 = 1[npm test exit 0]` | = 1 | **chặn** |
+| A2 | Đồng bộ SSOT | `A2 = 1[gen:check ∧ link:check ∧ trace:check đều exit 0]` | = 1 | **chặn** |
+| A3 | Phủ điều kiện cứng | `A3 = |điều kiện cứng có ≥1 test làm nó FAIL| / |điều kiện cứng|` (hiện 7) | = 1 | **chặn** (test meta) |
+| A4 | Toàn vẹn routing tĩnh | `A4 = |tham chiếu skill hợp lệ| / |tham chiếu skill|` — mọi tên skill trỏ từ `rules.json`, bảng router, link `../{skill}/SKILL.md` đều tồn tại và `name` ≡ thư mục | = 1 | **chặn** |
+| A5 | Không tự chạy LLM (QĐ-7) | `A5 = 1[không script test/CI/hook nào gọi eval:run hoặc claude -p]` | = 1 | **chặn** |
+| A6 | Độ dài skill | `W_len = |SKILL.md có > 150 dòng|` | báo số | WARN |
+| A7 | "bắt buộc" không cổng máy | `W_must = |dòng chứa "bắt buộc" không kèm tham chiếu check máy|` | báo số | WARN |
+| A8 | Trace coverage (`trace:check --stats`) | `TC_FR = |FR có ≥1 AC| / |FR|` · `TC_chain = |UC có chuỗi UC→FR→AC→Test thông| / |UC|` | báo số | WARN, không đổi exit code |
+
+**Kết luận nhóm A:** `A_pass = A1 ∧ A2 ∧ A3 ∧ A4 ∧ A5`. A6–A8 ghi vào kết quả để so giữa version, không chặn.
+
+### 7.2 Nhóm B — đơn vị chấm
+
+- **Case** `c` = fixture + prompt + bẫy + bộ grader; chạy `k` lần (mặc định `k = 2`).
+- **Grader** `g` trên run `r`: `g(c,r) ∈ {0, 1, N/A}`; riêng recall nhận giá trị trong `[0, 1]`.
+- Mỗi grader gắn nhãn **critical** hoặc **thường**. Critical = vi phạm là sai nguyên tắc nền của skill.
+
+**Run đạt:**
+```
+pass(c,r) = ∏ g(c,r)  với mọi g critical áp dụng được
+            ∧ recall(c,r) ≥ θ_recall          (θ_recall = 0.8)
+```
+
+**Case đạt ổn định (pass^k, M5):**
+```
+stable(c) = ∏_{r=1..k} pass(c,r)        → 1 chỉ khi MỌI run đều đạt
+```
+
+**Độ chập chờn (flaky):**
+```
+flaky(c) = 1[ 0 < Σ_r pass(c,r) < k ]
+```
+
+### 7.3 Bộ tiêu chí chấm: nguyên tắc · chung · riêng · judge
+
+```
+Bộ chấm(skill) = C1–C7 (chung, tham số theo skill)  +  S1…Sn (riêng của skill)  +  J (judge)
+```
+
+Thay khuôn "G1–G7 viết riêng cho từng gate" của bản trước: khoảng một nửa G lặp giữa các gate, nên tách phần chung ra viết grader **một lần, dùng cho mọi skill**; mỗi skill chỉ khai **tham số** cho phần chung + vài tiêu chí riêng.
+
+#### 7.3.1 Nguyên tắc viết tiêu chí (N1–N8)
+
+Mọi tiêu chí — chung hay riêng — phải thoả cả 8:
+
+| # | Nguyên tắc | Nghĩa | Cơ sở |
+|---|---|---|---|
+| N1 | **Có nguồn** | Mỗi tiêu chí trỏ một câu cụ thể trong SKILL.md / AGENTS.md / contracts. Không có nguồn → không có tiêu chí | Không đo thứ skill không dạy (vd QC review đang stub — §11-Q5) |
+| N2 | **Quan sát được** | Phát biểu CÓ/KHÔNG, chỉ ra được bằng chứng trên transcript (`tool_use`, đoạn text, file ghi ra) | Lặp lại được |
+| N3 | **Máy trước, judge sau** | Chấm được bằng máy thì không đưa judge | M6 — judge nhiễu, thiên lệch |
+| N4 | **Một tiêu chí = một hành vi** | Không gộp hai hành vi vào một tiêu chí | M3 CheckList — biết chính xác hành vi nào hỏng |
+| N5 | **Đo hành vi, không đo chữ** | Không so khớp nguyên văn câu trong SKILL | Tiêu chí sống qua refactor |
+| N6 | **Có case vi phạm được** | Tiêu chí critical phải có ≥ 1 case gài bẫy làm nó trượt được | M2 — tiêu chí không bao giờ trượt thì không đo gì |
+| N7 | **Grader có test** | Mỗi grader có test trên transcript mẫu tĩnh — bản đạt + bản vi phạm, 0 LLM call | Bộ chấm sai thì mọi điểm sai |
+| N8 | **Không chép logic production** | Grader đọc transcript + fixture; không tính lại routing/gate, không đọc lại SKILL để suy kỳ vọng | M9 Goodhart — bài học ADR-001 §3.5 |
+
+**Critical** = vi phạm triết lý bất biến hoặc nguyên tắc nền của skill. Run có một critical trượt là run trượt (§7.2).
+
+#### 7.3.2 Tiêu chí chung C1–C7 (mọi skill)
+
+| ID | Tiêu chí | Critical | Nguồn | Tham số khai trong `case.yaml` | Chấm (máy, trên `stream-json`) |
+|---|---|---|---|---|---|
+| **C1** | Kích hoạt đúng skill | ✔ | dispatcher `minipower-router` | `expect.skill` (hoặc `none`) | `tool_use` Skill đầu tiên có `name` = kỳ vọng; `none` → không mở skill nào |
+| **C2** | Không thực thi sớm | ✔ | AGENTS §Triết lý bất biến — *không nhảy giải pháp sớm* | `allow_write` (path được ghi trước verdict, vd `memory/**`) | Không `tool_use` Write/Edit ngoài `allow_write` trước dòng verdict |
+| **C3** | Không bịa | ✔ | trace-spine; readiness §Anti-patterns *"tự bịa tiền đề"* | — (lấy tập ID/module/DOC từ fixture) | Không xuất hiện ID `{MOD}-…`, mã module, `DOC-NN` ngoài tập có trong fixture + prompt |
+| **C4** | Bắt được bẫy | ✔ (θ = 0.8) | fault seeding (M2) | `fixture.seed[]` + cách nhận diện từng bẫy | `recall = |bẫy bị nêu| / |bẫy gài|` |
+| **C5** | Đúng format | | §Format phản hồi của skill | `expect.sections[]`, `expect.verdict[]` | Có đủ mục; verdict thuộc tập cho phép, đúng **một** |
+| **C6** | Không vượt ranh giới | ✔ | 1 module = 1 owner (parallel-work); `baseline-guard` | `forbid_write` (vd `docs/02-baseline/**`, `03-modules/{khác}/**`) | Không Write/Edit vào `forbid_write` |
+| **C7** | Đúng theo `project_mode` | | `rules.json` `project_modes`; bảng *Theo chế độ dự án* trong skill | `mode` + `expect.by_mode` | Hành vi khai cho mode của case xảy ra (vd file ghi nợ) |
+
+#### 7.3.3 Tiêu chí riêng S (theo skill)
+
+Chỉ hành vi **đặc thù**, nguồn là §nguyên tắc vận hành / §Anti-patterns / §Exit criteria của chính skill.
+
+| Skill | ID | Tiêu chí riêng | Critical | Nguồn | Chấm |
+|---|---|---|---|---|---|
+| **readiness** | S1 | Hỏi trọn gói, một lượt | ✔ | §Ba nguyên tắc #1 | Số assistant message hỏi người trước lượt user kế tiếp = 1 |
+| | S2 | Hoãn thì ghi nợ đúng dòng | | §Sổ nợ | Dòng `- [ ] {OQ-NNN} … · intent: … · hoãn ngày …` xuất hiện trong file nợ theo mode (C7 lo *file nào*) |
+| | S3 | Không soát tiền đề cấp module khi prompt không nêu module | | §Kiểm theo module | Case không nêu module → không nêu DOC cột "theo module" là thiếu |
+| **deliberation** | S1 | Câu Premise đúng theo mode | | §Theo chế độ dự án | `mvp` có câu 1·2·4 · `maintain` có 1·4·6 · `standard` đủ 6 |
+| | S2 | Mỗi góc nhìn một lượt | | Protocol 2 §Quy tắc | Mỗi vai xuất hiện đúng một khối; số vai ≥ ngưỡng theo mode |
+| | S3 | Khung vấn đề không kèm giải pháp | ✔ | §Exit criteria | Mục "Vấn đề đã khung lại" không chứa từ khoá giải pháp mà case cố ý nhử |
+| **router** | S1 | Micro không mở gate | ✔ | §Phân tầng micro/light/full | Case typo/format → không mở deliberation/readiness |
+| | S2 | Full mở premise gate | | §Phân tầng | Case Full (DOC/module mới) → mở `minipower-router-deliberation` |
+| **QC review** | — | **Chưa có** — skill hiện stub, N1 không thoả | | §11-Q5 | Khung dự kiến: verdict PASS/BLOCK · finding dạng `{DOC}#{ID}` · BLOCK khi có lỗi gài critical |
+
+**Ánh xạ từ khuôn G1–G7 cũ của readiness** (không mất tiêu chí nào): G1→S1 · G2→C4 · G3→C2 · G4→C7+S2 · G5→C5 · G6→C3+S3 · G7→J.
+
+Riêng routing có thêm chỉ số tổng hợp: `Acc_route = |case C1 đạt ổn định| / |case routing|` · `Confusion[i→j]` = số lần kỳ vọng skill i nhưng mở j (chỉ ra `description` nào đang "giành" intent của skill khác).
+
+#### 7.3.4 Judge J và hiệu chỉnh
+
+Mỗi skill có **đúng một** tiêu chí judge, phát biểu theo skill: readiness — *câu hỏi đúng trọng tâm, không bịa tiền đề* · deliberation — *khung vấn đề + góc nhìn có thực chất* · router — không cần J.
+
+- Rubric 3 mức: **2** đúng trọng tâm, không bịa · **1** đúng một phần / thừa · **0** lạc đề hoặc bịa tiền đề.
+- Judge **không thấy** tên version, hash, kết quả C/S (tránh thiên lệch, M6).
+- Người soát ngẫu nhiên `⌈0.2 × N⌉` mục J, chấm độc lập cùng rubric.
+- Độ đồng thuận (M7):
+  ```
+  κ = (p_o − p_e) / (1 − p_e)
+  p_o = tỉ lệ mục người và judge cho cùng mức
+  p_e = Σ_m  p_judge(m) × p_người(m)        (m ∈ {0,1,2})
+  ```
+- `κ ≥ 0.6` → dùng điểm J. `κ < 0.6` → J hiển thị nhưng gắn cờ *chưa tin cậy*, **không** dùng trong verdict so sánh.
+
+### 7.4 Scorecard một version skill
+
+Cho skill `s` ở version `v` (hash), model `m`, tập case `C_s`:
+
+| Chỉ số | Công thức | Ý nghĩa |
+|---|---|---|
+| Pass rate ổn định | `P(s,v) = Σ_c stable(c) / |C_s|` | Chỉ số chính |
+| Recall bẫy | `R(s,v) = Σ_{c,r} hit(c,r) / Σ_{c,r} seeded(c,r)` | Gate bắt được bao nhiêu lỗi đã gài |
+| Theo từng tiêu chí | `X_i(s,v) = mean_{c,r} g_i(c,r)` cho mỗi C/S (bỏ N/A) | Biết **hành vi nào** yếu |
+| Flaky rate | `F(s,v) = Σ_c flaky(c) / |C_s|` | Nhiễu; cao thì không kết luận được |
+| Chất lượng J | `Q(s,v) = mean(J) / 2` (chỉ khi κ ≥ 0.6) | Phần ngữ nghĩa |
+| Chi phí | `Cost(s,v) = Σ total_cost_usd / (|C_s| × k)` | USD trung bình mỗi run |
+
+**Không gộp thành một điểm tổng** (M4): trọng số là tuỳ ý, và một điểm tổng che mất việc S1 tăng nhưng C2 giảm.
+
+### 7.5 So sánh hai version của cùng skill
+
+Điều kiện so được: **cùng skill, cùng model, cùng bộ case** (giao của case cả hai đã chạy — `C* = C_old ∩ C_new`). Khác model → phép so riêng "đổi model" (bằng chứng cho P4).
+
+**Chênh lệch:** `ΔX = X(new) − X(old)` cho mọi chỉ số §7.4.
+
+**Lật case (paired, M8):**
+```
+b = |{x ∈ C* : stable_old(x)=1 ∧ stable_new(x)=0}|    ← regression
+c = |{x ∈ C* : stable_old(x)=0 ∧ stable_new(x)=1}|    ← cải thiện
+```
+
+**Kiểm định McNemar chính xác** (khi `b + c ≥ 6`; ít hơn thì chỉ báo số đếm, không kết luận thống kê):
+```
+p = 2 × Σ_{i=0..min(b,c)}  C(b+c, i) × 0.5^(b+c)       (cắt tại 1)
+```
+
+**Verdict advisory** (người ký, không chặn — C2):
+
+| Verdict | Điều kiện |
+|---|---|
+| 🔴 **Tệ đi** | `b ≥ 1` với case có bẫy critical **hoặc** `ΔP ≤ −0.15` **hoặc** (`b + c ≥ 6` ∧ `p < 0.05` ∧ `b > c`) |
+| 🟢 **Tốt lên** | `b = 0` ∧ (`ΔP ≥ +0.15` **hoặc** (`b + c ≥ 6` ∧ `p < 0.05` ∧ `c > b`)) |
+| ⚪ **Không đổi** | còn lại |
+| ❔ **Không kết luận** | `F(old) > 0.25` hoặc `F(new) > 0.25` — nhiễu lớn hơn tín hiệu |
+
+Ngưỡng 0.15 / 0.25 là **khởi điểm**, hiệu chỉnh sau baseline đầu tiên (§9 Đ2).
+
+### 7.6 Outcome dự án đích (GQM, M10 — theo mốc, đọc tay)
+
+| Câu hỏi | Metric | Công thức |
+|---|---|---|
+| Trace có thông? | Trace coverage | `TC_FR`, `TC_chain` (A8) chạy trên repo dự án đích |
+| Premise gate có thật sự đổi hướng? | Tỉ lệ đổi hướng | `|verdict RESHAPE ∪ STOP| / |verdict|` trong `decision-log.md` — 0% kéo dài = gate hình thức |
+| Nợ doc có được trả? | Tuổi nợ | `mean(today − ngày hoãn)` của mục `[ ]` trong `open-questions.md` / `doc-debt.md` |
+| Gate có bắt lỗi sớm? | Rework sau baseline | `|CR mở vì thiếu sót gate lẽ ra bắt| / |CR|` |
+
+## §8. Giải pháp kỹ thuật
+
+### 8.1 Cấu trúc thư mục
+
+```
+evals/
+├── README.md                     # hướng dẫn người: lệnh, đọc kết quả
+├── lib/                          # Node ESM, không dependency
+│   ├── version.js                # hash skill (§8.3)
+│   ├── plan.js                   # chọn case B1/B2
+│   ├── runner.js                 # spawn claude -p, lưu transcript
+│   ├── graders/common/           # C1–C7 — viết một lần, tham số từ case.yaml
+│   ├── graders/{skill}/          # S1…Sn riêng — thuần đọc transcript
+│   ├── judge.js                  # J
+│   └── compare.js                # §7.5
+├── test/                         # test cho chính grader, trên transcript mẫu tĩnh (0 LLM call)
+├── cases/{module}/{skill}/{case}/
+│   ├── case.yaml
+│   ├── prompt.md
+│   └── fixture.js                # copy skeleton thật vào tmp rồi gài bẫy
+├── results/{skill}/{hash8}__{model}__{yyyy-mm-dd}.json   # commit
+└── .runs/                        # transcript thô — gitignore
+```
+
+### 8.2 Schema `case.yaml`
+
+```yaml
+id: readiness-impl-thieu-doc-standard
+covers: [minipower-router-readiness]     # theo NAME skill, không theo path (4.4)
+also_depends: [minipower-router]          # đổi hash các skill này cũng đánh dấu case cần chạy lại
+mode: standard                            # standard | mvp | maintain
+fixture:
+  base: [project-skeleton, docs-skeleton] # copy từ src/router/* thật
+  seed:                                   # bẫy gài — C4 đo recall trên đây
+    - { id: T1, remove: DOC-07, module: ORD, detect: "DOC-07" }
+    - { id: T2, remove: DOC-11, module: ORD, detect: "DOC-11" }
+expect:                                   # tham số cho tiêu chí chung C1–C7
+  skill: minipower-router-readiness       # C1
+  allow_write: ["memory/**"]              # C2
+  verdict: ["⏸️", "⛔"]                     # C5
+  sections: [Intent, "Có / Thiếu", "Câu hỏi", Verdict]   # C5
+  forbid_write: ["docs/02-baseline/**"]   # C6
+  by_mode: { debt_file: memory/open-questions.md }       # C7
+criteria:
+  common: [C1, C2, C3, C4, C5, C6, C7]
+  specific: [S1, S2, S3]                  # grader riêng của skill
+  judge: J
+runs: 2
+max_turns: 3
+```
+
+### 8.3 Version skill
+
+```
+hash(s) = sha256( Σ theo thứ tự path tương đối:  path + "\0" + nội dung đã chuẩn hoá LF )
+          trên mọi file trong thư mục skill s (SKILL.md, README.md, file kèm)
+label(s) = {name}@{metadata.version}+{8 ký tự đầu của hash}   vd minipower-router-readiness@1.0.0+3f9a1c2e
+
+Khoá so sánh = hash. Semver chỉ để người đọc. Cùng semver mà khác hash ⇒ eval:compare in cảnh báo *nội dung đổi nhưng chưa bump* (bổ trợ version:check của ADR-044)
+```
+
+Một kết quả gắn với **dấu vân tay môi trường**: `{skill hash, hash các skill also_depends, hash rules.json, model id, claude CLI version}`. Case **cần chạy lại** khi bất kỳ thành phần nào khác kết quả gần nhất.
+
+### 8.4 Lệnh
+
+| Lệnh | Nhóm | Ai chạy | Việc |
+|---|---|---|---|
+| `npm run check` | A | CI + mọi người | `test` + `gen:check` + `link:check` + `trace:check --stats` + lint A6/A7 |
+| `npm run eval:plan` | B | AI / người | Liệt kê skill có hash đổi so với kết quả gần nhất → case cần chạy (B1). In bảng: case · số run · chi phí ước tính · **lệnh để chạy**. Không gọi model |
+| `npm run eval:plan -- --all` | B2 | AI / người | Như trên cho mọi case |
+| `npm run eval:run -- --case <id>… --model <id>` | B | **chỉ người** | Chạy, chấm C/S/J, ghi `results/` |
+| `npm run eval:audit -- <result>` | B | người | Hiện mẫu 20% J để người chấm, tính κ |
+| `npm run eval:compare -- <skill> [--from <hash8>] [--to <hash8>]` | B | AI / người | Scorecard hai version + verdict §7.5 |
+
+### 8.5 File kết quả
+
+```json
+{
+  "skill": "minipower-router-readiness",
+  "hash": "3f9a1c2e…",
+  "semver": "1.0.0",
+  "env": { "deps": { "minipower-router": "…" }, "rules": "…", "model": "claude-opus-5-5", "cli": "…" },
+  "date": "2026-11-09",
+  "runs_per_case": 2,
+  "cases": [
+    { "id": "…", "runs": [ { "C1": 1, "C2": 1, "C3": 1, "C4": 0.67, "C5": 1, "C6": 1, "C7": 1, "S1": 1, "S2": 1, "S3": "N/A", "J": 2, "cost": 0.21 } ],
+      "stable": 0, "flaky": 1 }
+  ],
+  "scorecard": { "P": 0.5, "R": 0.83, "F": 0.5, "Q": null, "kappa": null, "cost": 0.23 }
+}
+```
+
+### 8.6 Luồng sử dụng
 
 ```mermaid
 flowchart LR
-  Q(["Minipower có tốt không?"]):::q --> T1 & T2 & T3 & T4
+  E["Sửa skill"]:::doc --> A["npm run check<br/><b>nhóm A</b> — luôn toàn bộ"]:::may
+  A -->|FAIL| X{{"CHẶN CI"}}:::hard
+  A -->|xanh| P["eval:plan<br/>hash đổi → case cần chạy<br/>+ chi phí + LỆNH"]:::may
+  P --> H["<b>Người</b> quyết chạy<br/>eval:run (B1 / B2)"]:::nguoi
+  H --> R[("evals/results/<br/>skill@hash")]:::doc
+  R --> C["eval:compare<br/>old ↔ new"]:::may
+  C --> V(["🟢 / ⚪ / 🔴 / ❔<br/><b>ADVISORY</b> — người ký"]):::soft
 
-  T1["<b>T1 · Kỹ thuật</b><br/>hook · CI · 7 điều kiện cứng<br/><i>máy — mỗi commit</i>"]:::may
-  T2["<b>T2 · Nội dung skill</b><br/>lint tĩnh (QĐ-2b) + rubric<br/><i>máy WARN — mỗi commit</i>"]:::may
-  T3["<b>T3 · Hành vi agent</b><br/>kịch bản golden cho 3 gate<br/><i>6/7 máy + judge — thay đổi Full · đổi model</i>"]:::mix
-  T4["<b>T4 · Outcome dự án đích</b><br/>trace coverage · gate precision<br/>tuổi nợ doc · rework sau baseline<br/><i>người đọc artifact — theo mốc / quý</i>"]:::nguoi
-
-  T1 --> HARD{{"CHẶN CI"}}:::hard
-  T2 --> SOFT(["ADVISORY<br/>không sinh cổng cứng mới (C2)"]):::soft
-  T3 --> SOFT
-  T4 --> SOFT
-
-  classDef q fill:#e5e7eb,stroke:#374151,color:#111
+  classDef doc fill:#e5e7eb,stroke:#374151,color:#111
   classDef may fill:#bfdbfe,stroke:#1e40af,color:#111
-  classDef mix fill:#ddd6fe,stroke:#5b21b6,color:#111
   classDef nguoi fill:#fde68a,stroke:#b45309,color:#111
   classDef hard fill:#fecaca,stroke:#b91c1c,color:#111
   classDef soft fill:#bbf7d0,stroke:#15803d,color:#111
 ```
 
-Đọc sơ đồ: **chỉ T1 được chặn**. Ba tầng còn lại là số để người đọc — đúng ADR-020 QĐ-11 (gate mềm), và là lý do O2 bị loại ở §4.
+## §9. Triển khai
 
-## §6. Confirm
+| Đợt | Việc | Done khi |
+|---|---|---|
+| **Đ0** — nhóm A (0 LLM call) | A3 · A4 · A5 · A6 · A7 · A8 (`trace:check --stats`) · `npm run check` · vòng `gen → test → gen:check` | `npm run check` xanh; A6/A7 **0 false-positive** sau khi sửa chữ "bắt buộc" (M2 cũ) |
+| **Đ1** — spike 1 case | `version.js` · `runner.js` · grader chung C1–C7 + riêng readiness S1–S3 + test trên transcript tĩnh · 1 case readiness `standard` | Chạy 3 lần; đo chi phí/run, flaky, S1/C2 đọc được từ transcript |
+| **Điểm dừng** | Đọc 3 số | `F ≤ 0.25` và grader đọc được → Đ2. Không đạt → **dừng nhóm B**, hạ về checklist người (QĐ-9) |
+| **Đ2** — nhân bộ + baseline | Readiness 6 kịch bản × mode thưa ≈ 9–10 case · deliberation ≥ 5 case · routing (nếu §11-Q3) · `plan` · `compare` · `audit` | **Baseline commit vào `results/` trước khi refactor**; κ đầu tiên; hiệu chỉnh ngưỡng §7.5 |
+| **Đ3** | QC review (sau khi §11-Q5 có nội dung skill) · `AGENTS.md` §thư mục thêm `evals/` | |
 
-**Chốt 2026-08-29** (chủ repo duyệt hướng sau vòng thực nghiệm §6a).
+## §10. Xác minh
+
+| # | Case | Expect | |
+|---|---|---|---|
+| T1 | `npm run check` trên repo hiện tại | xanh; A6/A7 không false-positive | 🔴 |
+| T2 | `trace:check --stats` trên fixture có ID | khớp đếm tay; exit code không đổi | 🔴 |
+| T3 | Grader C1–C7 + S trên transcript mẫu tĩnh (đạt / vi phạm từng tiêu chí — N7) | đúng từng tiêu chí, 0 LLM call | 🔴 |
+| T4 | A5: thêm `claude -p` vào một script test giả | `npm run check` FAIL | 🔴 |
+| T5 | Grep `evals/lib/` không có bản copy logic routing/gate | 0 hit (C3) | 🔴 |
+| T6 | Đổi 1 byte trong SKILL.md skill A | `eval:plan` chỉ đánh dấu case `covers`/`also_depends` A | 🔴 |
+| T7 | `eval:compare` trên 2 file kết quả dựng tay | ΔP, b, c, p, verdict đúng tính tay | 🔴 |
+| T8 | Baseline B2 trước refactor | có file kết quả cho mọi skill có case | 🔴 |
+
+**Không 🟢 Done khi còn T đỏ.**
+
+## §11. Confirm
+
+**Chốt 2026-11-09** — chủ repo duyệt toàn bộ theo đề xuất.
 
 | # | Câu hỏi | Trả lời |
 |---|---|---|
-| Q1 | Duyệt khung 4 tầng + 6 QĐ? | **Duyệt.** QĐ-1…QĐ-6 giữ nguyên; §7 viết lại theo 3 đợt, QĐ-3 bổ sung tách grader **máy / judge** (§7b) |
-| Q2 | Harness tầng 3: `claude plugin eval` hay `node --test` + `claude -p` tự viết? | **Runner tự viết** (`node --test` + `claude -p --output-format stream-json`) là chính thức. Hai lý do cộng dồn: `plugin eval` **early access** chưa bật (§6a), **và** Q5 đặt `evals/` ở gốc trong khi `--eval-dir` đòi thư mục **nằm dưới plugin** ⇒ đường lai *bật-được-thì-đổi-runner* **không còn miễn phí**. Vẫn **giữ schema `plugin eval`** (`case.yaml` + `prompt.md` + `graders/*.md`) vì đó là schema tốt sẵn có — không phải để đổi runner |
-| Q3 | Làm QĐ-2b trong đợt này? | **Có, và làm TRƯỚC.** Thuần máy, không phụ thuộc tầng 3, cho tầng 2 có cái chạy ngay (Đợt 0) |
-| Q4 | Đợt đầu chỉ readiness-gate? | **Chỉ readiness-gate**, và **6 kịch bản** với ma trận mode **thưa** — chỉ nhân theo `project_mode` ở kịch bản mà mode thật sự đổi hành vi (file ghi nợ `open-questions.md` ↔ `doc-debt.md`; `maintain`+`implement` không đòi tiền đề). "6–8 × 3 mode = 24 case" ở QĐ-3 là chi phí giả, **bỏ** |
-| Q5 | Đặt thư mục eval ở đâu? | **`evals/` ở gốc repo**, ngang `contracts/` · `ADRs/` — chủ repo chốt 2026-08-29. Lý do: §Phạm vi của chính ADR này là *toàn bộ* minipower (sdlc · backend · ops · hooks · contracts) — đặt trong một module thì eval của `backend`/`ops` sau này không có nhà, và `sdlc/evals/backend/` là vô lý. Phân biệt module bằng thư mục con **`evals/{module}/`**. **Cái giá đã biết và chấp nhận:** mất khả năng gọi thẳng `claude plugin eval` (eval dir phải nằm dưới plugin) ⇒ Q2 đổi theo |
+| Q1 | "7 gate" = khuôn G1–G7? | **Thay** bằng cấu trúc N1–N8 + C1–C7 + S + J (QĐ-5) |
+| Q2 | Version = hash nội dung (4.3 V3)? | **Có — hash là khoá chính cho chính xác** (QĐ-4). Đối chiếu `develop`: giữ `metadata.version` (ADR-044) trong frontmatter làm nhãn, không bỏ, không thay |
+| Q3 | Nhóm B có case **routing**? | **Có** — router S1/S2 + C1. Refactor đổi tên/description hàng loạt là chỗ hỏng mềm dễ nhất, nhóm A không bắt được |
+| Q4 | Số run mỗi case? | **`k = 2`** cho B1; **`k = 3`** cho baseline B2 (một lần, làm mốc) |
+| Q5 | QC review skill đang stub? | **Để Đ3**; không chặn baseline readiness + deliberation + routing |
+| Q6 | Chữ "bắt buộc" không có cổng máy? | **Sửa chữ**, không whitelist (đóng M2 cũ) |
 
-### §6a. Vòng thực nghiệm harness (chạy 2026-08-29, trước khi chốt Q2)
-
-| Kiểm | Kết quả | Hệ quả |
-|---|---|---|
-| `claude plugin eval --help` | Có đủ: `case.yaml` / `prompt.md` + `graders/*.md`, `--ablation with-without`, `--json`, `--threshold`, `--judge-model` (mặc định haiku), `--max-cost-usd` | Schema đáng bám theo — nhưng… |
-| `claude plugin eval init` | `"plugin eval is currently in early access"` | **Không dựng suite bằng nó được hôm nay** ⇒ Q2 đi đường lai |
-| `claude -p --output-format json` headless | Chạy được; output có `total_cost_usd`; một call rỗng ≈ **$0.02** | Fallback khả thi ngay, và **tự đo được chi phí** cho QĐ-4 |
-| `--plugin-dir sdlc` + `--setting-sources` | Có sẵn | C3 thoả tự nhiên: eval nạp **plugin thật**, không tồn tại bản copy logic |
-
-### §6b. Ba điểm còn mở (không chặn Đợt 0, phải đóng trước Đợt 1)
-
-| # | Điểm | Đề xuất |
-|---|---|---|
-| M1 | Early-access `plugin eval` có bật được không — và nếu bật, có đáng bắc cầu tới `evals/` ở gốc không? | **Không còn chặn gì** sau Q5: runner tự viết là chính thức. Muốn dùng `plugin eval` thì thử symlink `sdlc/evals → ../evals/sdlc` — **chưa xác minh nó resolve được**, đừng hứa trước khi thử |
-| M2 | Check "chữ **bắt buộc** không kèm tham chiếu check máy" sẽ **kêu vào chính repo ngay** (vd `readiness-gate/SKILL.md` §Ba nguyên tắc vận hành) — sửa chữ hay whitelist? | **Sửa chữ** ở chỗ không có cổng máy; whitelist là cách nhanh nhất biến WARN thành tiếng ồn. Nếu không đóng điểm này, T4 *"0 false-positive trên repo hiện tại"* không đạt được |
-| M3 | `.claude-plugin/plugin.json` khai `name: "minipower"`, không phải `minipower-sdlc` | Thống nhất **trước** khi kịch bản tham chiếu tên plugin (ADR-011 · ADR-022 QĐ-2) |
-
-## §7. Việc triển khai — 3 đợt
-
-Thứ tự đợt theo nguyên tắc: **cái rẻ và thuần máy trước · một kịch bản xuyên suốt trước khi nhân bộ**.
-
-```mermaid
-flowchart LR
-  D0["<b>Đợt 0</b> — hạ tầng rẻ<br/>trace:check --stats · 2 check QĐ-2b<br/><i>0 LLM call</i>"]:::cheap
-  D1["<b>Đợt 1</b> — spike 1 kịch bản<br/>runner · grader máy · fixture từ skeleton thật"]:::spike
-  Q{"<b>Đ1.4 · ĐIỂM DỪNG</b><br/>đọc 3 số: chi phí/run · variance<br/>· transcript có đủ tín hiệu?"}:::gate
-  D2["<b>Đợt 2</b> — nhân bộ<br/>9–10 case · 2 run · baseline đầu tiên"]:::spike
-  SAU["<b>Đợt sau</b> — deliberation + doc-review<br/>khuôn ADR đánh giá định kỳ (QĐ-6)"]:::later
-  STOP["<b>DỪNG tầng 3</b><br/>hạ QĐ-3 → checklist người tự soát<br/><i>KHÔNG tăng số run để mua ổn định</i>"]:::stop
-
-  D0 --> D1 --> Q
-  Q -->|đạt| D2 --> SAU
-  Q -->|không đạt| STOP
-
-  M["<b>§6b</b> M1 early-access · M2 chữ <i>bắt buộc</i> · M3 tên plugin"]:::open
-  M -.->|phải đóng trước| D1
-
-  classDef cheap fill:#bbf7d0,stroke:#15803d,color:#111
-  classDef spike fill:#bfdbfe,stroke:#1e40af,color:#111
-  classDef gate fill:#fde68a,stroke:#b45309,color:#111
-  classDef stop fill:#fecaca,stroke:#b91c1c,color:#111
-  classDef later fill:#e5e7eb,stroke:#374151,color:#111
-  classDef open fill:#fef3c7,stroke:#a16207,color:#111,stroke-dasharray: 4 3
-```
-
-### Đợt 0 — hạ tầng rẻ (0 LLM call)
-
-| Bước | Việc | Done khi |
-|---|---|---|
-| Đ0.1 | `trace:check --stats` — in trace coverage (% FR có AC, % chuỗi UC→FR→AC→Test nối thông), **không đổi exit code** + test canh | Số khớp đếm tay trên `docs-skeleton` + 1 fixture có ID thật; exit code y như trước |
-| Đ0.2 | QĐ-2b: 2 check advisory — (a) SKILL.md > 150 dòng → WARN; (b) chữ "bắt buộc" không kèm tham chiếu check máy → WARN. **Đóng M2 trước khi viết check (b)** | WARN đúng case gài · **0 false-positive trên repo hiện tại** |
-| Đ0.3 | Vòng bắt buộc khi chạm `lib/*` | `npm run gen` → `npm test` → `npm run gen:check` xanh cả ba |
-
-### Đợt 1 — spike: **một** kịch bản xuyên suốt
-
-Mục tiêu **không** phải có kịch bản, mà là biết ba số: chi phí/run · độ ổn định giữa các run · transcript có đủ tín hiệu để chấm bằng máy không.
-
-| Bước | Việc | Done khi |
-|---|---|---|
-| Đ1.1 | `evals/runner.js` — spawn `claude -p --plugin-dir <repo>/sdlc --setting-sources project --output-format stream-json --max-turns 3`, ghi transcript + `total_cost_usd` | Chạy được từ `npm run eval`, không cần bật early-access |
-| Đ1.2 | `evals/graders/machine.js` — G1…G6 (§7b), thuần đọc transcript JSON | Có test canh **trên transcript mẫu tĩnh** (grader tự nó cũng phải test được, không cần gọi model) |
-| Đ1.3 | Kịch bản mẫu `evals/sdlc/readiness-gate/impl-thieu-doc/{case.yaml,prompt.md,fixture.js}`. **Fixture = copy `project-skeleton` + `docs-skeleton` vào tmp rồi gài thiếu**, không viết skeleton riêng | Fixture trôi theo skeleton thật (giữ C3); chạy 3 run cùng case ra kết quả đọc được |
-| Đ1.4 | **Điểm dừng.** Đọc 3 số ở trên | G1/G3 đọc được từ transcript **và** variance đủ nhỏ để phân biệt regression với nhiễu → đi tiếp Đợt 2. **Không đạt → DỪNG**, hạ QĐ-3 xuống "checklist người tự soát"; **không** tăng số run để mua độ ổn định |
-
-### Đợt 2 — nhân bộ + baseline
-
-| Bước | Việc | Done khi |
-|---|---|---|
-| Đ2.1 | 6 kịch bản readiness-gate × ma trận mode thưa ≈ **9–10 case**, mỗi case 2 run, mỗi kịch bản có **bẫy gài sẵn** | Suite chạy hết một lượt, có **điểm baseline đầu tiên + chi phí thật** ghi lại trong `evals/` |
-| Đ2.2 | Người soát xác suất ~20% kết quả judge (G7) | Ghi lại tỉ lệ người đồng ý với judge — đây là số hiệu chỉnh cho các kỳ sau |
-| Đ2.3 | Một dòng vào AGENTS.md §thư mục: `evals/` là **tầng gốc thứ ba** bên cạnh `contracts/` + `ADRs/` — đọc trực tiếp, không cài, chứa eval cho **mọi** module (`evals/{module}/`) — nợ §9 | AGENTS.md khai đủ |
-
-### Đợt sau (ngoài phạm vi đợt này, giữ làm cam kết)
-
-Nhân kịch bản ra **deliberation** + **doc-review** (mỗi gate ≥ 5 kịch bản) · khuôn **"ADR đánh giá định kỳ"** (QĐ-6). Cả hai **để sau baseline đầu tiên**: nhân kịch bản trước khi biết grader có ổn định không là cách chắc chắn nhất để phải viết lại.
-
-### §7b. Grader: **máy** trước, **judge** sau (chi tiết hoá QĐ-3)
-
-Áp chính C1 *"cứng bằng máy, mềm bằng lời"* lên bản thân việc eval. Phần lớn hành vi của readiness-gate **deterministic được** trên transcript `stream-json` — đưa hết vào judge là bỏ phí và tự chuốc nhiễu.
-
-**Sơ đồ — một lần chạy eval tầng 3 (nhấn C3: không tồn tại bản copy logic)**
-
-```mermaid
-flowchart LR
-  CASE["evals/{module}/{skill}/{case}/<br/>case.yaml + prompt.md"]:::doc --> RUN
-  FIX["fixture.js — copy<br/>project-skeleton + docs-skeleton<br/>vào tmp rồi <b>gài bẫy</b>"]:::doc --> RUN
-  RUN["<b>evals/runner.js</b><br/>claude -p --plugin-dir sdlc<br/>--output-format stream-json"]:::run
-  RUN --> PLG[("<b>PLUGIN THẬT</b> — sdlc/<br/>skill · hook · rules.json")]:::prod
-  PLG --> TR["transcript stream-json<br/>(turn · tool_use · text)"]:::doc
-  TR --> MG["<b>grader máy</b> G1–G6<br/>hỏi-một-lượt · recall bẫy<br/>· artifact-trước-verdict · ghi nợ<br/>· dạng verdict · không đoán module"]:::may
-  TR --> JG["<b>judge</b> haiku · G7<br/>chất lượng câu hỏi"]:::judge
-  JG --> HU["người soát ~20%"]:::nguoi
-  MG --> SC(["điểm suite — <b>ADVISORY</b><br/>+ total_cost_usd"]):::soft
-  HU --> SC
-
-  X["✖ scorer re-implement logic<br/><i>bẫy đã giết superpowers — ADR-001 §3.5</i>"]:::stop
-  X -.->|cấm, T5 canh| RUN
-
-  classDef doc fill:#e5e7eb,stroke:#374151,color:#111
-  classDef run fill:#bfdbfe,stroke:#1e40af,color:#111
-  classDef prod fill:#ddd6fe,stroke:#5b21b6,color:#111
-  classDef may fill:#bfdbfe,stroke:#1e40af,color:#111
-  classDef judge fill:#fde68a,stroke:#b45309,color:#111
-  classDef nguoi fill:#fde68a,stroke:#b45309,color:#111
-  classDef soft fill:#bbf7d0,stroke:#15803d,color:#111
-  classDef stop fill:#fecaca,stroke:#b91c1c,color:#111,stroke-dasharray: 4 3
-```
-
-| # | Hành vi kỳ vọng (nguồn: `readiness-gate/SKILL.md`) | Chấm bằng | Cách chấm |
-|---|---|---|---|
-| G1 | **Hỏi trọn gói, một lượt** | máy | đếm assistant turn trước lượt user kế tiếp = 1 |
-| G2 | **Recall bẫy** | máy | fixture gài thiếu DOC-07/DOC-11/DOC-19 → tìm ID trong transcript; recall = hit / số bẫy gài |
-| G3 | **Không sinh artifact trước verdict** | máy | không có `tool_use` Write/Edit nào trước dòng verdict |
-| G4 | **Hoãn thì ghi nợ, đúng file theo mode** | máy | `open-questions.md` (standard) ↔ `doc-debt.md` (mvp · maintain) |
-| G5 | Verdict đúng dạng | máy | đúng **một** trong ✅ / ⏸️ / ⛔ |
-| G6 | **Không đoán module** khi prompt không nêu | máy | không xuất hiện ID module không có trong fixture |
-| G7 | Chất lượng câu hỏi (đúng trọng tâm, không bịa tiền đề) | **judge** (haiku) + người soát 20% | rubric ngắn |
-
-6/7 tiêu chí là máy ⇒ suite ổn định, rẻ, ít nhiễu judge. Điểm **vẫn advisory** — không có cổng cứng mới nào sinh ra từ đây (C2, giữ ADR-020 QĐ-11).
-
-### §7c. Chi phí & nhịp
-
-Số đo duy nhất đang có là **$0.02/call rỗng** (§6a). Ước một case readiness-gate thật (nạp skill + fixture, 2–3 turn) ≈ **$0.15–0.40**; suite 10 case × 2 run ≈ **$3–8/lượt** — **con số này phải đo ở Đợt 1, không ước trong ADR**. Với mức đó, nhịp QĐ-4 giữ nguyên (Full đụng SKILL gate / router / routing · đổi model · trước tag release), không cần siết thêm.
-
-## §8. Xác minh (định nghĩa xong)
-
-| # | Loại | Case | Expect | Trạng thái |
-|---|---|---|---|---|
-| T1 | Smoke | Chạy suite readiness-gate (Đ2.1) trên plugin thật, model hiện hành | Có report điểm; kịch bản gài bẫy bị bắt ≥ 80%; người soát 20% đồng ý với judge | 🔴 |
-| T2 | Smoke | `trace:check --stats` trên fixture có ID | Số coverage đúng với đếm tay; exit code không đổi so với trước | 🔴 |
-| T3 | Regression | `npm test` + `gen:check` + `link:check` 0 gãy mới | xanh | 🟡 |
-| T4 | Mới | test canh 2 check advisory: case WARN đúng + repo hiện tại 0 false-positive | xanh | 🔴 |
-| T5 | Smoke | Kịch bản "scorer lệch" cố ý: xác nhận eval gọi plugin/hàm production, không có bản copy logic nào trong `evals/` (grep không thấy re-implement routing/gate) | 0 hit | 🔴 |
-
-Icon: 🟢 xong · 🟡 có sẵn, cần giữ xanh · 🔴 chưa có. **Không 🟢 Done khi còn T đỏ.**
-
-## §9. Hệ quả
+## §12. Hệ quả
 
 | Hướng | Hệ quả |
 |---|---|
-| Tốt | "Chất lượng minipower" có định nghĩa đo được, so được giữa hai kỳ; sửa SKILL của gate hết "bay mù" (P2); đổi model có bằng chứng thay vì niềm tin (P3); giữ được lợi thế kỷ luật token bằng số thay vì bằng trí nhớ |
-| Xấu / chi phí | Tầng 3 tốn LLM call mỗi lần chạy (giới hạn bằng nhịp QĐ-4); viết + bảo trì kịch bản golden là công việc thật — kịch bản lỗi thời khi SKILL đổi lớn; LLM-judge có nhiễu, phải giữ kỷ luật người-soát-20% |
-| Trung lập | `evals/` là **tầng gốc mới** (không phải skill, không phải hook, không phải module cài được) — cần một dòng trong AGENTS.md §thư mục khi đợt đầu xong; đổi lại nó **không** đi kèm plugin khi cài bằng `--plugin-dir sdlc`; điểm eval là advisory nên giá trị phụ thuộc người có đọc nó không — đúng tinh thần gate mềm |
+| Tốt | "Chất lượng" có định nghĩa và công thức; mỗi skill có version tự động; refactor có baseline để so; đổi model có bằng chứng; ranh giới máy-chặn / người-quyết rõ và được máy canh (A5) |
+| Xấu / chi phí | Nhóm B tốn LLM call (chỉ khi người chạy); bảo trì case khi skill đổi hành vi thật; κ thấp thì J vô dụng; mẫu nhỏ (k=2) chỉ phát hiện regression lớn |
+| Trung lập | `evals/` là tầng gốc mới, không cài theo plugin; điểm B advisory — giá trị phụ thuộc người có đọc `eval:compare` không |
