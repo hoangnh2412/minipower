@@ -136,7 +136,7 @@
   "approval_source_kinds": ["docs", "tasks", "code"],
   "profile_providers": {
     "docs": ["local", "outline"],
-    "tasks": ["openproject", "lark", "none"],
+    "tasks": ["openproject", "lark", "github", "none"],
     "chat": ["slack", "lark", "none"],
     "code": ["gitlab", "local"]
   },
@@ -178,25 +178,6 @@
       "requires": ["15", "17"]
     }
   ],
-  "feedback": {
-    "repo": "hoangnh2412/minipower",
-    "labels": [
-      { "name": "lesson", "description": "Mọi issue bài học từ retro đều gắn nhãn này" },
-      { "name": "kind:skill", "description": "Nguyên nhân: SKILL.md viết sai/thiếu" },
-      { "name": "kind:prereq", "description": "Nguyên nhân: dự án thiếu tiền đề" },
-      { "name": "kind:model", "description": "Nguyên nhân: model hiểu sai, không phải lỗi skill" },
-      { "name": "kind:other", "description": "Nguyên nhân khác, chưa rõ loại" },
-      { "name": "priority:p1", "description": "Artifact sai mà người không thấy ngay" },
-      { "name": "priority:p2", "description": "Sai nhưng dễ thấy" },
-      { "name": "priority:p3", "description": "Chỉ câu chữ" },
-      { "name": "impact:high", "description": "Ảnh hưởng ≥2 pack hoặc contract/hook" },
-      { "name": "impact:medium", "description": "Ảnh hưởng một lá" },
-      { "name": "impact:low", "description": "Ảnh hưởng một workflow/provider" },
-      { "name": "status:batched", "description": "Gom lại, chưa xử lý ngay" },
-      { "name": "status:assessed", "description": "Agent định kỳ đã đánh giá, chờ người quyết" },
-      { "name": "status:decided", "description": "Người đã quyết, chờ thi hành" }
-    ]
-  },
   "install_hooks": [
     { "shim": "token-guard", "slot": "prompt", "cursor_timeout": 5 },
     { "shim": "auto-routing", "slot": "prompt", "cursor_timeout": 5 },
