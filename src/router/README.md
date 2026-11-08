@@ -14,6 +14,10 @@ Manifest: [PACK.md](PACK.md).
 | **minipower-router-deliberation** | [skills/minipower-router-deliberation/README.md](./skills/minipower-router-deliberation/README.md) | Premise gate mềm PROCEED/RESHAPE/STOP |
 | **minipower-router-readiness** | [skills/minipower-router-readiness/README.md](./skills/minipower-router-readiness/README.md) | Soát tiền đề trước thực thi, hỏi một lượt |
 | **minipower-router-retro** | [skills/minipower-router-retro/README.md](./skills/minipower-router-retro/README.md) | Bắt bài học "làm chưa tốt" → sổ dự án + nháp GitHub Issue ẩn danh, người OK rồi mới đăng |
+| **minipower-router-model** | [skills/minipower-router-model/README.md](./skills/minipower-router-model/README.md) | Chọn model theo độ phức tạp việc, tiết kiệm token |
+| **minipower-router-selfcheck** | [skills/minipower-router-selfcheck/README.md](./skills/minipower-router-selfcheck/README.md) | Tự kiểm một bước theo AC, tối đa 3 lần thử |
+| **minipower-router-mistake** | [skills/minipower-router-mistake/README.md](./skills/minipower-router-mistake/README.md) | Ghi nhật ký sai lầm/lần thử theo khuôn chung |
+| **minipower-router-implement** | [skills/minipower-router-implement/README.md](./skills/minipower-router-implement/README.md) | Thực thi một task tiết kiệm token: chọn model → làm → tự kiểm → ghi nhật ký |
 
 ## Tài liệu
 

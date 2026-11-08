@@ -135,6 +135,10 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-router-readiness](src/router/skills/minipower-router-readiness/SKILL.md)** | đủ chưa, trước code/test/deploy | Hỏi **một lượt** mọi thiếu; ghi nợ `doc-debt.md` |
 | **[minipower-router-plan](src/router/skills/minipower-router-plan/SKILL.md)** | nhiều skill, nhiều bước, chia task, plan trước khi làm | Router triage PHỨC → kế hoạch có tiêu chí đo được; người OK một lần; tự kiểm ≤ 3 lần, review ≤ 3 vòng; người ký PASS |
 | **[minipower-router-retro](src/router/skills/minipower-router-retro/SKILL.md)** | chưa tốt, sai rồi, rút kinh nghiệm, báo lỗi skill | Ghi `docs/00-governance/lessons.md` + nháp GitHub Issue ẩn danh qua MCP `feedback`, người OK rồi mới đăng |
+| **[minipower-router-model](src/router/skills/minipower-router-model/SKILL.md)** | chọn model, tiết kiệm token | Gợi ý bậc model theo độ phức tạp việc; chọn model đắt phải nêu lý do |
+| **[minipower-router-selfcheck](src/router/skills/minipower-router-selfcheck/SKILL.md)** | tự kiểm theo AC, kiểm sau một bước | Đối chiếu tiêu chí, tối đa 3 lần thử, dừng theo 4 điều kiện |
+| **[minipower-router-mistake](src/router/skills/minipower-router-mistake/SKILL.md)** | ghi nhật ký sai lầm, log lần thử | Bảng chung Lần/Tiêu chí chưa đạt/Cách xử lý/Kết quả |
+| **[minipower-router-implement](src/router/skills/minipower-router-implement/SKILL.md)** | thực thi một task, tiết kiệm token lúc làm | Chọn model → làm → tự kiểm → ghi nhật ký khi sai |
 
 ### Discovery — [`discovery/`](src/discovery/)
 
