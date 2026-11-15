@@ -52,6 +52,16 @@ Có bước bị chặn ⇒ hiện luôn trong bảng, ghi rõ **chặn vì lu�
 
 Qua lá kênh: đổi trạng thái, đổi người được giao, và ghi bình luận lý do nếu có. Lý do **ghi vào bình luận**, không nhét vào mô tả — mô tả là yêu cầu, bình luận là diễn biến.
 
+Lý do viết theo khuôn của [comment.md](comment.md) §2 — ngắn, mỗi ý một dòng, đánh số phân cấp:
+
+```
+1. Chưa đạt: thiếu AC cho trường hợp huỷ hoá đơn
+1.1 Chưa nói rõ huỷ sau khi đã ký thì xử lý thế nào
+2. Trả về Todo, giao lại người phụ trách chính
+```
+
+Người nói một câu dài ⇒ tách thành từng dòng đánh số, giữ nguyên chữ. Không viết thành đoạn.
+
 ## 7. Báo lại
 
 Mã ticket · trạng thái mới · người được giao mới · đã ghi lý do hay chưa.

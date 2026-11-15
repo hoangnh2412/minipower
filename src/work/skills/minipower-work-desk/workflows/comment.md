@@ -8,7 +8,17 @@ Lý do khi lùi bước thì **không đi qua đây** — [move.md](move.md) t�
 
 ## 2. Luật
 
-- **Giữ nguyên lời người.** Chỉ sửa lỗi gõ rõ ràng và tách đoạn. Không tóm tắt lại, không trau chuốt.
+- **Ngắn gọn, mỗi ý một dòng, đánh số phân cấp.** Khuôn bắt buộc của mọi comment lên ticket — kể cả lý do lùi bước ở [move.md](move.md):
+
+  ```
+  1. Ý chính thứ nhất
+  1.1 Chi tiết của 1
+  1.2 Chi tiết của 1
+  2. Ý chính thứ hai
+  ```
+
+  Không viết đoạn văn. Một ý thì vẫn đánh `1.`. Người đọc trả lời được bằng mã — *"1.2 chưa ổn"* — thay vì trích lại cả câu.
+- **Giữ nguyên lời người.** Chỉ sửa lỗi gõ rõ ràng và **xếp vào khuôn đánh số** ở trên. Không tóm tắt lại, không trau chuốt, không gộp hai ý vào một dòng.
 - **Không bịa nội dung.** Người nói ngắn thì ghi ngắn. Không tự thêm "đã kiểm tra và thấy ổn" nếu họ không nói vậy.
 - **Nhận xét của máy thì nói rõ là của máy.** Cần thêm quan sát ⇒ tách đoạn riêng, mở đầu bằng dấu hiệu rõ ràng, không trộn vào lời người.
 - **Không đụng trường nào khác.** Bình luận là bình luận; muốn đổi hạn hay trạng thái thì sang workflow tương ứng.
