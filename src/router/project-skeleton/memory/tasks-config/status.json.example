@@ -16,7 +16,7 @@
 {"key":"deploy_prod","name":"11. Deploy PROD - Đã kiểm thử UAT / Chờ release (DEV)","holder":"dev"},
 {"key":"verify_prod","name":"12. Verify PROD - Đã release / Chờ test (TEST)","holder":"test"},
 {"key":"released","name":"13. Released - Đã test Prod (DEV)","holder":"dev"},
-{"key":"removed","name":"0. Remove - Hủy bỏ / Không thực hiện","holder":null}],
+{"key":"removed","name":"00. Remove - Hủy bỏ / Không thực hiện","holder":null}],
 "_stages":"key là mã ổn định dùng trong code và báo cáo; name là chuỗi thật trên Lark, đổi tên trên Lark thì chỉ sửa name. holder = vai giữ việc ở bước đó.",
 "flows":{
 "ba":["backlog","request","planning","todo","doing","review","released"],

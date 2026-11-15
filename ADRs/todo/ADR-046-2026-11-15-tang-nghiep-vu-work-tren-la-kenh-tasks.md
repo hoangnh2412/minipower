@@ -118,10 +118,10 @@ Vì giao một lượt nên khối lượng dồn vào một lần review — kh
 
 | # | Loại | Case | Expect | Trạng thái |
 |---|---|---|---|---|
-| T1 | Smoke | Đổi tên một lựa chọn trên Lark, sửa đúng một dòng cấu hình | Skill chạy lại không cần sửa file nào trong `src/` | 🔴 |
-| T2 | Smoke | Chuyển một ticket qua trọn luồng bằng `work-desk` | Người được giao đổi đúng; lùi bước mà thiếu lý do thì bị chặn | 🔴 |
-| T3 | Mới | Grep `src/work/` tìm tên trường và tên lựa chọn cụ thể | 0 kết quả | 🔴 |
-| T4 | Regression | `npm test` · `gen:check` · `link:check` 0 gãy mới | xanh | 🔴 |
+| T1 | Smoke | Đổi tên một lựa chọn trên Lark, sửa đúng một dòng cấu hình | Skill chạy lại không cần sửa file nào trong `src/` | 🔴 chưa chạy |
+| T2 | Smoke | Chuyển một ticket qua trọn luồng bằng `work-desk` | Người được giao đổi đúng; lùi bước mà thiếu lý do thì bị chặn | 🟡 2026-11-15: chạy trên `TechGroup` thật bằng hai ticket thử (BA `70f77b93…` → Released, DEV `17eaf05a…` → Verify TEST, nối chặn), 48 lệnh ghi xanh, bước lùi-không-lý-do bị từ chối. Chạy qua script gọi thẳng gói MCP chứ chưa qua lá `work-desk` trong phiên thật — thành 🟢 khi chủ repo chạy lại bằng lá |
+| T3 | Mới | Grep `src/work/` tìm tên trường và tên lựa chọn cụ thể | 0 kết quả | 🟢 2026-11-15 |
+| T4 | Regression | `npm test` · `gen:check` · `link:check` 0 gãy mới | xanh | 🟢 2026-11-15 — 644/644 |
 
 ## §9. Hệ quả
 
