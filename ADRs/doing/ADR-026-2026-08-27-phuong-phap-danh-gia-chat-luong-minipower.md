@@ -159,11 +159,30 @@ Ký hiệu chung: `|X|` = số phần tử; `1[đk]` = 1 nếu điều kiện đ
 
 Việc của Đ0 ở A8 vì thế là **in thêm hai tỷ lệ**, không phải thêm flag. `ac-no-test` đã có, dùng cho nửa sau của `TC_chain`.
 
+**A4 · A5 · A6 · A7 — đã thi hành 2026-11-15.** Bốn check nằm cùng `evals/checks/` với nhóm §7.1b, gọi qua `npm run check:integrity`:
+
+| Mã | File | Mức | Số đo hôm nay |
+|---|---|---|---|
+| A04 | [`a04-skill-reference.mjs`](../../evals/checks/a04-skill-reference.mjs) | WARN | 9 phát hiện / 2.215 đã soát |
+| A05 | [`a05-no-llm-in-ci.mjs`](../../evals/checks/a05-no-llm-in-ci.mjs) | **chặn** | 0 phát hiện / 76 đã soát |
+| A06 | [`a06-skill-length.mjs`](../../evals/checks/a06-skill-length.mjs) | WARN | 3 phát hiện / 113 đã soát |
+| A07 | [`a07-must-without-gate.mjs`](../../evals/checks/a07-must-without-gate.mjs) | WARN | 23 phát hiện / 24 ứng viên |
+
+**A4 — đính chính phạm vi.** Phần lớn công thức A4 đã có người canh: `name` ≡ thư mục và README gốc liệt kê mọi lá do `test/minipower-catalog.test.js` lo; link `[x](../x/SKILL.md)` do `link:check` lo; còn "tên skill trỏ từ `rules.json`" thì **mẫu số rỗng** — `rules.json` không chứa tên lá nào. Khoảng trống thật là **tên nhắc trần trong văn xuôi, không phải link**: một bảng README liệt kê `| minipower-ops-log-flow | Đọc log |` thì người đọc và agent đều tin lá đó tồn tại, mà không link nào gãy. A04 nhận đúng phần đó.
+
+A04 ra mắt **WARN** chứ không phải chặn như bảng trên ghi: repo hiện có 9 chỗ, trong đó vài chỗ là nhắc có chủ đích (lá còn trong catalog chưa tách file; tên dùng làm ví dụ phản diện trong lá dạy viết skill). Nâng lên chặn sau khi 9 chỗ đó được phân loại — cùng luật ADR-044 §8.1.
+
+A05 lấy closure của `test` và `check*` từ `scripts` thật, **gồm cả `pre*`/`post*`** mà npm chạy tự động — một `pretest` gọi model thì `npm test` tiêu tiền mà không dòng nào trong `test` nói ra. Không có lối thoát bằng marker: muốn gọi model trong CI thì phải đổi QĐ-7.
+
+**A07 — đính chính phạm vi.** Bắt thẳng theo chữ "dòng chứa *bắt buộc*" cho **62** phát hiện trong `SKILL.md`, phần lớn là nhiễu. Phải thêm bốn phép loại, mỗi phép là một luật tổng quát: heading (`## Output bắt buộc` là nhãn cấu trúc) · phủ định (`không bắt buộc` nói điều ngược lại) · frontmatter (`description` là bề mặt kích hoạt) · dùng ở dạng trích (`"bắt buộc"` đang nói VỀ chữ đó — thường chính là dòng dạy luật này). Lưu ý `**bắt buộc**` in đậm **không** được loại: đậm là nhấn một yêu cầu thật. Còn 23 ứng viên.
+
+Trong 23 ứng viên đó, khoảng hai phần ba là **yêu cầu của framework ngoài hoặc ràng buộc nghiệp vụ**, không phải cổng của repo (`ITenantEntity bắt buộc` · `bắt buộc trước EF` · `trường bắt buộc` của form). Máy không phân biệt được "repo bắt buộc" với "thứ đang được mô tả bắt buộc" — nên con số A07 là **ứng viên để người soát**, không phải danh sách lỗi. Theo Q6 (*sửa chữ, không whitelist*) cách đóng đúng là viết lại những câu đó cho thôi dùng chữ "bắt buộc" (`Jarvis yêu cầu`, `trường required`), để dành chữ đó cho nghĩa "có cổng máy" — đúng ý AGENTS.md. Đó là ~23 lần sửa câu ở `SKILL.md` của nhiều owner khác nhau, **việc riêng, không thuộc lượt thi hành check**.
+
 **Kết luận nhóm A:** `A_pass = A1 ∧ A2 ∧ A3 ∧ A4 ∧ A5`. A6–A8 ghi vào kết quả để so giữa version, không chặn.
 
 ### 7.1b Nhóm A mở rộng — đã thi hành
 
-Sáu check tính toàn vẹn repo, nằm ở [`evals/checks/`](../../evals/README.md), gọi bằng `npm run check:integrity`. Tất cả mức **WARN** lúc ra mắt (cùng luật `version:check`, ADR-044 §8.1).
+Sáu check tính toàn vẹn repo, nằm ở [`evals/checks/`](../../evals/README.md) cùng A05–A07 của §7.1, gọi bằng `npm run check:integrity`. Tất cả mức **WARN** lúc ra mắt (cùng luật `version:check`, ADR-044 §8.1).
 
 | Mã | Tiêu chí | Bắt loại lỗi |
 |---|---|---|
@@ -447,7 +466,7 @@ flowchart LR
 
 | Đợt | Việc | Done khi |
 |---|---|---|
-| **Đ0** — nhóm A (0 LLM call) | A3 · A4 · A5 · A6 · A7 · A8 (in thêm hai tỷ lệ coverage vào `trace:check`) · `npm run check` · vòng `gen → test → gen:check` | `npm run check` xanh; A6/A7 **0 false-positive** sau khi sửa chữ "bắt buộc" (M2 cũ) |
+| **Đ0** — nhóm A (0 LLM call) | ✅ A4 (phần còn trống) · A5 · A6 · A7 · `npm run check` (2026-11-15) — ❌ còn A3 (phủ điều kiện cứng) · A8 (hai tỷ lệ coverage, **hoãn sang cùng lượt với [#8](https://github.com/hoangnh2412/minipower/issues/8)** vì `lib/trace-check.js` thuộc vùng sở hữu S2) | `npm run check` xanh ✅; A6/A7 **0 false-positive** ❌ — còn 23 ứng viên A07 chờ sửa câu chữ (M2 cũ) |
 | **Đ1** — spike 1 case | `version.js` · `runner.js` · grader chung C1–C7 + riêng readiness S1–S3 + test trên transcript tĩnh · 1 case readiness `standard` | Chạy 3 lần; đo chi phí/run, flaky, S1/C2 đọc được từ transcript |
 | **Điểm dừng** | Đọc 3 số | `F ≤ 0.25` và grader đọc được → Đ2. Không đạt → **dừng nhóm B**, hạ về checklist người (QĐ-9) |
 | **Đ2** — nhân bộ + baseline | Readiness 6 kịch bản × mode thưa ≈ 9–10 case · deliberation ≥ 5 case · routing (nếu §11-Q3) · `plan` · `compare` · `audit` | **Baseline commit vào `results/` trước khi refactor**; κ đầu tiên; hiệu chỉnh ngưỡng §7.5 |
@@ -457,10 +476,10 @@ flowchart LR
 
 | # | Case | Expect | |
 |---|---|---|---|
-| T1 | `npm run check` trên repo hiện tại | xanh; A6/A7 không false-positive | 🔴 |
+| T1 | `npm run check` trên repo hiện tại | xanh; A6/A7 không false-positive | 🟡 exit 0 · 644+20 test xanh · nhưng A07 còn 23 ứng viên |
 | T2 | Hai tỷ lệ coverage của `trace:check` trên fixture có ID | khớp đếm tay; exit code không đổi | 🔴 |
 | T3 | Grader C1–C7 + S trên transcript mẫu tĩnh (đạt / vi phạm từng tiêu chí — N7) | đúng từng tiêu chí, 0 LLM call | 🔴 |
-| T4 | A5: thêm `claude -p` vào một script test giả | `npm run check` FAIL | 🔴 |
+| T4 | A5: thêm `claude -p` vào một script test giả | `npm run check` FAIL | 🟢 fixture `pretest: claude -p` → `FAIL A05`, exit 1; repo thật exit 0 |
 | T5 | Grep `evals/lib/` không có bản copy logic routing/gate | 0 hit (C3) | 🔴 |
 | T6 | Đổi 1 byte trong SKILL.md skill A | `eval:plan` chỉ đánh dấu case `covers`/`also_depends` A | 🔴 |
 | T7 | `eval:compare` trên 2 file kết quả dựng tay | ΔP, b, c, p, verdict đúng tính tay | 🔴 |

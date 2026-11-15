@@ -16,6 +16,10 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
+import { run as a04 } from "./a04-skill-reference.mjs"
+import { run as a05 } from "./a05-no-llm-in-ci.mjs"
+import { run as a06 } from "./a06-skill-length.mjs"
+import { run as a07 } from "./a07-must-without-gate.mjs"
 import { run as a09 } from "./a09-hook-registry.mjs"
 import { run as a10 } from "./a10-duplicate-content.mjs"
 import { run as a11 } from "./a11-hardcoded-counts.mjs"
@@ -217,5 +221,136 @@ test("A16 âm — shim lành: thoát 0 hoặc 2, in JSON đọc được", () =>
   const r = a16(root)
   assert.deepEqual(r.findings, [])
   assert.equal(r.checked, 2)
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A05 ──────────────────────────────────────────────────────────────────────
+
+test("A05 dương — ba đường tiêu tiền: script trong closure, pretest npm tự chạy, file test", () => {
+  const root = fixture({
+    "package.json": JSON.stringify({
+      scripts: {
+        check: "npm run smoke",
+        smoke: "claude -p 'chạy thử'",
+        test: "node --test",
+        pretest: "claude --print 'hâm nóng'",
+      },
+    }),
+    "a.test.mjs": "const cmd = 'claude -p'\n",
+  })
+  const r = a05(root)
+  assert.equal(r.findings.length, 3)
+  assert.equal(r.level, "block")
+  const where = r.findings.map((f) => f.file).join(" ")
+  assert.match(where, /scripts\.smoke/)
+  assert.match(where, /scripts\.pretest/)
+  assert.match(where, /a\.test\.mjs/)
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A05 âm — eval:run tồn tại nhưng NGOÀI closure CI thì không báo", () => {
+  const root = fixture({
+    "package.json": JSON.stringify({
+      scripts: {
+        test: "node --test",
+        check: "npm test",
+        "eval:run": "claude -p 'chỉ người chạy'",
+        "eval:plan": "node evals/plan.mjs",
+      },
+    }),
+    "a.test.mjs": "const ok = 'node --test'\n",
+  })
+  const r = a05(root)
+  assert.deepEqual(r.findings, [])
+  assert.equal(r.checked, 3)
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A06 ──────────────────────────────────────────────────────────────────────
+
+test("A06 dương — lá 151 dòng vượt ngưỡng 150", () => {
+  const root = fixture({
+    "src/x/skills/mp-a/SKILL.md": `---\nname: mp-a\n---\n${"dòng\n".repeat(148)}`,
+  })
+  const r = a06(root)
+  assert.equal(r.findings.length, 1)
+  assert.match(r.findings[0].message, /151 dòng/)
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A06 âm — đúng 150 dòng thì im, và marker `dài có chủ đích` miễn cho lá dài", () => {
+  const root = fixture({
+    "src/x/skills/mp-b/SKILL.md": "dòng\n".repeat(150),
+    "src/x/skills/mp-c/SKILL.md": `---\ndài có chủ đích: bảng tra điều khoản không chẻ được\n---\n${"dòng\n".repeat(200)}`,
+  })
+  const r = a06(root)
+  assert.deepEqual(r.findings, [])
+  assert.equal(r.checked, 2)
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A07 ──────────────────────────────────────────────────────────────────────
+
+test("A07 dương — câu quy tắc nói bắt buộc mà không nêu cổng nào", () => {
+  const root = fixture({
+    [RULES]: JSON.stringify({ install_hooks: [{ shim: "prereq-gate", slot: "prompt" }] }),
+    "src/x/skills/mp-a/SKILL.md": "---\nname: mp-a\n---\n\n- Bước 2 là **bắt buộc** trước khi sinh code.\n",
+  })
+  const r = a07(root)
+  assert.equal(r.findings.length, 1)
+  assert.equal(r.findings[0].line, 5)
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A07 âm — bốn phép loại (heading · phủ định · frontmatter · trích) và dòng có cổng thật", () => {
+  const root = fixture({
+    [RULES]: JSON.stringify({ install_hooks: [{ shim: "prereq-gate", slot: "prompt" }] }),
+    "src/x/skills/mp-b/SKILL.md": [
+      "---",
+      "name: mp-b",
+      "description: Lá mẫu — trường bắt buộc theo DOC-12.",
+      "---",
+      "",
+      "## Output bắt buộc",
+      "",
+      "- Cột `note` không bắt buộc.",
+      '- Đừng viết chữ "bắt buộc" khi máy không kiểm được.',
+      "- Khai `module` là **bắt buộc** — `prereq-gate` chặn nếu thiếu.",
+      "",
+    ].join("\n"),
+  })
+  const r = a07(root)
+  assert.deepEqual(r.findings, [])
+  assert.equal(r.checked, 1)
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A04 ──────────────────────────────────────────────────────────────────────
+
+test("A04 dương — bảng README nhắc một lá không ai khai tên", () => {
+  const root = fixture({
+    "src/ops/skills/mp-x/SKILL.md": "---\nname: minipower-ops-deploy\n---\n",
+    "src/ops/README.md": "| `minipower-ops-log-flow` | Đọc log vẽ sơ đồ luồng |\n",
+  })
+  const r = a04(root)
+  assert.equal(r.findings.length, 1)
+  assert.match(r.findings[0].message, /minipower-ops-log-flow/)
+  assert.equal(r.findings[0].line, 1)
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A04 âm — lá đã khai · marker `nhắc có chủ đích` · fragment `-*` · token không phải hình dạng lá", () => {
+  const root = fixture({
+    "src/ops/skills/mp-x/SKILL.md": "---\nname: minipower-ops-deploy\n---\n",
+    "src/ops/README.md": [
+      "- Lá `minipower-ops-deploy` đã có.",
+      "- `minipower-ops-grafana` — nhắc có chủ đích: ví dụ phản diện về đặt tên theo công cụ.",
+      "- Tiền tố `minipower-ops-*` cho mọi lá ops.",
+      "- Gói npm `minipower-hooks` không phải lá.",
+    ].join("\n"),
+  })
+  const r = a04(root)
+  assert.deepEqual(r.findings, [])
+  assert.equal(r.checked, 3)
   rmSync(root, { recursive: true, force: true })
 })
