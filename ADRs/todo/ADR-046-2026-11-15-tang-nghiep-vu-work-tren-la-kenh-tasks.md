@@ -4,7 +4,7 @@
 |---|---|
 | **Ngày** | 2026-11-15 |
 | **Trạng thái** | chốt 2026-11-15 (Q1–Q3 §6), chưa thi hành |
-| **Phạm vi** | Module mới `src/work/` (4 lá) · sửa lá `minipower-tasks-lark` · thư mục cấu hình `memory/tasks/` ở workspace dự án đích |
+| **Phạm vi** | Module mới `src/work/` (4 lá) · sửa lá `minipower-tasks-lark` · thư mục cấu hình `memory/tasks-config/` ở workspace dự án đích |
 | **Ngoài phạm vi** | Ba báo cáo định kỳ cụ thể (issue #15) — ADR này chỉ dựng chỗ cho chúng. Provider khác Lark (Jira, Asana) — thiết kế có tính đến nhưng chưa làm |
 | **Nối tiếp** | [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-1/QĐ-7 · [ADR-033](../doing/ADR-033-2026-09-25-dispatcher-role-channel-ssot-provider.md) · [ADR-036](ADR-036-2026-09-26-agent-skill-lark-tasks.md) · [ADR-041](../doing/ADR-041-2026-10-22-dua-convention-du-an-vao-minipower.md) QĐ-12 |
 | **Mục đích** | Ghi lại vì sao tách nghiệp vụ quản lý công việc khỏi lá kênh, và vì sao tri thức riêng của từng doanh nghiệp phải nằm ngoài repo |
@@ -69,13 +69,13 @@ Ranh giới rút từ chính repo: **workflow là các bước của cùng một
 
 | # | Quyết định | Chi tiết |
 |---|---|---|
-| **QĐ-1** | **Ba lớp, trách nhiệm tách bạch** | Lá kênh `tasks/` biết gọi MCP · module `work/` biết nghiệp vụ · `memory/tasks/` giữ tri thức doanh nghiệp. Lớp nghiệp vụ **không được viết tên trường cụ thể** vào bất kỳ dòng nào |
+| **QĐ-1** | **Ba lớp, trách nhiệm tách bạch** | Lá kênh `tasks/` biết gọi MCP · module `work/` biết nghiệp vụ · `memory/tasks-config/` giữ tri thức doanh nghiệp. Lớp nghiệp vụ **không được viết tên trường cụ thể** vào bất kỳ dòng nào |
 | **QĐ-2** | **Module mới `src/work/`, 4 lá** | `minipower-work-profile` (quản trị cấu hình) · `minipower-work-desk` (làm việc trên ticket) · `minipower-work-status` (xem tình hình) · `minipower-work-report` (xuất bản định kỳ). Tên không gắn vai (C4) |
-| **QĐ-3** | **Cấu hình khai đủ, chia 5 file, đọc khi cần** | `memory/tasks/` gồm `profile` · `status` · `projects` · `members` · `scope`. Kèm ba chốt chặn: có `synced_at`; gặp giá trị lạ thì **dừng và hỏi**, không đoán; có đường sinh lại từ Lark để người không phải gõ tay |
+| **QĐ-3** | **Cấu hình khai đủ, chia 5 file, đọc khi cần** | `memory/tasks-config/` gồm `profile` · `status` · `projects` · `members` · `scope`. Kèm ba chốt chặn: có `synced_at`; gặp giá trị lạ thì **dừng và hỏi**, không đoán; có đường sinh lại từ Lark để người không phải gõ tay |
 | **QĐ-4** | **Trường nào đóng vai gì là khai báo, không phải quy ước** | Lớp nghiệp vụ hỏi "trường đóng vai loại-việc tên là gì" và nhận về `Type`. Doanh nghiệp khác trả `Loại việc` thì skill vẫn chạy nguyên |
 | **QĐ-5** | **Luật chuyển trạng thái viết theo chuỗi + ngoại lệ** | Không liệt kê đủ cặp từ-đến. Khai luồng chính của từng nhánh, cộng đường lỗi và đường huỷ. Lùi bước **bắt buộc kèm lý do** — máy kiểm được nên được phép viết "bắt buộc" |
 | **QĐ-6** | **Người phụ trách chính là hằng số của ticket** | Người được giao đổi theo trạng thái; người phụ trách chính thì không. Review hoặc test không đạt ⇒ trả việc về người phụ trách chính, nhánh suy từ vai của người đó. Không cần thêm trường mới |
-| **QĐ-7** | **Tách `lark-mapping.md` làm ba** | Sự thật về Lark ở lại lá kênh · ánh xạ luật phân rã về `work-breakdown.md` · bảng section và luật chuyển sang `memory/tasks/` của workspace. Repo giữ một bản ví dụ có nhãn rõ "không phải chuẩn" |
+| **QĐ-7** | **Tách `lark-mapping.md` làm ba** | Sự thật về Lark ở lại lá kênh · ánh xạ luật phân rã về `work-breakdown.md` · bảng section và luật chuyển sang `memory/tasks-config/` của workspace. Repo giữ một bản ví dụ có nhãn rõ "không phải chuẩn" |
 
 ```
 ┌─ LỚP 1 · lá kênh tasks/ ────── trong repo, dùng chung
@@ -86,7 +86,7 @@ Ranh giới rút từ chính repo: **workflow là các bước của cùng một
 │  biết: luật phân rã việc, cách tổng hợp tiến độ, khuôn báo cáo
 │  không biết: tên trường, tên lựa chọn
 └──────────────────────────── ▲ đọc
-┌─ LỚP 3 · memory/tasks/ ─────── workspace dự án, KHÔNG trong repo
+┌─ LỚP 3 · memory/tasks-config/ ─────── workspace dự án, KHÔNG trong repo
 │  khai: tasklist, vai trò từng trường, luật chuyển, nhân sự, phạm vi
 └────────────────────────────
 ```
@@ -130,3 +130,35 @@ Vì giao một lượt nên khối lượng dồn vào một lần review — kh
 | Tốt | Doanh nghiệp thứ hai chỉ cần khai cấu hình, không sửa code. Luật chuyển trạng thái từ chỗ truyền miệng thành thứ máy canh được. Làm việc không phải rời công cụ |
 | Xấu / chi phí | Thêm một module và bốn lá — nhiều thứ phải bảo trì hơn. Cấu hình khai đủ nên sẽ lệch khi Lark đổi mà chưa báo; chốt chặn ở QĐ-3 chỉ giảm chứ không khử |
 | Trung lập | Cấu hình nằm ở workspace nên không theo repo — mỗi máy mỗi bản, cần tự lo sao lưu |
+
+---
+
+## Điều chỉnh 2026-11-15 — tên thư mục cấu hình
+
+Bản chốt ban đầu đặt cấu hình ở `memory/tasks/`. Khi thi hành thì **4 test đỏ** và cả `minipower init --check` cũng chặn: [ADR-035](../done/ADR-035-2026-09-26-memory-mot-file-thay-overview.md) QĐ-9 đã cấm đúng đường dẫn đó.
+
+Đọc kỹ thì hai bên nói về hai thứ khác nhau. ADR-035 cấm `memory/tasks/` làm **nơi chứa việc đội** khi không có provider — việc đội đã chuyển sang `trace.db`. Còn ADR này dùng nó cho **cấu hình ánh xạ**, không chứa việc nào. Nhưng tên trùng, nên máy chặn — và chặn là đúng: hai thứ khác bản chất không nên chung một tên.
+
+**Đổi sang `memory/tasks-config/`.** Tên nói đúng bản chất, không đụng điều cấm. Mọi QĐ và sơ đồ ở trên đã cập nhật theo tên mới; không có quyết định nào đổi nội dung.
+
+Bài học cho lần sau: trước khi chọn một đường dẫn trong `memory/`, chạy `npm test` sớm — hệ thống đã có test canh những chỗ từng bị cấm, và nó biết nhiều hơn người viết ADR nhớ được.
+
+## Điều chỉnh 2026-11-15 — §7 bước 2 nói "rules.json", thực tế là ba chỗ khác
+
+`rules.json` không khai danh sách pack. Khi thi hành mới thấy một pack mới phải vào **ba chỗ**, và chỗ nào thiếu thì hỏng theo một kiểu khác nhau:
+
+| Chỗ | Thiếu thì |
+|---|---|
+| `SKILL_PACKS` trong `hooks/lib/skill-catalog.js` | `npm run gen` không quét pack ⇒ `module-registry.json` không có ⇒ `install --with work` từ chối |
+| Bảng `kind` / `installDefault` trong `hooks/lib/module-registry.js` | Pack bị gán nhầm là `role` — trái C4 |
+| `MODULES` trong `test/pack-manifest.test.js` + số lá trong `test/minipower-catalog.test.js` | Test đỏ |
+
+`module-registry.json` là **file generated** từ hai chỗ đầu — sửa tay vào đó sẽ bị `gen` ghi đè, đúng như tôi đã bị. Vòng `gen → test → gen:check` vì thế vẫn bắt buộc dù không đụng `rules.json`. Pack `work` lấy `kind: business` (kind mới, chỉ dùng để hiển thị) và `install.default: false` — chỉ cài khi `--with work`, vì nó cần cấu hình riêng mới chạy được.
+
+## Điều chỉnh 2026-11-15 — module khai ở đâu
+
+`§7` bước 2 viết "`rules.json` thêm module `work`". **Sai.** `rules.json` không khai pack hay module — nó giữ map DOC→phase, project-mode, roles, prereq. Danh sách module nằm cứng trong `test/pack-manifest.test.js`, cùng một test canh nó khớp cây `src/` (ADR-032 T5).
+
+Thực tế phải làm: thêm `"work"` vào danh sách đó, và viết `src/work/PACK.md` theo schema [pack-manifest](../../contracts/pack-manifest.md). Không chạm `rules.json`, nên cũng không cần vòng `gen → test → gen:check` — `gen:check` vẫn chạy để chắc.
+
+Mục **Ảnh hưởng** ở đầu ADR ghi `rules.json` là thừa; giữ nguyên dòng đó làm dấu vết, đọc kèm mục này.

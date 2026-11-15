@@ -1,0 +1,10 @@
+{"_":"VÍ DỤ — KHÔNG phải chuẩn. Phạm vi làm việc: mặc định lọc gì khi người hỏi mà không nói rõ. Đây là lựa chọn của người, không phải dữ liệu đọc từ Lark.",
+"synced_at":"2026-11-15",
+"me":"",
+"_me":"open_id của chính chủ workspace. Dùng cho workflow 'việc của tôi'. Bỏ trống ⇒ lá nghiệp vụ hỏi một lần rồi ghi lại.",
+"projects":["minvoice-2"],
+"_projects":"key theo projects.json. Mặc định khi người hỏi 'tiến độ dự án' mà không nêu tên. Mảng rỗng ⇒ không mặc định, luôn hỏi.",
+"team":[],
+"_team":"open_id những người thuộc đội mình, cho workflow 'việc của đội'. Rỗng ⇒ suy từ members.json.",
+"exclude_stages":["removed"],
+"_exclude_stages":"key theo status.json → stages. Bỏ khỏi mọi thống kê trừ khi người hỏi thẳng."}

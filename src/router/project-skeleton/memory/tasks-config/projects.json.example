@@ -1,0 +1,13 @@
+{"_":"VÍ DỤ — KHÔNG phải chuẩn. Danh mục dự án, chép từ các lựa chọn của trường đóng vai 'project'. Dùng để lọc việc theo dự án và để gom báo cáo.",
+"synced_at":"2026-11-15",
+"field":"Project",
+"_field":"Khớp profile.json → field_roles.project. Để đây cho dễ đối chiếu khi sync.",
+"items":[
+{"key":"minvoice-2","name":"mINVOICE 2.0","active":true},
+{"key":"minvoice-1","name":"mINVOICE 1.0","active":true},
+{"key":"new-invoice","name":"NEW-INVOICE","active":true},
+{"key":"msmi","name":"mSMI","active":true},
+{"key":"mtvan","name":"mTVAN","active":true},
+{"key":"mbhxh","name":"mBHXH","active":true},
+{"key":"mpay","name":"mPAY","active":true}],
+"_items":"key là mã ổn định dùng khi gọi và khi viết báo cáo; name là chuỗi thật trên Lark. active:false = dự án đã đóng, vẫn giữ để đọc dữ liệu cũ nhưng không gợi ý khi tạo mới. Ví dụ này chỉ chép 7 dòng cho gọn — bản thật khai đủ."}

@@ -26,6 +26,7 @@ Cách làm dựa trên ba nguyên tắc:
 | **Công cụ làm ra Minipower** — [`toolbox/`](src/toolbox/) | Module nghề | Viết/soát skill, mở module — `minipower-toolbox-*`. Không cài workspace khách | [toolbox/README.md](src/toolbox/README.md) |
 | **Tài liệu (Outline)** — [`docs/`](src/docs/) | Module kênh | SOP MCP mặt `docs`: tra / publish / migrate Outline (`minipower-docs-outline`) | [docs/README.md](src/docs/README.md) |
 | **Việc (OpenProject / Lark / GitHub)** — [`tasks/`](src/tasks/) | Module kênh | SOP MCP mặt `tasks` (`minipower-tasks-openproject` · `minipower-tasks-lark` · `minipower-tasks-github`); `none` thì SQLite `artifact` | [tasks/README.md](src/tasks/README.md) |
+| **Quản lý công việc** — [`work/`](src/work/) | Module nghiệp vụ | Tầng trên lá kênh `tasks`: làm việc trên ticket không mở app, xem tình hình, báo cáo định kỳ, giữ cấu hình board của đội — `minipower-work-*` (ADR-046). Không gắn vai, không gọi MCP thẳng; tri thức của đội ở `memory/tasks-config/` ngoài repo | [work/README.md](src/work/README.md) |
 | **Chat (Lark IM)** — [`chat/`](src/chat/) | Module kênh | SOP MCP mặt `chat` (`minipower-chat-lark`) — tách khỏi task | [chat/README.md](src/chat/README.md) |
 | **Mã nguồn (GitLab)** — [`vcs/`](src/vcs/) | Module kênh | SOP MCP/git mặt `code` (`minipower-vcs-gitlab`) | [vcs/README.md](src/vcs/README.md) |
 | [`contracts/`](contracts/) | Tầng nền | Luật chơi chung giữa các module và giữa repo tài liệu ↔ repo code: trace spine, điểm bàn giao H1–H6, quy ước chung, schema `PACK.md` | [contracts/README.md](contracts/README.md) |
@@ -123,7 +124,7 @@ Một file: `node --test test/minipower-catalog.test.js` (cwd `src/router/hooks`
 
 Skill **đăng ký loader** = thư mục lá `minipower-…` (có `SKILL.md` + `description`). Không còn pack/`src/sdlc` — dispatcher = [`minipower-router`](src/router/skills/minipower-router/SKILL.md).
 
-Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [analyst](src/analyst/README.md) · [architecture](src/architecture/README.md) · [pm](src/pm/README.md) · [support](src/support/README.md) · [qa](src/qa/README.md) · [presales](src/presales/README.md) · [ops](src/ops/README.md) · [backend](src/backend/README.md) · [frontend](src/frontend/README.md) · [toolbox](src/toolbox/README.md) · [docs](src/docs/README.md) · [tasks](src/tasks/README.md) · [chat](src/chat/README.md) · [vcs](src/vcs/README.md).
+Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [analyst](src/analyst/README.md) · [architecture](src/architecture/README.md) · [pm](src/pm/README.md) · [support](src/support/README.md) · [qa](src/qa/README.md) · [presales](src/presales/README.md) · [ops](src/ops/README.md) · [backend](src/backend/README.md) · [frontend](src/frontend/README.md) · [toolbox](src/toolbox/README.md) · [docs](src/docs/README.md) · [tasks](src/tasks/README.md) · [chat](src/chat/README.md) · [vcs](src/vcs/README.md) · [work](src/work/README.md).
 
 ### Dispatcher — [`router/`](src/router/)
 
@@ -253,6 +254,17 @@ Lá-rời theo kit `@platform/core`: **mô tả việc**. Pattern con chỉ đ�
 |-------|----------|-----------|
 | **[minipower-toolbox-skill-author](src/toolbox/skills/minipower-toolbox-skill-author/README.md)** | viết/soát skill lá | *Tạo skill gửi email đúng chuẩn minipower* |
 | **[minipower-toolbox-backlog](src/toolbox/skills/minipower-toolbox-backlog/README.md)** | backlog của chính repo minipower | *Ghi ý tưởng này thành issue cho minipower* |
+
+### Work — [`work/`](src/work/) (nghiệp vụ, không gắn vai)
+
+Tầng trên lá kênh `tasks`. Không một tên trường, trạng thái hay dự án nào nằm trong `src/work/` — tất cả đọc từ `memory/tasks-config/` của workspace ([ADR-046](ADRs/todo/ADR-046-2026-11-15-tang-nghiep-vu-work-tren-la-kenh-tasks.md)).
+
+| Skill | Khi nào | Prompt mẫu |
+|-------|---------|------------|
+| **[minipower-work-profile](src/work/skills/minipower-work-profile/README.md)** | chưa có cấu hình, board đổi, sửa bằng lời | *Dựng cấu hình cho board của đội* · *Thêm X vào đội DEV* |
+| **[minipower-work-desk](src/work/skills/minipower-work-desk/README.md)** | tạo · sửa · chuyển trạng thái · bình luận · đóng ticket | *Chuyển ticket này sang review* — chặn nhảy cóc, lùi bước phải nêu lý do |
+| **[minipower-work-status](src/work/skills/minipower-work-status/README.md)** | "đang có chuyện gì" | *Tiến độ dự án X đến đâu* · *Việc của tôi tuần này* |
+| **[minipower-work-report](src/work/skills/minipower-work-report/README.md)** | báo cáo có khuôn theo nhịp | *Soạn báo cáo tuần theo milestone* |
 
 ### Kênh MCP
 

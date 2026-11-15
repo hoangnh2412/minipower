@@ -1,0 +1,28 @@
+{"_":"VÍ DỤ của một doanh nghiệp — KHÔNG phải chuẩn. Copy thành profile.json rồi sửa theo đội mình. Tên trường và tên lựa chọn dưới đây là của riêng họ.",
+"synced_at":"2026-11-15",
+"provider":"lark",
+"workspace":{"tasklist":"TechGroup"},
+"field_roles":{
+"type":"Type",
+"project":"Project",
+"owner":"PIC",
+"watcher":"Follower",
+"priority":"Priority Index",
+"estimate_start":"EstimateStartTime",
+"estimate_end":"EstimateEndTime",
+"note":"Note"},
+"_field_roles":"Vai trò → tên trường thật. Vai trò nào đội không dùng thì bỏ hẳn dòng, đừng để chuỗi rỗng. Không có vai 'spent' ⇒ đội này không theo dõi giờ công.",
+"type_map":{
+"epic":"Epic",
+"story":"Story",
+"task":"Task",
+"bug":"Bug",
+"milestone":"Millestone",
+"release":"Release",
+"support":"Support"},
+"_type_map":"Loại chuẩn của work-breakdown → tên lựa chọn thật, chép ĐÚNG như trên Lark kể cả khi sai chính tả. Loại không khai ⇒ đội không dùng khái niệm đó; lá nghiệp vụ phải dừng và hỏi chứ không chọn loại gần giống.",
+"hierarchy":{
+"shape":"blocking",
+"parent_of":{"story":"release","task":"release","bug":"release","support":"release"},
+"blocks":{"epic":["story","task"]}},
+"_hierarchy":"shape: 'subtask' = cây thuần cha-con · 'blocking' = cây nông + quan hệ chặn. parent_of nói cha của từng loại; blocks nói loại nào gom loại nào bằng quan hệ chặn."}
