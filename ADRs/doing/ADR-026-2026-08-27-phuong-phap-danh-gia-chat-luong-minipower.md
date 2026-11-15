@@ -3,12 +3,12 @@
 | | |
 |---|---|
 | **Ngày** | 2026-08-27 · **viết lại 2026-11-09** (issue [#5](https://github.com/hoangnh2412/minipower/issues/5)) |
-| **Trạng thái** | khung 2026-08-29 giữ ý; **bản 2026-11-09 chốt §11** — chưa triển khai (`evals/` chưa tồn tại), kế tiếp Đ0 |
+| **Trạng thái** | khung 2026-08-29 giữ ý; **bản 2026-11-09 chốt §11**; **2026-11-14 thi hành một phần** — `evals/` đã có 6 check nhóm A (§7.1b) + runner nhóm B đã kiểm chứng (§4.2); chưa có case nhóm B nào |
 | **Phạm vi** | Tiêu chí đánh giá + cơ sở phương pháp luận + bộ script + bộ test case cho **toàn bộ** minipower (`src/*` · hooks · `rules.json` · contracts). So sánh chất lượng **trước/sau mỗi version của từng skill** |
 | **Ngoài phạm vi** | Hạ tầng ngoài repo (dashboard, DB metric — ADR-022 QĐ-12); eval cho một dự án đích cụ thể; biến điểm LLM thành gate cứng |
 | **Nối tiếp** | [ADR-001](../done/ADR-001-2026-07-17-danh-gia-minipower-va-chien-luoc-phat-trien.md) (§3.5 bài học scorer lệch) · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (QĐ-11 gate mềm) · [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) (QĐ-1 model là engine thay được) · [ADR-044](ADR-044-2026-10-29-vong-phan-hoi-bai-hoc-github-issue-version-skill.md) (`metadata.version` semver + CHANGELOG mỗi lá; Q4 giao thước đo cho ADR đánh giá — chính ADR này) |
 | **Mục đích** | Trước đợt refactor lớn: có thước đo lặp lại được để biết refactor làm minipower **tốt lên hay tệ đi**, theo từng skill |
-| **Ảnh hưởng** | `evals/` (**mới — tầng gốc**, ngang `contracts/` · `ADRs/`) · `package.json` gốc (script `check`, `eval:*`) · `src/router/hooks/` (lint SKILL, routing tĩnh, `trace:check --stats`) · `.gitignore` (`evals/.runs/`) · `AGENTS.md` §thư mục |
+| **Ảnh hưởng** | `evals/` (**mới — tầng gốc**, ngang `contracts/` · `ADRs/`) · `package.json` gốc (script `check`, `eval:*`) · `src/router/hooks/` (lint SKILL, routing tĩnh, hai tỷ lệ coverage của `trace:check`) · `.gitignore` (`evals/.runs/`) · `AGENTS.md` §thư mục |
 
 ---
 
@@ -61,6 +61,23 @@
 | H3 | **Runner tự viết** spawn `claude -p --plugin-dir src/router --output-format stream-json` | ✅ | Nạp đúng skill + hook production; transcript có `tool_use` để chấm bằng máy; có `total_cost_usd` |
 
 Giữ **schema** gần với `plugin eval` (`case.yaml` + `prompt.md`) để đổi harness sau này rẻ.
+
+**Đã kiểm chứng thật 2026-11-14** (CLI 2.1.260, 4 lần chạy, $1,21). H3 dùng được, nhưng **lý do chọn ở trên đúng một nửa** — sửa lại cho khỏi dựng case trên giả định sai:
+
+| Khẳng định ban đầu | Thực tế đo được |
+|---|---|
+| Nạp đúng skill | ✅ `tool_use` tên `Skill`, input `{"skill":"minipower:minipower-router-readiness"}` — kèm namespace plugin. `system/init` → `plugins: [{name:"minipower", version:"0.1.0"}]` |
+| Nạp hook production | ✅ hook **có chạy** (chứng minh bằng marker ghi file trên bản copy của `src/router`) |
+| Transcript có `tool_use` để chấm bằng máy | ✅ cho **hành vi agent**: `Skill`, `Read`, `Glob` · `system/permission_denied` kèm `tool_name` · `result.permission_denials` |
+| — | ❌ **nhưng hook event và output của hook KHÔNG hiện trên `stream-json`.** Vắng event không chứng minh hook không chạy |
+| Có `total_cost_usd` | ✅ thật: ~**$0,56** một case readiness 4 lượt; $0,12–0,40 một lượt tầm thường |
+
+**Hệ quả cho bộ tiêu chí:** hành vi **hook** không chấm được qua runner — nó thuộc test đơn vị ở `src/router/hooks/test/` (và [A16](../../evals/checks/a16-hook-runnable.mjs) cho phần "hook chạy được"). Nhóm B chỉ chấm **hành vi agent khi hook đang bật**.
+
+Hai điều kiện vận hành của runner, thiếu là case sai chứ không phải skill sai:
+
+- **Fixture phải tự chứa mọi thứ.** Agent đọc ra ngoài thư mục làm việc là `permission_denied` ở chỗ ngẫu nhiên — case lệch mà trông như lá làm sai.
+- **Phải truyền `< /dev/null`**, nếu không CLI chờ stdin 3 giây rồi cảnh báo.
 
 ### 4.3 Version của skill
 
@@ -130,9 +147,38 @@ Ký hiệu chung: `|X|` = số phần tử; `1[đk]` = 1 nếu điều kiện đ
 | A5 | Không tự chạy LLM (QĐ-7) | `A5 = 1[không script test/CI/hook nào gọi eval:run hoặc claude -p]` | = 1 | **chặn** |
 | A6 | Độ dài skill | `W_len = |SKILL.md có > 150 dòng|` | báo số | WARN |
 | A7 | "bắt buộc" không cổng máy | `W_must = |dòng chứa "bắt buộc" không kèm tham chiếu check máy|` | báo số | WARN |
-| A8 | Trace coverage (`trace:check --stats`) | `TC_FR = |FR có ≥1 AC| / |FR|` · `TC_chain = |UC có chuỗi UC→FR→AC→Test thông| / |UC|` | báo số | WARN, không đổi exit code |
+| A8 | Trace coverage | `TC_FR = |FR có ≥1 AC| / |FR|` · `TC_chain = |UC có chuỗi UC→FR→AC→Test thông| / |UC|` | báo số | WARN, không đổi exit code |
+
+**A8 — đính chính 2026-11-14.** Bản đầu ghi lệnh là `trace:check --stats`. **Flag đó không tồn tại**, và cũng không cần: `bin/trace-check.js` hiểu `argv[2]` là *gốc dự án*, nên truyền `--stats` sẽ bị đọc thành đường dẫn. Trạng thái thật:
+
+| Cần cho A8 | Hôm nay |
+|---|---|
+| Số ID và số file | ✅ `formatReport()` đã in `{ids} ID trong {files} file` ở **cả** nhánh OK lẫn nhánh có finding — đọc dòng đó, đừng thêm flag |
+| `TC_FR` | ⚠️ dữ liệu có (mã WARN `fr-no-ac`) nhưng **tỷ lệ chưa được tính** — thiếu mẫu số `|FR|` in ra |
+| `TC_chain` | ❌ **chưa tính được** — không có mã nào bắt UC thiếu FR, nên chuỗi UC→FR→AC→Test chưa dò được đầu chuỗi |
+
+Việc của Đ0 ở A8 vì thế là **in thêm hai tỷ lệ**, không phải thêm flag. `ac-no-test` đã có, dùng cho nửa sau của `TC_chain`.
 
 **Kết luận nhóm A:** `A_pass = A1 ∧ A2 ∧ A3 ∧ A4 ∧ A5`. A6–A8 ghi vào kết quả để so giữa version, không chặn.
+
+### 7.1b Nhóm A mở rộng — đã thi hành
+
+Sáu check tính toàn vẹn repo, nằm ở [`evals/checks/`](../../evals/README.md), gọi bằng `npm run check:integrity`. Tất cả mức **WARN** lúc ra mắt (cùng luật `version:check`, ADR-044 §8.1).
+
+| Mã | Tiêu chí | Bắt loại lỗi |
+|---|---|---|
+| A09 | Sổ `install_hooks` ↔ cây `bin/`, hai chiều | khai mà thiếu file (lệnh cài dựng hook trỏ hư không) · có file shim mà quên đăng ký (hook không bao giờ chạy) |
+| A10 | Không hai file nào giống hệt mà không khai | hai nguồn chân lý chép tay, ngoài mọi cổng máy |
+| A11 | Test không chép tay con số **tồn kho repo** | con số là nguồn chân lý thứ hai; sửa cho xanh thì không ai biết sửa gì |
+| A12 | Cơ chế đã quyết gỡ không còn dấu vết trong chữ — đọc [sổ](../../evals/decided-removed.md) | code đi trước chữ; tài liệu mô tả hệ đã chết mà không test nào đỏ |
+| A13 | `catch` không trả mặc định trong im lặng | fail-open: lỗi thật thành đường đi bình thường |
+| A16 | Lệnh hook phải có file, parse được, không ném với stdin rỗng | hook chết lúc nạp ⇒ harness đi tiếp ⇒ cổng không chặn gì |
+
+Ba luật bắt buộc của mọi check trong `evals/checks/`: **đọc từ dữ liệu** không từ danh sách chép tay (nếu không nó lão hoá đúng cách nó đi bắt) · **phát biểu luật tổng quát**, không nhắm vào một lỗi đang tồn tại · **có fixture dương VÀ âm** (N7 — thiếu case âm thì một check "luôn báo" cũng đạt 100%).
+
+Lối thoát là **marker trong chính file bị bắt**, không phải file baseline — `link-check.baseline.txt` là đúng cái bẫy nới âm thầm.
+
+Còn thiếu: **A14** (mỗi test phải có một đột biến làm nó đỏ) và **A15** (hợp của "vùng sở hữu" các thẻ phải phủ kín cây file — phải đọc thẻ từ GitHub nên không thuần offline).
 
 ### 7.2 Nhóm B — đơn vị chấm
 
@@ -328,8 +374,13 @@ criteria:
   specific: [S1, S2, S3]                  # grader riêng của skill
   judge: J
 runs: 2
-max_turns: 3
+max_turns: 8     # xem ghi chú dưới — 3 là quá chặt
 ```
+
+**`max_turns` — đã hiệu chỉnh 2026-11-14.** Bản đầu đặt `3`. Thực nghiệm: một case readiness thật dừng ở `subtype: error_max_turns`, `num_turns: 4`, **chưa kịp ra dòng verdict** — nghĩa là mọi case sẽ "trượt" vì hết lượt chứ không vì lá làm sai. Hai việc kéo theo:
+
+- Khởi điểm `max_turns: 8`, hiệu chỉnh lại sau case thật đầu tiên.
+- Grader chấm theo **"đã ra verdict chưa"**, không theo `is_error` của `result`. Một run `error_max_turns` mà đã có verdict đúng khuôn vẫn tính là đạt; ngược lại, `is_error: false` mà không có verdict thì trượt C5. Lấy `is_error` làm cổng là trộn "hết lượt" với "làm sai".
 
 ### 8.3 Version skill
 
@@ -347,7 +398,8 @@ Một kết quả gắn với **dấu vân tay môi trường**: `{skill hash, h
 
 | Lệnh | Nhóm | Ai chạy | Việc |
 |---|---|---|---|
-| `npm run check` | A | CI + mọi người | `test` + `gen:check` + `link:check` + `trace:check --stats` + lint A6/A7 |
+| `npm run check` | A | CI + mọi người | `test` + `gen:check` + `link:check` + `trace:check` + `check:integrity:test` + `check:integrity` (A09–A16) + lint A6/A7 |
+| `npm run check:integrity` | A | CI + mọi người | Sáu check §7.1b. `-- --json` để lấy kết quả máy đọc |
 | `npm run eval:plan` | B | AI / người | Liệt kê skill có hash đổi so với kết quả gần nhất → case cần chạy (B1). In bảng: case · số run · chi phí ước tính · **lệnh để chạy**. Không gọi model |
 | `npm run eval:plan -- --all` | B2 | AI / người | Như trên cho mọi case |
 | `npm run eval:run -- --case <id>… --model <id>` | B | **chỉ người** | Chạy, chấm C/S/J, ghi `results/` |
@@ -395,7 +447,7 @@ flowchart LR
 
 | Đợt | Việc | Done khi |
 |---|---|---|
-| **Đ0** — nhóm A (0 LLM call) | A3 · A4 · A5 · A6 · A7 · A8 (`trace:check --stats`) · `npm run check` · vòng `gen → test → gen:check` | `npm run check` xanh; A6/A7 **0 false-positive** sau khi sửa chữ "bắt buộc" (M2 cũ) |
+| **Đ0** — nhóm A (0 LLM call) | A3 · A4 · A5 · A6 · A7 · A8 (in thêm hai tỷ lệ coverage vào `trace:check`) · `npm run check` · vòng `gen → test → gen:check` | `npm run check` xanh; A6/A7 **0 false-positive** sau khi sửa chữ "bắt buộc" (M2 cũ) |
 | **Đ1** — spike 1 case | `version.js` · `runner.js` · grader chung C1–C7 + riêng readiness S1–S3 + test trên transcript tĩnh · 1 case readiness `standard` | Chạy 3 lần; đo chi phí/run, flaky, S1/C2 đọc được từ transcript |
 | **Điểm dừng** | Đọc 3 số | `F ≤ 0.25` và grader đọc được → Đ2. Không đạt → **dừng nhóm B**, hạ về checklist người (QĐ-9) |
 | **Đ2** — nhân bộ + baseline | Readiness 6 kịch bản × mode thưa ≈ 9–10 case · deliberation ≥ 5 case · routing (nếu §11-Q3) · `plan` · `compare` · `audit` | **Baseline commit vào `results/` trước khi refactor**; κ đầu tiên; hiệu chỉnh ngưỡng §7.5 |
@@ -406,7 +458,7 @@ flowchart LR
 | # | Case | Expect | |
 |---|---|---|---|
 | T1 | `npm run check` trên repo hiện tại | xanh; A6/A7 không false-positive | 🔴 |
-| T2 | `trace:check --stats` trên fixture có ID | khớp đếm tay; exit code không đổi | 🔴 |
+| T2 | Hai tỷ lệ coverage của `trace:check` trên fixture có ID | khớp đếm tay; exit code không đổi | 🔴 |
 | T3 | Grader C1–C7 + S trên transcript mẫu tĩnh (đạt / vi phạm từng tiêu chí — N7) | đúng từng tiêu chí, 0 LLM call | 🔴 |
 | T4 | A5: thêm `claude -p` vào một script test giả | `npm run check` FAIL | 🔴 |
 | T5 | Grep `evals/lib/` không có bản copy logic routing/gate | 0 hit (C3) | 🔴 |
