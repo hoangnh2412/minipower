@@ -1,6 +1,6 @@
 # Work breakdown — luật phân rã việc (tool-neutral)
 
-Luật chung khi biến scope thành đơn vị việc theo dõi được (Epic · Feature · Story · Task · Bug) — **không phụ thuộc công cụ**. Ánh xạ sang từng công cụ nằm ở lá kênh: [OpenProject](../../../../tasks/skills/minipower-tasks-openproject/reference/openproject-mapping.md); Lark / Jira thêm reference tương tự khi cần. Nguồn: SOP quản lý công việc công ty, đã chạy thật trên dự án e-invoice (ADR-041 QĐ-12).
+Luật chung khi biến scope thành đơn vị việc theo dõi được (Epic · Feature · Story · Task · Bug) — **không phụ thuộc công cụ**. Ánh xạ sang từng công cụ nằm ở lá kênh: [OpenProject](../../../../tasks/skills/minipower-tasks-openproject/reference/openproject-mapping.md) · [Lark](../../../../tasks/skills/minipower-tasks-lark/reference/lark-mapping.md); Jira thêm reference tương tự khi cần. Nguồn: SOP quản lý công việc công ty, đã chạy thật trên dự án e-invoice (ADR-041 QĐ-12).
 
 Không load mặc định — mở khi lập DOC-14, khi soạn bảng L2 tạo việc, hoặc khi phân vân "việc này loại gì, log giờ vào đâu".
 

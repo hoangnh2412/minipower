@@ -20,7 +20,7 @@
 |------------|------------------------|
 | Pack | `src/tasks/` — `PACK.md` `mcp: [tasks]`, `consumes: preview L2`, `roles: [pm, support]` |
 | Skill | `minipower-tasks-lark` — SKILL ~36 dòng + `workflows/l1-l3.md` 9 dòng; `description` kích hoạt được; **channel-pack.test.js** đã canh |
-| MCP | `user-lark-mcp`: **chỉ đọc** — `task_v2_task_list` (`type=my_tasks`) · `task_v2_task_get` · `task_v2_tasklist_list` · `task_v2_tasklist_tasks`. **Không** có `task_create` / `task_update` trên catalog phiên này |
+| MCP | `user-lark-mcp`: **chỉ đọc** — `task_v2_task_list` (`type=my_tasks`) · `task_v2_task_get` · `task_v2_tasklist_list` · `task_v2_tasklist_tasks`. **Không** có `task_create` / `task_update` trên catalog phiên này ⚠️ **mô tả này sai — xem đính chính §5.4** |
 | God-file | `src/router/agents/lark-work-assistant.md` (~260 dòng) gộp task + IM + wiki + Base + Drive; ADR-017 từng gỡ khỏi router; ADR-033 D1 ưu tiên pack kênh |
 | Chat | `minipower-chat-lark` — mặt `chat_provider`, **không** đụng `task_v2_*` |
 | Profile | `tasks_provider`: `openproject` \| `lark` \| `none` (v3). `none` → `memory/tasks/` local, không MCP |
@@ -51,7 +51,7 @@ Hai nghĩa chữ **agent** dễ lẫn — ADR này tách:
 |---|---|---|
 | P1 | Skill mỏng, SOP thật nằm god-file `sdlc/agents/` | Loader kích hoạt đúng lá nhưng agent vẫn “nhớ” IM/wiki; một phiên task dễ L3 gửi tin |
 | P2 | Chữ “tạo agent” bị hiểu thành runtime / custom agent Cursor độc lập khỏi pack | Trái dispatcher atomic; hai SSOT (Cursor Agents UI vs `src/tasks/`) |
-| P3 | MCP task **không ghi** nhưng SOP vẫn nói “L3 tạo task” | Agent bịa tool `task_create` hoặc im lặng giả đã ghi |
+| P3 | ~~MCP task **không ghi** nhưng SOP vẫn nói "L3 tạo task"~~ ⚠️ **tiền đề sai, xem đính chính §5.4.** Vấn đề thật: cờ chọn tool khai thiếu nên tool ghi biến mất lặng lẽ | Agent kết luận nhầm "Lark không ghi được" rồi bắt người tạo tay, dù công cụ có sẵn |
 | P4 | Thiếu `tasklist_guid` / `completed` / cửa sổ thời gian hỏi nhỏ giọt | Trái execution-gate “một lượt” |
 | P5 | Board Lark vs sổ `memory/memory.md` (ADR-035) vs SQLite khi `none` | Ba nơi “việc”; agent copy FR vào mô tả Lark |
 
@@ -188,12 +188,18 @@ Hai agent-file **không** gọi nhau. Đổi board = người `minipower init` �
 | Vào | Intent người · `profile.json` · (opt) `memory/lark.json` · schema MCP · filter đã hỏi |
 | Ra L1 | Tóm tắt 3–7 bullet + mục mở + (opt) bảng task đã đọc — **cắt trang** phải nói |
 | Ra L2 | Bảng `hành động \| tiêu đề \| due \| list \| map ID` — người bỏ dòng |
-| Ra L3 | `task_guid` / id MCP **hoặc** “không ghi — MCP không có tool” + bước tay |
+| Ra L3 | `task_guid` từng dòng; nhiều ticket ⇒ bảng `tiêu đề \| task_guid \| section` *(sửa 2026-11-14 — xem đính chính §5.4)* |
 | Không ra | Body FR · tin nhắn nhóm · record Bitable · sửa `docs/` |
 
 ### §5.4 Tool map (tham chiếu, không SSOT)
 
 SSOT = schema MCP tại runtime. Bảng này chỉ định hướng SOP; lệch catalog thì theo catalog.
+
+> **Đính chính 2026-11-14.** Câu "MCP Lark chỉ đọc" ở §1 và vấn đề P3 là **mô tả sai**, không phải giới hạn của Lark. Soát lại gói `@larksuiteoapi/lark-mcp` 0.5.1 thấy khoảng **50 tool task**, đủ tạo, sửa, xoá, task con, section, bình luận, custom field, phụ thuộc.
+>
+> Nguyên nhân nhầm: gói nhận một **cờ chọn tool**, và preset task **thay thế** nhóm tool của preset mặc định chứ không cộng dồn — khai thiếu thì tool ghi bị bỏ qua **lặng lẽ**, catalog vẫn lên bình thường. Thêm một bẫy nữa: tên tool lúc khai dùng **dấu chấm**, tên client nhìn thấy dùng **gạch dưới**.
+>
+> Hệ quả: **L3 ghi thật là làm được**, không chờ upstream. Cách khai cờ cho đúng nằm ở `workflows/connect.md` của lá; bảng dưới giữ nguyên làm bản ghi thời điểm.
 
 | Việc người | Tool (tên hay gặp 2026-09-26) | Tầng |
 |------------|-------------------------------|------|
@@ -202,7 +208,7 @@ SSOT = schema MCP tại runtime. Bảng này chỉ định hướng SOP; lệch 
 | Chi tiết một task | `task_v2_task_get` | L1 |
 | Các list tôi đọc được | `task_v2_tasklist_list` | L1 |
 | Task trong một list | `task_v2_tasklist_tasks` + `page_token` | L1 |
-| Tạo / sửa / hoàn thành | *không có trên catalog hiện tại* | L2 dừng; L3 = tay |
+| Tạo / sửa / hoàn thành | ~~*không có trên catalog hiện tại*~~ → `task_v2_task_create` · `task_v2_taskSubtask_create` · `task_v2_task_patch` · `task_v2_task_addTasklist` · `task_v2_task_addDependencies` (đính chính 2026-11-14) | **L3 ghi thật** |
 
 ### §5.5 Việc cần có trước khi skill chạy được (ngoài repo)
 
