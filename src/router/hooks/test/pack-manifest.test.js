@@ -29,6 +29,7 @@ const MODULES = [
   "support",
   "qa",
   "presales",
+  "work",
 ]
 
 // trường bắt buộc theo schema contracts/pack-manifest.md §1

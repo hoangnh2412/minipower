@@ -31,10 +31,13 @@ export function scanModuleRegistry(repoRoot = ROOT) {
         ? "dispatcher"
         : pack === "toolbox"
           ? "toolbox"
-          : ["docs", "tasks", "chat", "vcs"].includes(pack)
-            ? "channel"
-            : "role"
-    const installDefault = pack !== "toolbox"
+          : pack === "work"
+            ? "business"
+            : ["docs", "tasks", "chat", "vcs"].includes(pack)
+              ? "channel"
+              : "role"
+    // work: tầng nghiệp vụ, chỉ cài khi --with (ADR-046 QĐ-2) — mặc định chưa bật
+    const installDefault = !["toolbox", "work"].includes(pack)
     out.push({
       pack,
       path: `${pack}/`,

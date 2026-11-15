@@ -37,6 +37,7 @@ export const SKILL_PACKS = [
   "tasks",
   "chat",
   "vcs",
+  "work",
 ]
 
 export function frontmatter(path) {
