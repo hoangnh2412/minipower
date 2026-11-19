@@ -3,7 +3,7 @@ name: minipower-backend-convention-dotnet
 description: Quy ước coding C#/.NET — đặt tên, nullable, async/CancellationToken, exception, logging, LINQ, DI, C# 11–12, test, bảo mật. Dùng khi viết hoặc sửa code C#, và khi cần dựng .editorconfig / Directory.Build.props để analyzer ép convention lúc build.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Quy ước coding C#/.NET — Orchestrator
@@ -44,13 +44,17 @@ Phần mềm, hay quên nhất:
 - **Ít nhất mà trọn, không tự thêm fallback** — thang 6 bậc + 7 luật ứng xử ở [shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent) cắt ngang mọi mục dưới: không default im lặng, không `catch` rồi đi tiếp, không retry / đường phụ tự chế khi người chưa OK — thiếu điều kiện thì ném `BusinessException` có mã và hỏi.
 - **Đặt tên field**: instance `_camelCase`, **static PascalCase không `_`**, const PascalCase (mục 1).
 - **CancellationToken** xuyên suốt API async công khai → truyền xuống EF/HTTP, không nuốt (mục 4).
-- **Exception cụ thể**, không `throw new Exception(...)`; không dùng exception để điều khiển luồng — `TryParse` (mục 3).
+- **Exception API Platform**: lỗi nghiệp vụ → `BusinessException` + mã `IErrorCode` (mục 14); không `return Unauthorized()` / `catch` nuốt — để `ApiResponseWrapperMiddleware` bọc `BaseResponse` (mục **3.1**, **3.2**). `try`/`catch` mới → hỏi người trước.
+- **Controller không xử lý lỗi**: không `try`/`catch`, không `throw`, không trả lỗi tay (`BadRequest` / `NotFound` / `StatusCode(4xx)` / `Problem`). Họ `BusinessException` chỉ ném ở Application / Domain / Infrastructure — guard đầu vào, phạm vi tenant/org, "không tìm thấy" nằm ở đó (mục 3.1).
+- **Exception cụ thể** (layer khác), không `throw new Exception(...)`; không dùng exception để điều khiển luồng — `TryParse` (mục 3).
 - **Điều kiện tách dòng**: không nhồi nhiều `&&`/`||` hay ternary lồng một dòng; extract biến `bool` có tên (mục 7.6).
 - **DI lifetime**: Singleton stateless · Scoped theo request (`DbContext`, repository) · tránh Service Locator (mục 6).
 - **Secret không hard-code**: User Secrets / env / secret manager; `IOptions<T>` cho config typed (mục 12).
 - **Thời điểm**: property map cột datetime là `DateTime` UTC+0, **không** `DateTimeOffset`; Domain không `DateTime.Now` (mục 9.4).
 - **Audit / tenant / user qua marker Jarvis**: `ILogCreatedEntity` · `ITenantEntity` · `ICurrentTenant<T>` · `ICurrentUser<T>` — không tự chế interface song song, không đọc `HttpContext` trong handler, không nhận tenant từ body khi phiên đã có (mục 13).
-- **Lỗi nghiệp vụ ném bằng mã**: `BusinessException` + `IErrorCode` đã khai trong `{Product}.ErrorCodes`; `code` theo họ `{MOD}-VAL-` · `{MOD}-BR-` · `{MOD}-API-` · `SYS-` là token API và UI dùng chung (mục 14).
+- **Lỗi nghiệp vụ ném bằng mã**: `BusinessException` (`Platform.DDD.Domain.Shared.ExceptionHandling`) + `IErrorCode` trong `{Product}.ErrorCodes` / `*ErrorCode.cs`; không map lỗi tay trong controller (mục 14).
+- **Format mã lỗi Platform**: chuỗi **5 chữ số**, duy nhất toàn solution. Platform `9xxxx` · sản phẩm `0xxxx`–`8xxxx`, mỗi module một khối 10.000 · `99xxx` là mã framework bọc HTTP status (`99404`, `99403`…), module không cấp. Trên dây `{EntryAssembly}:{mã}` do `BaseResponse` tự ghép (mục 14, 14.1).
+- **`error.message` là câu cuối người dùng đọc** — FE hiện nguyên `[code] message`, không bọc lại. Mọi response lỗi có `code` + `error.message`; không trả 401/403/404/5xx body rỗng; chi tiết kỹ thuật vào `systemMessage` / log (mục 14).
 - **Không tạo/sửa bảng trong logic**: cấm `CREATE`/`ALTER`/`DROP` (SQL thô hoặc `ExecuteSql*`) trong service, handler, controller, seed nghiệp vụ. Đổi schema bằng EF migration, áp lúc khởi động qua `Database.Migrate` (mục 15).
 
 ## Templates

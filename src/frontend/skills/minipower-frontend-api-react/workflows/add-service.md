@@ -88,6 +88,7 @@ Mở màn hình, xem tab Network: request đi `/api/{apiPath}`, query đúng tê
 | `axios.create()` trong feature | Mất baseURL, API key, chuẩn hoá lỗi — lint R2 đỏ |
 | `fetch('/api/…')` trong page | Như trên, và không qua `handleAction` ⇒ host không thay được API |
 | Path có `/` đầu hoặc host tuyệt đối (`http://…/v1/…`) | Bỏ qua `VITE_API_URL` — vỡ khi đổi môi trường |
-| Đọc `error.response.status` trong catch | Interceptor của kit đã thay lỗi bằng body — luôn `undefined` |
+| Đọc `error.response.status` trong catch | Interceptor của kit đã thay lỗi bằng body + `status` — dùng `error.status`, `error.response` luôn `undefined` |
+| Tự dựng câu lỗi trong service / page (`new Error('Không tải được…')`, ghép tiền tố, đổi `status` sang câu) | Mất `code` backend, người dùng không báo được mã — hiện nguyên qua `getErrorMessage` ([convention § 5.1](../../minipower-frontend-convention-react/reference/coding-convention.md#51-lỗi-từ-backend--không-bọc-lại)) |
 | `res.data.items` rải khắp page | Lệch dạng response là vỡ nhiều chỗ — gom về `unwrap*` |
 | Kiểu payload = kiểu form | Gửi thừa trường (vd. `status` khi sửa); map tường minh trong `defaultSubmit` |

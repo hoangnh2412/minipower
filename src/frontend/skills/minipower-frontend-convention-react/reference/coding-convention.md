@@ -56,10 +56,37 @@ Toàn văn quy ước. Không load mặc định — mở khi cần tra một m�
 
 - Mọi thao tác ghi (lưu, xoá, đổi trạng thái) đi qua `handleAction` — giữ thứ tự `before → onSubmit → onSuccess của page → success → complete` và cho host thay API bằng `callback`.
 - Sau `handleAction`: `if (outcome.status === 'cancelled') return` **trước** toast thành công.
-- `catch (error)` ⇒ `notify.error(getErrorMessage(error, messages.x))` — fallback là câu tiếng Việt có nghĩa, không nuốt lỗi im lặng.
-- Thông báo lỗi người dùng thấy mang **mã**: dạng `[code] message`, `code` là token backend trả (họ `{MOD}-VAL-` · `{MOD}-BR-` · `{MOD}-API-` · `SYS-`) — người dùng đọc được mã để báo hỗ trợ, QA trace được về BR / API. Không hiện `error.message` thô của framework, không `alert()`. Một thao tác một toast — batch fail không bắn N toast.
-- Interceptor của kit reject bằng **body lỗi** (không phải AxiosError) — đừng đọc `error.response.status` trong catch; xem [api](../../minipower-frontend-api-react/SKILL.md).
+- `catch (error)` ⇒ `notify.error(getErrorMessage(error, messages.x))` — không nuốt lỗi im lặng. `fallback` chỉ hiện khi lỗi không phải HTTP (mục 5.1).
+- Thông báo lỗi người dùng thấy mang **mã**: dạng `[code] message` — người dùng đọc được mã để báo hỗ trợ, QA trace được về BR / API. Không `alert()`. Một thao tác một toast — batch fail không bắn N toast.
+- Interceptor của kit reject bằng **body lỗi** kèm `status` HTTP (không phải AxiosError) — đừng đọc `error.response.status` trong catch; xem [api](../../minipower-frontend-api-react/SKILL.md).
 - Nút submit `disabled={isSubmitting}` — chặn bấm hai lần.
+
+### 5.1 Lỗi từ backend — không bọc lại
+
+Mã và câu lỗi là của **backend**. FE hiện nguyên văn qua `getErrorMessage`, không viết lại. Câu backend sai hoặc khó hiểu ⇒ sửa catalog mã lỗi ở backend ([backend convention § 14](../../../../backend/skills/minipower-backend-convention-dotnet/reference/coding-convention.md#14-mã-lỗi-nghiệp-vụ--ierrorcode)), không vá ở FE.
+
+**Format `code` Platform** ([backend § 14.1](../../../../backend/skills/minipower-backend-convention-dotnet/reference/coding-convention.md#141-dải-mã-lỗi)): `{EntryAssembly}:{5 chữ số}` — vd `Sample.Api:98501`. Platform `9xxxx` · sản phẩm `0xxxx`–`8xxxx` · `99xxx` là mã framework bọc HTTP status (`99404`, `99403`). FE **không** cắt tiền tố assembly, **không** parse / tách số để đổi câu, **không** tự chế mã dạng `99{status}` — chỉ hiện nguyên văn `code` backend trả.
+
+| Lỗi nhận được | Hiển thị |
+|---|---|
+| Body có `code` + `error.message` | `[code] message` — nguyên văn cả hai, vd `[Sample.Api:98501] Không tìm thấy đơn vị.` |
+| Body có `code`, thiếu message | `[code] {câu chuẩn của HTTP status}` — vd `[Sample.Api:99404] Not Found` |
+| Body rỗng / không đọc được, có HTTP status | `[HTTP {status}] {câu chuẩn}` — vd `[HTTP 502] Bad Gateway` |
+| Không có response (mất mạng, CORS, timeout) | Câu của interceptor kit |
+| Không phải lỗi HTTP (lỗi FE tự ném, mock) | `Error.message`, không có thì `fallback` của `getErrorMessage` |
+
+*Câu chuẩn* là reason phrase của HTTP status theo RFC 9110 — kit giữ bảng, feature không tự dịch.
+
+Không làm:
+
+- Ghép tiền tố / hậu tố vào câu backend — `` `Lưu thất bại: ${msg}` ``, `` `${msg} (403 — thiếu quyền)` ``.
+- Đổi status / `code` / chuỗi lỗi sang câu FE — `if (status === 409) 'Đã tồn tại'`, `'Network Error'` → `'Không kết nối được'`. Rẽ nhánh **hành vi** theo `status` / `code` được; đổi **câu** thì không.
+- Bỏ qua `error` rồi hiện câu FE — `catch { notify.error(messages.saveError) }`, `isError ? 'Không tải được…' : …`.
+- Hiện `error.systemMessage` — chi tiết kỹ thuật, chỉ để log.
+- Đọc `error.message` để hiển thị — luôn qua `getErrorMessage`.
+- Service / wrapper `throw new Error(text)` thay lỗi backend — mất `code`. Client riêng (axios instance khác, `fetch`, wrapper quanh `platformHttp`) reject **nguyên body kèm `status`** như interceptor kit ([api § Hợp đồng lỗi](../../minipower-frontend-api-react/SKILL.md#hợp-đồng-lỗi)).
+
+Ngoài luật này: validate form phía client, lỗi FE tự phát hiện mà không có response backend (thiếu cấu hình, response 2xx sai hình) — text vẫn qua `get{Feature}Messages`.
 
 ## 6. UI — PrimeReact 11 + Tailwind
 

@@ -1,9 +1,9 @@
 ---
 name: minipower-frontend-convention-react
-description: Quy ước code TypeScript/React theo kit @platform/core — đặt tên (*Page, use*, call*, *Schema, *_ROUTES, configure*Navigate…), `as const` thay enum, PrimeReact 11 compound + `unstyled` + Tailwind, text qua get*Messages, dùng ConfirmDialog/FeatureDialog/ListPagination/notify của kit, xử lý lỗi qua handleAction + getErrorMessage. Dùng khi viết hoặc sửa file .ts/.tsx, và khi cần dựng tsconfig strict + ESLint để ép convention lúc CI.
+description: Quy ước code TypeScript/React theo kit @platform/core — đặt tên (*Page, use*, call*, *Schema, *_ROUTES, configure*Navigate…), `as const` thay enum, PrimeReact 11 compound + `unstyled` + Tailwind, text qua get*Messages, dùng ConfirmDialog/FeatureDialog/ListPagination/notify của kit, xử lý lỗi qua handleAction + getErrorMessage — hiện nguyên [code] message của backend, không bọc lại. Dùng khi viết hoặc sửa file .ts/.tsx, và khi cần dựng tsconfig strict + ESLint để ép convention lúc CI.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # Quy ước code TypeScript / React — Orchestrator
@@ -33,7 +33,7 @@ Toàn văn quy ước (11 mục): [reference/coding-convention.md](reference/cod
 | Tầng | Nội dung | Ai gác |
 |---|---|---|
 | **Cứng** — CI FAIL được | Null-safety, implicit any (`strict`) · `import type` (`verbatimModuleSyntax`) · cấm `enum`/`namespace` (`erasableSyntaxOnly`) · rules-of-hooks · exhaustive-deps · `no-explicit-any` · biến thừa · `console.log` · `==` · `en.ts` thiếu key so với `vi.ts` · trùng tên export giữa feature | [templates/tsconfig.json](templates/tsconfig.json) + [templates/eslint.config.js](templates/eslint.config.js) |
-| **Mềm** — advisory, người quyết | Hệ đặt tên export (mục 1) · tổ chức file (2) · controlled/uncontrolled (4) · PrimeReact compound + `unstyled` (6) · text qua localization (8) · dùng sẵn của kit (9) · bảo mật (10) | Agent nhắc khi viết · [review-react](../minipower-frontend-review-react/SKILL.md) khi review |
+| **Mềm** — advisory, người quyết | Hệ đặt tên export (mục 1) · tổ chức file (2) · controlled/uncontrolled (4) · PrimeReact compound + `unstyled` (6) · lỗi backend không bọc lại (5.1) · text qua localization (8) · dùng sẵn của kit (9) · bảo mật (10) | Agent nhắc khi viết · [review-react](../minipower-frontend-review-react/SKILL.md) khi review |
 
 Rule máy kiểm được thì **đừng nhắc bằng lời** — để `tsc`/lint báo. Rule máy không kiểm được thì **đừng viết "bắt buộc"** — nêu lý do, người quyết.
 
@@ -41,11 +41,12 @@ Rule máy kiểm được thì **đừng nhắc bằng lời** — để `tsc`/l
 
 Phần mềm, hay sai nhất:
 
-- **Ít nhất mà trọn, không tự thêm fallback** — thang 6 bậc + 7 luật ứng xử ở [shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent) cắt ngang mọi mục dưới: không default im lặng, không `catch` nuốt lỗi, không gọi endpoint phụ / cache cũ thay dữ liệu hỏng khi người chưa OK. Tham số `fallback` của `getErrorMessage` là **câu thông báo** đã chốt trong convention, không phải logic dự phòng.
+- **Ít nhất mà trọn, không tự thêm fallback** — thang 6 bậc + 7 luật ứng xử ở [shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent) cắt ngang mọi mục dưới: không default im lặng, không `catch` nuốt lỗi, không gọi endpoint phụ / cache cũ thay dữ liệu hỏng khi người chưa OK. Tham số `fallback` của `getErrorMessage` là **câu thông báo** cho lỗi không phải HTTP, không phải logic dự phòng.
 - **PrimeReact 11 là API compound** (`Dialog.Root`, `Select.Root`, `DataTable.Root`…). API v10 (`<Column>`, `visible`/`onHide`, `value=` cho DataTable) không chạy — đối chiếu mục 6 trước khi viết UI.
 - **Control dùng `unstyled` + class** từ `components/fieldStyles.ts`; nút dùng skin `pr-btn-*` của kit.
 - **Dùng sẵn của kit trước khi tự viết** — toast `notify`, `ConfirmDialog`, `FeatureDialog`, `ListPagination`, `RowActions`, `FieldSelect` (bảng mục 9).
 - **Thao tác ghi đi qua `handleAction`**; kiểm `outcome.status === 'cancelled'` trước toast; lỗi ⇒ `notify.error(getErrorMessage(error, fallback))` — thông báo mang mã `[code] message`, không `error.message` thô (mục 5).
+- **Không bọc lại lỗi backend** — hiện nguyên `code` + `error.message` backend trả; thiếu message thì `[code | HTTP {status}] {câu chuẩn của status}`. Không ghép tiền tố / hậu tố, không đổi status / `code` sang câu FE, không hiện `systemMessage`; client riêng reject nguyên body kèm `status` (mục 5.1).
 - **Cột số căn phải + `tabular-nums`**, cột chữ căn trái (mục 6).
 - **Text người dùng thấy qua `get{Feature}Messages(locale)`**, không hard-code trong JSX.
 - **Enum là object `as const`** + `…Value` + `…_LABEL` + `…_OPTIONS`, giá trị khớp backend.
