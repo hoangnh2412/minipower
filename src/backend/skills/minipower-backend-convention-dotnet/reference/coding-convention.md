@@ -557,3 +557,22 @@ Không viết code tạo hoặc sửa bảng trong logic ứng dụng. Service, 
 | `EnsureCreated` để “vá” bảng mới vào database đã tồn tại | `Database.Migrate` khi host khởi động |
 
 Migration nằm cạnh `DbContext` của host (thư mục `Migrations/`). Entity và `OnModelCreating` mô tả model; file migration là chỗ duy nhất sinh DDL. Trong file đó dùng API `migrationBuilder`. `migrationBuilder.Sql` chỉ khi builder không diễn được thao tác (ví dụ áp lên database đã có bảng nhưng chưa có `__EFMigrationsHistory`). Database đã có từ trước khi có history thì migration mới phải áp được bằng `Migrate`, không vá bằng SQL trong request.
+
+---
+
+## 16. Catalog quyền (`IPermissionDefinition`)
+
+Mỗi **vùng nghiệp vụ / module package** sở hữu một class quyền riêng — **một class, một file**, không gom mọi `Platform.*` vào một `*Permissions` khổng lồ.
+
+| Quy tắc | Chi tiết |
+|---------|----------|
+| Vị trí | Package sở hữu API: ví dụ `Platform.Tenants/Authorization/PlatformTenantPermissions.cs`, `Platform.Orgs/Authorization/PlatformOrgPermissions.cs`, identity admin trong `Platform.Modules.IdentityAdmin/Authorization/`. |
+| Interface | `public sealed class XPermissions : IPermissionDefinition` + reference `Platform.Permissions.Abstractions`. |
+| Hiển thị UI | Class: `[Display(Name = "Platform", Description = "<vùng>", Order = n)]`. Field: `[Display(Description = "…", GroupName = "…", Order = n)]` — nhãn ngắn thêm `Name` trên field khi cần. |
+| Mã quyền | Chuỗi ổn định `Platform.{Area}.{Action}` (ví dụ `Platform.Tenant.Create`). Hằng field PascalCase ngắn: `View`, `Create`, `Update`, `Delete`, `Manage`, `Connection` — **không** prefix lặp `TenantView` trên class `PlatformTenantPermissions`. |
+| `Manage` | Chỉ mở menu FE — **không** dùng làm wildcard API; handler không coi `Manage` = full CRUD. |
+| Cấm alias | Không class wrapper chỉ re-export chuỗi; không duplicate file `TenantPermissions` song song `PlatformTenantPermissions` cùng mã. |
+| Policy ASP.NET | `[Authorize(Policy = XPermissions.View)]` — policy name **trùng** mã quyền; đăng ký qua `PlatformPermissionCodes` / `PermissionCatalogBuilder.Build`. |
+| Host | `Platform.Host.Authorization.PlatformPermissionAssemblies` liệt kê assembly module; `AddPlatformIdentityAdmin` merge với `permissionAssemblies` của product (`PermissionCatalogBuilder.Build`). **Không** đặt danh sách assembly trong IdentityAdmin. |
+
+Quyền **App** (tenant/org trong phiên nghiệp vụ, ví dụ `Org.View` trong `SystemPermissions`) tách khỏi **Platform** (`Platform.Org.View`) — không trộn namespace hay class.

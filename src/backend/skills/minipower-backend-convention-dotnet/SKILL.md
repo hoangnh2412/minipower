@@ -56,6 +56,7 @@ Phần mềm, hay quên nhất:
 - **Format mã lỗi Platform**: chuỗi **5 chữ số**, duy nhất toàn solution. Platform `9xxxx` · sản phẩm `0xxxx`–`8xxxx`, mỗi module một khối 10.000 · `99xxx` là mã framework bọc HTTP status (`99404`, `99403`…), module không cấp. Trên dây `{EntryAssembly}:{mã}` do `BaseResponse` tự ghép (mục 14, 14.1).
 - **`error.message` là câu cuối người dùng đọc** — FE hiện nguyên `[code] message`, không bọc lại. Mọi response lỗi có `code` + `error.message`; không trả 401/403/404/5xx body rỗng; chi tiết kỹ thuật vào `systemMessage` / log (mục 14).
 - **Không tạo/sửa bảng trong logic**: cấm `CREATE`/`ALTER`/`DROP` (SQL thô hoặc `ExecuteSql*`) trong service, handler, controller, seed nghiệp vụ. Đổi schema bằng EF migration, áp lúc khởi động qua `Database.Migrate` (mục 15).
+- **Catalog quyền**: mỗi module package một class `IPermissionDefinition`; danh sách assembly quét catalog đặt ở **Host** (`PlatformPermissionAssemblies`), không trong IdentityAdmin; `Manage` chỉ menu FE (mục 16).
 
 ## Templates
 
