@@ -9,6 +9,9 @@
     "link:check": "npm run link:check --prefix src/router/hooks",
     "trace:check": "npm run trace:check --prefix src/router/hooks",
     "version:check": "npm run version:check --prefix src/router/hooks",
+    "check:integrity": "node evals/checks/run.mjs",
+    "check:integrity:test": "node --test \"evals/**/*.test.mjs\"",
+    "check": "npm test && npm run gen:check && npm run link:check && npm run trace:check && npm run check:integrity:test && npm run check:integrity",
     "minipower": "node cli/minipower.mjs"
   }
 }

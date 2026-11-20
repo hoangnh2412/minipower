@@ -10,13 +10,19 @@ Persona (tuỳ phiên): [agents/minipower-tasks-lark.md](../../agents/minipower-
 |-----|--------|------------|
 | L1 | Tìm, lọc, list, get | Không |
 | L2 | Bảng đề xuất | Chờ một lần OK |
-| L3 | Tool ghi **nếu catalog có** | Chỉ dòng còn tick |
+| L3 | Tool ghi: tạo, sửa, chuyển section, nối phụ thuộc | Chỉ dòng còn tick |
 
-MCP task thường **chỉ đọc**. Không có tool ghi: dừng sau L2, tạo tay trên Lark.
+**MCP Lark ghi được task** — catalog đầy đủ có khoảng 50 tool task. Nếu phiên nào chỉ thấy tool đọc thì là **cờ `-t` khai thiếu**, không phải Lark không hỗ trợ.
 
 ## Cài MCP (máy người)
 
-[larksuite/lark-openapi-mcp](https://github.com/larksuite/lark-openapi-mcp) — app Feishu/Lark, OAuth user token, server `user-lark-mcp` / `lark-mcp` trong Settings → MCP. Skill không giả kết quả khi server thiếu.
+Gói **cố định**, không thay bằng nguồn khác: `@larksuiteoapi/lark-mcp` — [larksuite/lark-openapi-mcp](https://github.com/larksuite/lark-openapi-mcp).
+
+Các bước đầy đủ (đăng ký app, lấy App ID / App Secret, chọn scope, snippet cấu hình, OAuth login, verify): [workflows/connect.md](workflows/connect.md).
+
+Tóm tắt: app Feishu/Lark tự dựng → scope task → release version → dán `mcp.json` → `lark-mcp login` lấy user token. Server tên `user-lark-mcp` / `lark-mcp` trong Settings → MCP. Skill không giả kết quả khi server thiếu.
+
+Hai chỗ dễ sai, chi tiết ở `connect.md` §4: preset task **thay thế** chứ không cộng dồn `preset.default`; tên tool khai bằng **dấu chấm** nhưng gọi bằng **gạch dưới**.
 
 `minipower install` với pack `tasks` (mặc định trong registry). Skill đã có trên đĩa được quét `listLeafSkills()` — **không** khai từng lá trong `module-registry.json` (file đó chỉ pack).
 

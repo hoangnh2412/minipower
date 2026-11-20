@@ -1,0 +1,18 @@
+{"_":"VÍ DỤ — KHÔNG phải chuẩn, tên người là giả. Danh sách nhân sự và vai. Dùng để suy nhánh khi trả việc (status.on_fail.reassign_to) và để đổi người được giao theo từng bước.",
+"synced_at":"2026-11-15",
+"roles":["pm","lead_ba","lead_dev","lead_test","ba","dev","test"],
+"_roles":"Bộ vai của đội — thêm bớt tuỳ doanh nghiệp. status.json → stages[].holder tham chiếu nhóm vai này. Một người có thể nhiều vai — xem people[].roles.",
+"branch_of":{"lead_ba":"ba","ba":"ba","lead_dev":"dev","dev":"dev","lead_test":"test","test":"test","pm":null},
+"_branch_of":"Vai thuộc nhánh nào. Review không đạt ⇒ nhìn vai của người phụ trách chính để biết trả về nhánh nào. Người nhiều vai ⇒ lấy vai ĐẦU TIÊN trong roles. null = vai quản lý, không nhận việc trả về.",
+"leads":{"ba":"ou_AAA","dev":"ou_BBB","test":"ou_AAA"},
+"_leads":"open_id lead từng nhánh. Việc vào bước do lead giữ thì người được giao đổi sang đây. Một người có thể lead nhiều nhánh. Nhánh không có lead ⇒ để rỗng, skill sẽ hỏi người.",
+"oversight":["ou_PPP"],
+"_oversight":"Người theo dõi toàn bộ board — mốc, đợt bàn giao, tiến độ chung. Không nhận việc trả về, nhưng mặc định là người đọc báo cáo tuần.",
+"people":[
+{"open_id":"ou_PPP","name":"Người A","roles":["pm"]},
+{"open_id":"ou_AAA","name":"Người B","roles":["lead_ba","lead_test"]},
+{"open_id":"ou_CCC","name":"Người C","roles":["ba"]},
+{"open_id":"ou_BBB","name":"Người D","roles":["lead_dev"]},
+{"open_id":"ou_DDD","name":"Người E","roles":["dev"]},
+{"open_id":"ou_EEE","name":"Người F","roles":["test"]}],
+"_people":"Mỗi phần tử một dòng. roles là mảng, vai đầu tiên là vai chính. Lấy open_id bằng tool tra người của lá kênh, hoặc đọc thành viên nhóm chat của board. name chỉ để người đọc, skill luôn dùng open_id."}

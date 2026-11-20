@@ -56,7 +56,8 @@ Bảng dưới là **gợi ý pack** khi LLM định hướng, không phải mat
 | DOC-17 deploy incident metrics | `ops/` |
 | báo giá ULNL estimate quotation trước ký | `presales/` |
 | Outline wiki publish docs | `docs/` |
-| task Lark / OpenProject | `tasks/` |
+| tiến độ, việc của tôi, việc của đội, báo cáo định kỳ, chuyển trạng thái ticket | `work/` |
+| task Lark / OpenProject — gọi MCP, kết nối | `tasks/` |
 | tin nhắn Slack/Lark | `chat/` |
 | MR GitLab commit push | `vcs/` |
 | code .NET Jarvis | `backend/` |

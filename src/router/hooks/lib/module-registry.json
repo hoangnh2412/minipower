@@ -142,5 +142,14 @@
     "install": {
       "default": true
     }
+  },
+  {
+    "pack": "work",
+    "path": "work/",
+    "repo": "any",
+    "kind": "business",
+    "install": {
+      "default": false
+    }
   }
 ]
