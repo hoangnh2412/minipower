@@ -3,7 +3,7 @@ name: minipower-work-desk
 description: Làm việc trên ticket của board mà không mở app — tạo, sửa nội dung, chuyển trạng thái đúng luồng, bình luận, đóng việc. Dùng khi người nói "tạo task", "chuyển sang review", "xong rồi", "ghi chú vào ticket". Không dùng để xem tình hình hay làm báo cáo.
 metadata:
   workflow: github
-  version: 1.1.0
+  version: 1.2.0
 ---
 
 # minipower-work-desk
@@ -27,6 +27,7 @@ Người: [README.md](README.md). Luật board của đội: `memory/tasks-confi
 - **Đọc cấu hình trước, luôn luôn.** Tên trường, tên trạng thái, loại việc đều nằm ở `memory/tasks-config/`. **Không hardcode, không đoán** — thiếu cấu hình thì dừng và chỉ sang [minipower-work-profile](../minipower-work-profile/SKILL.md).
 - **Ghi đi qua lá kênh, qua đủ cổng.** Mọi thao tác ghi là L2 → người OK → L3 của lá kênh. Lá này **không gọi MCP thẳng**, và không bỏ qua cổng dù người giục.
 - **Tạo ticket là hai lệnh.** Lệnh tạo không nhận trường tuỳ biến. Phải tạo rồi sửa. Trình L2 thì nói rõ đây là hai bước, để người không tưởng nửa chừng là hỏng.
+- **Tạo ticket thiếu thì không trình.** Bắt buộc đủ dự án, loại việc, Assign, PIC, Start Date, Due Date. Hai ngày là timeline thực hiện, không để trống, không tự đặt. Chưa có deadline thực hiện thì gán đúng ngày người đưa vào cả hai trường, và trình thêm subtask `Due thực tế`. Provider Lark: comment `Ngày … là mốc phản hồi deadline thực hiện`.
 - **Không nhảy cóc trạng thái.** Bước kế tiếp đọc từ `status.flows`. Người muốn nhảy ⇒ nói rõ đang bỏ qua bước nào, hỏi xác nhận, rồi mới làm.
 - **Lùi bước bắt buộc kèm lý do.** `status.on_fail.require_comment` bật ⇒ thiếu lý do thì **từ chối ghi**. Đây là điều máy kiểm được nên nó là luật cứng, không phải lời khuyên.
 - **Trả việc về người phụ trách chính.** Review hoặc kiểm thử không đạt ⇒ người được giao quay về người phụ trách chính, nhánh suy từ vai của người đó trong `members.json`.

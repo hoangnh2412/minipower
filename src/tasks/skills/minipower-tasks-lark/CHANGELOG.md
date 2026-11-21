@@ -1,5 +1,18 @@
 # Changelog — minipower-tasks-lark
 
+## 1.4.0 · 2026-11-21
+
+- L1 đọc được comment: `task_v2_comment_list`, 10 comment mới nhất (`direction=desc`, `page_size=10`). Phục vụ báo cáo của `minipower-work-report`.
+- Cờ `-t` và scope cài đặt thêm `task.v2.comment.list`, `task:comment:read`, `task:comment:write`. Thiếu tool hoặc thiếu quyền thì nói rõ, không kết luận ticket không có comment.
+- Khi trả comment, kèm `reply_to_comment_id`: trống là chat trên ticket, có giá trị là chat trong thread.
+
+## 1.3.0 · 2026-11-21
+
+- Tạo ticket không ghi khi thiếu Dự án, Loại ticket, Assign, PIC, Start Date, Due Date. Tên trường đọc từ `field_roles` / `type_map`, không đoán trên board. Assign (`members.assignee`) và PIC (`field_roles.owner`) là hai chỗ; không gộp, không bỏ một bên.
+- Start Date và Due Date là timeline thực hiện, không để trống, không tự đặt. Chưa có deadline thực hiện thì gán đúng ngày người đưa vào cả `start` và `due`.
+- Comment đi cùng lúc tạo và mỗi lần sửa `start` / `due`. Có deadline thực hiện thì ghi loại đó. Chưa có thì đúng một câu: `Ngày … là mốc phản hồi deadline thực hiện`.
+- Chưa có deadline thực hiện thì L2 thêm subtask `Due thực tế` (cùng người, cùng ngày mốc). Xong việc khi ghi Start/Due thực hiện lên ticket cha. Bỏ tick thì không tạo.
+
 ## 1.2.0 · 2026-11-14
 
 - Thêm `workflows/connect.md` — cài và kiểm tra MCP Lark: đăng ký app trên Developer Console, lấy App ID / App Secret, chọn scope task, release version, snippet `mcp.json`, OAuth login do người tự chạy, verify có mặt cả tool đọc lẫn tool ghi và đối chiếu section thật với bảng ánh xạ.

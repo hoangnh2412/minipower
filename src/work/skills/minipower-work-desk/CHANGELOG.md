@@ -1,5 +1,10 @@
 # Changelog — minipower-work-desk
 
+## 1.2.0 · 2026-11-21
+
+- Tạo ticket không trình L2 khi thiếu dự án, loại việc, Assign, PIC, Start Date, Due Date. PIC không còn mặc định thành người đang gõ. Ước lượng vẫn được để trống.
+- Start Date và Due Date là timeline thực hiện. Chưa có deadline thực hiện thì gán đúng ngày người đưa vào cả hai trường; comment Lark là `Ngày … là mốc phản hồi deadline thực hiện`; L2 thêm subtask `Due thực tế`.
+
 ## 1.1.0 · 2026-11-15
 
 - Khuôn comment bắt buộc (yêu cầu chủ repo sau smoke T2): ngắn gọn, mỗi ý một dòng, đánh số phân cấp `1` · `1.1` · `1.1.1`. Áp cho `workflows/comment.md` và cho lý do lùi bước trong `workflows/move.md` §6. Không viết đoạn văn; người nói dài thì tách dòng, giữ nguyên chữ.

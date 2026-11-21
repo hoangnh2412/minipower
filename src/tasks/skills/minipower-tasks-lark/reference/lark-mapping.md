@@ -57,4 +57,5 @@ Khi soạn `hành động | tiêu đề | loại | cha | trạng thái | hạn |
 - `trạng thái` tra qua `status`; **đối chiếu với dữ liệu thật trên Lark** trước khi ghi, lệch tên ⇒ dừng (lark-model §2 điểm 7).
 - Story ⇒ `map ID` có `{MOD}-AC-*`; **không** copy body FR sang mô tả.
 - Mọi lệnh tạo ⇒ nhắc đây là **hai lệnh** và phải truyền `tasklists[]` (lark-model §2).
-- Việc có **hai người** cùng làm ⇒ tách **hai ticket**, mỗi ticket một người phụ trách chính.
+- Mọi lệnh tạo ⇒ đủ Dự án, Loại ticket, Assign, PIC, Start Date, Due Date. Thiếu thì không đưa vào bảng để ghi. Chưa có deadline thực hiện ⇒ task con `Due thực tế` theo WB-08. Cách ghi trên Lark: [l3-write.md](../workflows/l3-write.md) § Trường bắt buộc.
+- Việc có **hai người** cùng làm ⇒ tách **hai ticket**, mỗi ticket một người phụ trách chính. Assign và PIC vẫn là hai chỗ: cùng một người chỉ khi người nói vậy.

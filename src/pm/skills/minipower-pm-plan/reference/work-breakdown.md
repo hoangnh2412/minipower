@@ -8,7 +8,7 @@ Không load mặc định — mở khi lập DOC-14, khi soạn bảng L2 tạo 
 
 | Câu hỏi | Trả lời → |
 |---------|-----------|
-| Đây là **sản phẩm** cần làm ra, hay chỉ **hoạt động** (viết code, test, review, họp)? | Sản phẩm → có thể tạo việc. Hoạt động → **không** tạo việc; dùng **status**, **time entry** và **comment** trên việc cha |
+| Đây là **sản phẩm** cần làm ra, hay chỉ **hoạt động** (viết code, test, review, họp)? | Sản phẩm → có thể tạo việc. Hoạt động → **không** tạo việc; dùng **status**, **time entry** và **comment** trên việc cha. Riêng cha chưa có deadline thực hiện: tạo task con `Due thực tế` (WB-08) |
 | Đang nói **kế hoạch** (estimate) hay **thực tế** (giờ đã làm)? | Estimate ghi trên việc kế hoạch; giờ thực tế = time entry — không nhân đôi bằng việc mới |
 
 ## 2. Loại việc — chọn từ trên xuống, dòng đầu khớp thì dừng
@@ -36,12 +36,14 @@ Không load mặc định — mở khi lập DOC-14, khi soạn bảng L2 tạo 
 | WB-05 | **Estimate ở con hoặc cha — không đếm đôi** | Đã estimate Task con → để trống estimate Story cha. Estimate Story đã gồm review và rework |
 | WB-06 | **Bug khi sai AC; đổi scope → CR / Epic mới** | Bug không phải chỗ chứa yêu cầu mới; CR đi [minipower-analyst-cr](../../../../analyst/skills/minipower-analyst-cr/SKILL.md) |
 | WB-07 | **Chờ bên ngoài** (dữ liệu, đối tác, quyết định) → Story / Task bị chặn + relation *blocked by* + ghi chú, không tạo loại "Risk" | Rủi ro theo dõi ở DOC-15; việc bị chặn vẫn là việc |
+| WB-08 | **Chưa có deadline thực hiện → ngày trên cha là mốc phản hồi, và có task con `Due thực tế`** | Start/Due của cha là đúng ngày người đưa, không phải timeline thực hiện. Comment cha: `Ngày … là mốc phản hồi deadline thực hiện`. Task con cùng người, cùng ngày; ngày đó là hạn chốt. Xong khi Start/Due thực hiện đã ghi lên cha và comment cha là `deadline thực hiện`. Chốt ngày là sản phẩm, không xếp vào hoạt động của WB-01 |
 
 ## 4. Log giờ đúng cấp
 
 | Việc | Log vào |
 |------|---------|
 | Làm sản phẩm con | Task con |
+| Chốt Due thực tế của việc cha | Task con `Due thực tế` |
 | Review tổng, tích hợp cấp story | User story |
 | Họp **đúng một** việc, review code, demo một chức năng, UAT | Time entry vào việc đó — không tạo việc mới |
 | Họp phân tích liên module, chốt specs | Task riêng, link Epic |

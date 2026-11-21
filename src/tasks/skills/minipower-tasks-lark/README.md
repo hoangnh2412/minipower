@@ -8,7 +8,7 @@ Persona (tuỳ phiên): [agents/minipower-tasks-lark.md](../../agents/minipower-
 
 | Mức | Làm gì | Cổng người |
 |-----|--------|------------|
-| L1 | Tìm, lọc, list, get | Không |
+| L1 | Tìm, lọc, list, get, 10 comment mới nhất | Không |
 | L2 | Bảng đề xuất | Chờ một lần OK |
 | L3 | Tool ghi: tạo, sửa, chuyển section, nối phụ thuộc | Chỉ dòng còn tick |
 
@@ -27,6 +27,10 @@ Hai chỗ dễ sai, chi tiết ở `connect.md` §4: preset task **thay thế** 
 `minipower install` với pack `tasks` (mặc định trong registry). Skill đã có trên đĩa được quét `listLeafSkills()` — **không** khai từng lá trong `module-registry.json` (file đó chỉ pack).
 
 Agent-file **không** đi qua CLI: sống trong pack; phiên Agent Chat khớp `description` là đủ. Muốn persona cứng: `@` file agent hoặc Custom Agent Cursor trỏ cùng file — thủ công, không đợt CLI.
+
+## Tạo ticket — thiếu thì không ghi
+
+Bắt buộc đủ **Dự án**, **Loại ticket**, **Assign**, **PIC**, **Start Date**, **Due Date**. Start và Due là timeline thực hiện. Chưa có deadline thực hiện thì gán đúng ngày người đưa, comment `Ngày … là mốc phản hồi deadline thực hiện`, và thêm subtask `Due thực tế` để chốt ngày thực hiện. Luật đầy đủ: [workflows/l3-write.md](workflows/l3-write.md).
 
 ## Không làm
 

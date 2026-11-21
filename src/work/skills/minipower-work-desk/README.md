@@ -16,6 +16,8 @@ Bàn làm việc. Làm trọn vòng đời một ticket từ chỗ đang ngồi,
 
 **Tạo ticket là hai lệnh.** Công cụ không cho gắn trường tuỳ biến ngay lúc tạo, phải tạo rồi sửa. Nếu hỏng giữa chừng, skill sẽ nói rõ ticket đã có nhưng thiếu trường — không im lặng.
 
+**Tạo ticket phải đủ việc, người và ngày.** Dự án, loại việc, Assign, PIC, Start Date, Due Date. Thiếu thì không trình. Hai ngày là timeline thực hiện. Chưa có deadline thực hiện thì gán đúng ngày người đưa, comment ghi đó là mốc phản hồi deadline thực hiện, và thêm subtask `Due thực tế`.
+
 **Lùi bước phải nêu lý do.** Review không đạt, test fail — thiếu lý do thì skill **từ chối ghi**. Đây là luật cứng, không phải lời nhắc.
 
 **Trả việc về người phụ trách chính.** Người đang làm đổi theo từng bước; người phụ trách chính thì không. Fail thì việc quay về họ, nhánh suy từ vai trong cấu hình.
