@@ -264,7 +264,7 @@ Tầng trên lá kênh `tasks`. Không một tên trường, trạng thái hay d
 | **[minipower-work-profile](src/work/skills/minipower-work-profile/README.md)** | chưa có cấu hình, board đổi, sửa bằng lời | *Dựng cấu hình cho board của đội* · *Thêm X vào đội DEV* |
 | **[minipower-work-desk](src/work/skills/minipower-work-desk/README.md)** | tạo · sửa · chuyển trạng thái · bình luận · đóng ticket | *Chuyển ticket này sang review* — chặn nhảy cóc, lùi bước phải nêu lý do |
 | **[minipower-work-status](src/work/skills/minipower-work-status/README.md)** | "đang có chuyện gì" | *Tiến độ dự án X đến đâu* · *Việc của tôi tuần này* |
-| **[minipower-work-report](src/work/skills/minipower-work-report/README.md)** | báo cáo có khuôn theo nhịp | *Soạn báo cáo tuần theo milestone* |
+| **[minipower-work-report](src/work/skills/minipower-work-report/README.md)** | báo cáo ngắn theo nhịp | *Báo cáo tiến độ hôm nay* |
 
 ### Kênh MCP
 

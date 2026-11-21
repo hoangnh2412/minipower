@@ -1,40 +1,23 @@
-# Daily — tiến độ và hiện trạng trong ngày
+# Daily — báo cáo ngày
 
-Bản ngắn, đọc trong một phút. Dùng khi cần nắm tình hình giữa ngày.
+Bản ngắn cho ngày đọc. Khuôn và luật: [SKILL.md](../SKILL.md).
 
-## 1. Phạm vi
+## 1. Kỳ
 
-Theo `scope`. Người nêu dự án cụ thể ⇒ theo họ. Loại trừ `exclude_stages`.
+Ngày dương lịch của lúc đọc. Cập nhật trong kỳ = `updated_at` trong ngày đó. Việc phát sinh = ticket tạo trong ngày đó.
 
-## 2. Đọc
+Người nêu một ngày khác ⇒ lấy ngày đó.
 
-Dữ liệu cần: trạng thái · người được giao · người phụ trách · hạn · cờ hoàn thành · thời điểm cập nhật gần nhất.
+## 2. Phạm vi
 
-## 3. Khuôn
+Theo `scope`. Người nêu dự án ⇒ theo họ. Loại trừ `exclude_stages` khỏi danh sách đọc. Việc loại trừ không thành một mục trong bản.
 
-```markdown
-# Tiến độ ngày {ngày} — {phạm vi}
+## 3. Cửa sổ sắp đến hạn
 
-**Tóm tắt.** {2–4 câu: hôm nay có gì đáng chú ý, có gì chặn, có gì sắp tới hạn}
+Từ lúc đọc đến hết ngày hôm sau, trừ khi người nêu cửa sổ khác.
 
-## Đổi từ lần đọc trước
-{việc chuyển trạng thái · việc mới · việc vừa đóng — không so được thì ghi rõ}
+## 4. Đọc
 
-## Đang chặn
-{việc có việc khác chờ nó · việc đứng yên lâu bất thường — nêu số ngày, không đoán lý do}
+Theo thứ tự `milestone` → `release` → `story` → `bug` → `support`.
 
-## Quá hạn
-{bảng ngắn: ticket · tiêu đề · hạn · đang ở bước nào · ai giữ}
-
-## Tới hạn trong 2 ngày
-{như trên}
-
----
-Lọc theo {…} · đọc lúc {…}
-```
-
-## 4. Luật riêng của bản ngày
-
-- **Không liệt kê toàn bộ board.** Chỉ những thứ cần hành động hôm nay. Mỗi mục quá 10 dòng ⇒ cắt, ghi "còn N việc nữa".
-- **Mục nào rỗng thì ghi "không có"** và giữ tiêu đề — người đọc quen mắt sẽ biết là đã kiểm chứ không phải quên.
-- **Gọi nhiều lần trong ngày** ⇒ mỗi bản so với lần đọc gần nhất, không phải so với đầu ngày.
+Với từng Story, Bug, Support cập nhật trong ngày: lá kênh lấy 10 comment mới nhất, rồi tóm tắt theo luật ở SKILL.

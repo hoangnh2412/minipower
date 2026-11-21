@@ -1,47 +1,21 @@
-# Weekly — tổng hợp tuần theo mốc
+# Weekly — báo cáo tuần
 
-Bản cho nhiều dự án, gom theo mốc. Người đọc thường không ngồi trong board hằng ngày.
+Bản cho nhiều dự án. Khuôn và luật: [SKILL.md](../SKILL.md). Trục vẫn là thứ tự loại, không gom thành mục đếm theo mốc.
 
-## 1. Phạm vi và kỳ
+## 1. Kỳ và phạm vi
 
-Mặc định toàn bộ dự án đang hoạt động trong `projects.json`, trừ khi người giới hạn. Kỳ mặc định là 7 ngày tính tới thời điểm đọc.
+Kỳ mặc định: 7 ngày tính tới lúc đọc. Người nêu khoảng khác ⇒ theo họ.
 
-## 2. Trục chính là mốc
+Phạm vi mặc định: mọi dự án đang hoạt động trong `projects.json`. Người giới hạn dự án ⇒ theo họ. Loại trừ `exclude_stages` khỏi danh sách đọc.
 
-Lọc loại việc ứng với `milestone` trong `type_map`. Mỗi mốc gom việc con của nó theo `hierarchy`.
+## 2. Cửa sổ sắp đến hạn
 
-**Đội không khai loại mốc** ⇒ nói rõ ngay đầu báo cáo rằng không gom theo mốc được, và gom theo dự án thay thế. Đừng im lặng đổi trục.
+7 ngày tới kể từ lúc đọc, trừ khi người nêu cửa sổ khác.
 
-## 3. Khuôn
+## 3. Đọc
 
-```markdown
-# Tổng hợp tuần {từ ngày} – {đến ngày}
+Cùng thứ tự `milestone` → `release` → `story` → `bug` → `support`.
 
-**Tóm tắt.** {3–5 câu: mốc nào sắp tới, mốc nào có nguy cơ trượt, tuần này xong được gì}
+Cập nhật trong kỳ = `updated_at` trong 7 ngày vừa qua. Việc phát sinh = ticket tạo trong 7 ngày vừa qua và gắn với mốc hoặc đợt sắp đến hạn.
 
-## Theo mốc
-
-### {tên mốc} — hạn {ngày}
-- Xong trong tuần: {n} việc
-- Còn lại: {n} việc, trong đó {n} quá hạn
-- Nguy cơ: {chỉ ghi khi có việc quá hạn hoặc mốc đã qua hạn mà chưa xong}
-
-## Việc xong trong tuần
-{bảng gọn, gom theo dự án}
-
-## Việc mới phát sinh
-{bảng gọn — nhiều việc mới mà ít việc xong là tín hiệu đáng nêu}
-
-## Còn đang chặn
-{việc có việc khác chờ nó, kèm số ngày đứng yên}
-
----
-{n} dự án · lọc theo {…} · đọc lúc {…}
-```
-
-## 4. Luật riêng của bản tuần
-
-- **"Nguy cơ" chỉ viết khi có căn cứ đếm được** — quá hạn, hoặc mốc đã qua hạn mà việc con chưa xong. Không viết nguy cơ dựa trên cảm giác.
-- **So với tuần trước nếu có dữ liệu.** Không có ⇒ ghi rõ "kỳ đầu, chưa có để so".
-- **Mỗi mốc tối đa 5 dòng.** Chi tiết hơn thì người hỏi, hoặc dùng `work-status`.
-- **Dự án không có hoạt động nào trong tuần** ⇒ gom hết vào một dòng cuối, đừng mỗi dự án một mục rỗng.
+Đội không khai `milestone` hoặc `release` ⇒ một dòng ở đúng mục, rồi viết tiếp các mục còn lại.

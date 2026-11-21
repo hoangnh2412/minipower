@@ -35,7 +35,7 @@ Chỉ làm khi chưa có `APP_ID` / `APP_SECRET`. Hướng dẫn người, **kh�
 2. **Create custom app** → đặt tên, chọn **Self-built application**.
 3. Tab **Credentials & Basic Info** → copy **App ID** (dạng `cli_...`) và **App Secret**.
 4. Tab **Permissions & Scopes** → thêm scope task, tối thiểu:
-   `task:task:read` · `task:task:write` · `task:tasklist:read` · `task:tasklist:write`
+   `task:task:read` · `task:task:write` · `task:tasklist:read` · `task:tasklist:write` · `task:comment:read` · `task:comment:write`
 5. Tab **Security Settings** → thêm redirect URL `http://localhost:3000/callback` (OAuth ở bước 5 cần).
 6. **Version Management & Release** → tạo version và **submit for release**. Chưa release thì scope chưa hiệu lực.
 
@@ -54,7 +54,7 @@ Thêm vào `~/.cursor/mcp.json` (merge vào `mcpServers`, **không** xoá server
     "-s", "YOUR_APP_SECRET",
     "-d", "https://open.larksuite.com",
     "--oauth",
-    "-t", "preset.default,task.v2.tasklist.list,task.v2.tasklist.tasks,task.v2.section.list,task.v2.section.tasks,task.v2.task.get,task.v2.task.list,task.v2.task.create,task.v2.task.patch,task.v2.task.addDependencies,task.v2.task.addTasklist,task.v2.taskSubtask.create,task.v2.taskSubtask.list,task.v2.customField.list,task.v2.comment.create"
+    "-t", "preset.default,task.v2.tasklist.list,task.v2.tasklist.tasks,task.v2.section.list,task.v2.section.tasks,task.v2.task.get,task.v2.task.list,task.v2.task.create,task.v2.task.patch,task.v2.task.addDependencies,task.v2.task.addTasklist,task.v2.taskSubtask.create,task.v2.taskSubtask.list,task.v2.customField.list,task.v2.comment.create,task.v2.comment.list"
   ],
   "env": {}
 }
@@ -85,7 +85,7 @@ Máy **không** chạy thay, vì lệnh cần secret và mở trình duyệt:
 ```bash
 npx -y @larksuiteoapi/lark-mcp login -a <APP_ID> -s <APP_SECRET> \
   -d https://open.larksuite.com \
-  --scope "task:task:read,task:task:write,task:tasklist:read,task:tasklist:write"
+  --scope "task:task:read,task:task:write,task:tasklist:read,task:tasklist:write,task:comment:read,task:comment:write"
 ```
 
 `-d` phải khớp bước 4 — bỏ quên thì lệnh đẩy sang trang đăng nhập bản kia rồi hết giờ chờ.
@@ -110,7 +110,7 @@ Sau khi người xác nhận đã lưu `mcp.json` và **reload MCP** (Settings �
 ## 7. Verify
 
 1. `GetDynamicTools` namespace vừa cấu hình.
-2. Soát có mặt **cả tool đọc lẫn tool ghi** — thiếu `task_v2_task_create` hoặc `task_v2_task_patch` ⇒ cờ `-t` khai thiếu, quay bước 4.
+2. Soát có mặt **cả tool đọc lẫn tool ghi** — thiếu `task_v2_task_create` hoặc `task_v2_task_patch` ⇒ cờ `-t` khai thiếu, quay bước 4. Thiếu `task_v2_comment_list` ⇒ báo cáo không đọc được comment; cùng nguyên nhân, thêm `task.v2.comment.list` và scope `task:comment:read`.
 3. Smoke `task_v2_tasklist_list` → in 1–3 bản ghi (guid, name).
 4. `task_v2_section_list` trên tasklist dự án → **đối chiếu bảng §3.1** của [reference/lark-mapping.md](../reference/lark-mapping.md). Lệch tên hoặc thiếu group → **dừng**, báo người sửa trên Lark theo §3.5, không tự đổi.
 5. **FAIL** → checklist, soát theo thứ tự này: **`-d` sai bản** (bước 4 — nguyên nhân hay gặp nhất, triệu chứng là OAuth không bao giờ xong), chưa login OAuth, chưa reload MCP, app chưa release version, scope thiếu, tên namespace lệch `mcp.tasks`.
