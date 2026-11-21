@@ -163,14 +163,22 @@ Việc của Đ0 ở A8 vì thế là **in thêm hai tỷ lệ**, không phải 
 
 | Mã | File | Mức | Số đo hôm nay |
 |---|---|---|---|
-| A04 | [`a04-skill-reference.mjs`](../../evals/checks/a04-skill-reference.mjs) | WARN | 9 phát hiện / 2.215 đã soát |
+| A04 | [`a04-skill-reference.mjs`](../../evals/checks/a04-skill-reference.mjs) | WARN | 0 phát hiện / 1.449 đã soát |
 | A05 | [`a05-no-llm-in-ci.mjs`](../../evals/checks/a05-no-llm-in-ci.mjs) | **chặn** | 0 phát hiện / 76 đã soát |
 | A06 | [`a06-skill-length.mjs`](../../evals/checks/a06-skill-length.mjs) | WARN | 3 phát hiện / 113 đã soát |
 | A07 | [`a07-must-without-gate.mjs`](../../evals/checks/a07-must-without-gate.mjs) | WARN | 23 phát hiện / 24 ứng viên |
 
 **A4 — đính chính phạm vi.** Phần lớn công thức A4 đã có người canh: `name` ≡ thư mục và README gốc liệt kê mọi lá do `test/minipower-catalog.test.js` lo; link `[x](../x/SKILL.md)` do `link:check` lo; còn "tên skill trỏ từ `rules.json`" thì **mẫu số rỗng** — `rules.json` không chứa tên lá nào. Khoảng trống thật là **tên nhắc trần trong văn xuôi, không phải link**: một bảng README liệt kê `| minipower-ops-log-flow | Đọc log |` thì người đọc và agent đều tin lá đó tồn tại, mà không link nào gãy. A04 nhận đúng phần đó.
 
-A04 ra mắt **WARN** chứ không phải chặn như bảng trên ghi: repo hiện có 9 chỗ, trong đó vài chỗ là nhắc có chủ đích (lá còn trong catalog chưa tách file; tên dùng làm ví dụ phản diện trong lá dạy viết skill). Nâng lên chặn sau khi 9 chỗ đó được phân loại — cùng luật ADR-044 §8.1.
+**Bản cắt đầu của A04 cho 9 phát hiện, và cả 9 là giả** — đáng ghi lại vì nó là bài học về cách viết check đọc tài liệu. Nguyên nhân: nó đọc một dòng **tách rời khỏi ngữ cảnh**, trong khi tài liệu đã trung thực sẵn, chỉ là nói ở heading hoặc ở cột bên cạnh — bảng trong `ops/README.md` và `toolbox/README.md` nằm dưới `## Sẽ có — viết dần, không tạo folder rỗng` với cột `Skill dự kiến`; `analyst/README.md` ghi "chưa tách file"; `discovery/README.md` ghi "**chưa có skill**"; hai chỗ ở lá `minipower-toolbox-skill-author` là **ví dụ phản diện** về đặt tên theo công cụ.
+
+Cách sửa **không** phải dán 9 marker vào tài liệu đang sạch — đó là bắt tài liệu khai báo thay cho một check quá thô. Cách sửa là dạy check chính quy ước của repo: mục `Sẽ có`/`dự kiến` (AGENTS.md; ADR-022 QĐ-7 luật 2; ADR-023 QĐ-3 — dùng ở 3 README) · bảng có cột `❌` (khuôn `| ❌ | Vì sao |`, dùng ở 8 workflow) · `chưa có`/`chưa tách` trong **cửa sổ ±40 ký tự** quanh tên · `không phải` ngay trước tên. Marker `nhắc có chủ đích:` còn lại làm lối thoát cuối.
+
+Cửa sổ ±40 là số đo, không phải số đoán: soát cả dòng thì **44** token bị che trong khi chỉ cần 2; ±40 là cửa sổ chặt nhất vẫn giữ 0 phát hiện. Và 791 token biến mất khỏi mẫu số không phải vì check đi mù — **736** trong đó là cùng một tên lặp trên cùng một dòng, dedup đúng.
+
+Bản dương của A04 vì thế canh **biên** của luật, không chỉ canh việc bắt được: một tên trong mục `Sẽ có` thì miễn, nhưng tên ở heading kế sau **vẫn phải bị bắt**. Luật miễn theo mục mà không có biên là luật tắt cả file.
+
+A04 ra mắt **WARN** chứ không phải chặn như bảng trên ghi — theo ADR-044 §8.1, nâng lên chặn sau khi nó bắt đúng ít nhất hai lần trên thay đổi thật.
 
 A05 lấy closure của `test` và `check*` từ `scripts` thật, **gồm cả `pre*`/`post*`** mà npm chạy tự động — một `pretest` gọi model thì `npm test` tiêu tiền mà không dòng nào trong `test` nói ra. Không có lối thoát bằng marker: muốn gọi model trong CI thì phải đổi QĐ-7.
 

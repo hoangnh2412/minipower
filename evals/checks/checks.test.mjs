@@ -327,26 +327,50 @@ test("A07 âm — bốn phép loại (heading · phủ định · frontmatter ·
 
 // ── A04 ──────────────────────────────────────────────────────────────────────
 
-test("A04 dương — bảng README nhắc một lá không ai khai tên", () => {
+test("A04 dương — mục `Sẽ có` được miễn, nhưng miễn HẾT ở heading kế: tên sau đó vẫn bị bắt", () => {
   const root = fixture({
     "src/ops/skills/mp-x/SKILL.md": "---\nname: minipower-ops-deploy\n---\n",
-    "src/ops/README.md": "| `minipower-ops-log-flow` | Đọc log vẽ sơ đồ luồng |\n",
+    "src/ops/README.md": [
+      "## Sẽ có — viết dần, không tạo folder rỗng",
+      "",
+      "| Skill dự kiến | Việc |",
+      "|---|---|",
+      "| `minipower-ops-log-flow` | Đọc log vẽ sơ đồ luồng |",
+      "",
+      "## Lá đang có",
+      "",
+      "| `minipower-ops-ghost` | Việc gì đó |",
+    ].join("\n"),
   })
   const r = a04(root)
   assert.equal(r.findings.length, 1)
-  assert.match(r.findings[0].message, /minipower-ops-log-flow/)
-  assert.equal(r.findings[0].line, 1)
+  assert.match(r.findings[0].message, /minipower-ops-ghost/)
+  assert.equal(r.findings[0].line, 9)
   rmSync(root, { recursive: true, force: true })
 })
 
-test("A04 âm — lá đã khai · marker `nhắc có chủ đích` · fragment `-*` · token không phải hình dạng lá", () => {
+test("A04 âm — tám ngữ cảnh hợp lệ: lá đã khai · marker · fragment · không phải module · `không phải` · tự khai chưa có · mục Sẽ có · bảng ❌", () => {
   const root = fixture({
     "src/ops/skills/mp-x/SKILL.md": "---\nname: minipower-ops-deploy\n---\n",
     "src/ops/README.md": [
       "- Lá `minipower-ops-deploy` đã có.",
-      "- `minipower-ops-grafana` — nhắc có chủ đích: ví dụ phản diện về đặt tên theo công cụ.",
+      "- `minipower-ops-grafana` — nhắc có chủ đích: ví dụ phản diện trong tài liệu.",
       "- Tiền tố `minipower-ops-*` cho mọi lá ops.",
       "- Gói npm `minipower-hooks` không phải lá.",
+      "- Dùng `minipower-ops-deploy`, không phải `minipower-ops-grafana`.",
+      "- Tên `minipower-ops-ingest` trong catalog — chưa có skill.",
+      "",
+      "## Sẽ có — viết dần",
+      "",
+      "| Skill dự kiến | Việc |",
+      "|---|---|",
+      "| `minipower-ops-log-flow` | Đọc log |",
+      "",
+      "## Đừng làm",
+      "",
+      "| ❌ | Vì sao |",
+      "|---|---|",
+      "| Tên theo công cụ (`minipower-ops-kibana`) | Tên phải theo việc |",
     ].join("\n"),
   })
   const r = a04(root)

@@ -12,43 +12,66 @@
  * | tên skill trỏ từ `rules.json` | mẫu số rỗng — `rules.json` không chứa tên lá |
  * | **tên nhắc trần trong văn xuôi, không phải link** | **chưa ai — A04** |
  *
- * Chỗ trống đó có thật và là lối mục nát yên lặng nhất: một bảng trong README
- * liệt kê `| minipower-ops-log-flow | Đọc log vẽ sơ đồ luồng |` thì người đọc
- * và agent đều tin lá đó tồn tại. Không link nào gãy, không test nào đỏ. Đổi
- * tên hay bỏ một lá cũng để lại đúng dấu vết này.
+ * Chỗ trống đó là lối mục nát yên lặng nhất: một bảng liệt kê
+ * `| minipower-ops-log-flow | Đọc log |` thì người đọc và agent đều tin lá đó
+ * tồn tại. Không link nào gãy, không test nào đỏ. Đổi tên hay bỏ một lá cũng để
+ * lại đúng dấu vết này.
  *
- * Luật, đọc từ dữ liệu:
- *   (a) **module** = thư mục dưới `src/` — dùng để nhận "hình dạng tên lá".
- *       Chỉ token `minipower-{module}-…` mới được soát, nên `minipower-hooks`
- *       (gói npm), `minipower-catalog` (tên file test), `minipower-maintainer`
- *       (vai trong PACK.md) tự nằm ngoài mà không phải kê tên tay.
+ * Nhận tham chiếu, đọc từ dữ liệu:
+ *   (a) **module** = thư mục dưới `src/` — dùng để nhận "hình dạng tên lá". Chỉ
+ *       token `minipower-{module}-…` mới được soát, nên `minipower-hooks` (gói
+ *       npm), `minipower-catalog` (tên file test), `minipower-maintainer` (vai
+ *       trong PACK.md) tự nằm ngoài mà không phải kê tên tay.
  *   (b) **tên hợp lệ** = mọi `name:` khai trong BẤT KỲ `SKILL.md` nào, nên lá
- *       lồng trong `providers/` và `patterns/` cũng tính — chúng là skill thật,
- *       chỉ không nằm trong danh sách lá đăng ký.
+ *       lồng trong `providers/` và `patterns/` cũng tính.
  *   (c) token kết thúc bằng `-` là **fragment văn xuôi** (`minipower-backend-*`
  *       bị regex cắt ở dấu sao), không phải một tham chiếu.
  *
- * Không soát `ADRs/` (bản ghi lịch sử — nhắc tên lá đã chết ở đó là đúng, cùng
- * lý do A12 bỏ qua) và `staging/` (kho tạm).
+ * **Ngữ cảnh phủ nhận sự tồn tại thì không phải lỗi.** Đọc một dòng tách rời
+ * khỏi ngữ cảnh cho 9 phát hiện giả trên repo — tài liệu đã trung thực sẵn, chỉ
+ * là nói ở heading hoặc ở cột bên cạnh. Bốn hình thức, mỗi hình thức gắn một
+ * quy ước có thật trong repo:
+ *   1. **Mục "Sẽ có" / "dự kiến"** — quy ước *chưa có skill thật thì chưa tạo
+ *      thư mục* (AGENTS.md; ADR-022 QĐ-7 luật 2; ADR-023 QĐ-3). Dùng ở
+ *      `ops/README.md`, `toolbox/README.md`, `presales/README.md`.
+ *   2. **Bảng có cột `❌`** — khuôn bảng phản diện `| ❌ | Vì sao |`, dùng ở 8
+ *      workflow của frontend và toolbox. Tên trong đó là *đừng làm thế*.
+ *   3. **Dòng tự khai chưa có** — `chưa có`, `chưa tách`; và `không phải` /
+ *      `không theo` đứng ngay trước tên (ví dụ phản diện giữa câu).
+ *   4. Marker `nhắc có chủ đích: <lý do>` cùng dòng hoặc dòng trên — lối thoát
+ *      cuối cho trường hợp không khớp ba hình thức trên.
  *
- * Mức ra mắt **WARN** chứ không phải chặn như §7.1 ghi: repo hiện có 8 chỗ,
- * trong đó vài chỗ là nhắc có chủ đích. Theo ADR-044 §8.1 thì nâng lên chặn sau
- * khi check đã bắt đúng ít nhất hai lần trên thay đổi thật — và sau khi 8 chỗ
- * kia được phân loại xong.
- *
- * Lối thoát: `nhắc có chủ đích: <lý do>` cùng dòng hoặc dòng ngay trên — hợp lệ
- * cho lá đang trong catalog mà chưa tách file, và cho tên dùng làm **ví dụ**
- * (kể cả ví dụ phản diện trong lá dạy viết skill).
+ * Mức ra mắt **WARN** chứ không phải chặn như §7.1 ghi: theo ADR-044 §8.1, nâng
+ * lên chặn sau khi check đã bắt đúng ít nhất hai lần trên thay đổi thật.
  */
 
 import { readdirSync } from "node:fs"
 import { basename, join } from "node:path"
-import { walk, readText, relTo, lineAt, lineAndPrev, result, REPO_ROOT, isExempt } from "./lib.mjs"
+import { walk, readText, relTo, result, REPO_ROOT, isExempt } from "./lib.mjs"
 
 const MARKER = /nhắc có chủ đích\s*:/i
 
 /** `minipower-backend-review-dotnet`. Fragment kết thúc bằng `-` bị bỏ ở dưới. */
 const TOKEN = /minipower-[a-z0-9][a-z0-9-]*/g
+
+/** Mục roadmap — quy ước "chưa có skill thật thì chưa tạo thư mục". */
+const PLANNED_HEADING = /^#{1,6}\s.*(?:sẽ có|dự kiến)/i
+
+/** Dòng tiêu đề bảng phản diện: `| ❌ | Vì sao |`. */
+const COUNTER_HEADER = /❌/
+
+/**
+ * Tự khai là chưa tồn tại. Soát trong cửa sổ ±40 ký tự quanh tên, không soát
+ * cả dòng: cả dòng thì một chữ "chưa có" ở đầu câu che mọi tên phía sau — đo
+ * thật là 44 token bị che trong khi chỉ cần 2.
+ */
+const SELF_DISCLAIM = /chưa có|chưa tách/i
+const DISCLAIM_WINDOW = 40
+
+/** `…, không phải \`tên\`` — ví dụ phản diện giữa câu. */
+const NEGATED_BEFORE = /(?:không phải|không theo)[^.;]{0,30}$/i
+
+const TABLE_SEPARATOR = /^\s*\|[\s:|-]+\|\s*$/
 
 const SKIP_TOP = ["ADRs/", "staging/"]
 
@@ -79,9 +102,57 @@ export function declaredNames(root) {
   return out
 }
 
+/**
+ * Tham chiếu đáng soát trong một file, đã trừ mọi ngữ cảnh phủ nhận.
+ * @returns {{token:string, line:number}[]}
+ */
+export function references(src, isShaped) {
+  const lines = src.split(/\r?\n/)
+  const out = []
+  let plannedSection = false
+  let counterTable = false
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+
+    if (/^#{1,6}\s/.test(line)) {
+      plannedSection = PLANNED_HEADING.test(line)
+      counterTable = false
+    } else if (TABLE_SEPARATOR.test(line)) {
+      counterTable = COUNTER_HEADER.test(lines[i - 1] || "")
+    } else if (!line.trim()) {
+      counterTable = false
+    }
+
+    if (plannedSection || counterTable) continue
+    if (MARKER.test(line) || MARKER.test(lines[i - 1] || "")) continue
+
+    const seen = new Set()
+    TOKEN.lastIndex = 0
+    let m
+    while ((m = TOKEN.exec(line))) {
+      const token = m[0]
+      if (token.endsWith("-")) continue
+      if (!isShaped(token)) continue
+      const window = line.slice(
+        Math.max(0, m.index - DISCLAIM_WINDOW),
+        m.index + token.length + DISCLAIM_WINDOW,
+      )
+      if (SELF_DISCLAIM.test(window)) continue
+      if (NEGATED_BEFORE.test(line.slice(0, m.index))) continue
+      if (seen.has(token)) continue
+      seen.add(token)
+      out.push({ token, line: i + 1 })
+    }
+    TOKEN.lastIndex = 0
+  }
+  return out
+}
+
 export function run(root = REPO_ROOT) {
   const modules = moduleNames(root)
   const declared = declaredNames(root)
+  const isShaped = (t) => modules.has(t.split("-")[1])
   const findings = []
   let checked = 0
 
@@ -91,27 +162,15 @@ export function run(root = REPO_ROOT) {
     const src = readText(f)
     if (src === null || isExempt(src)) continue
 
-    const seen = new Set()
-    TOKEN.lastIndex = 0
-    let m
-    while ((m = TOKEN.exec(src))) {
-      const token = m[0]
-      if (token.endsWith("-")) continue
-      if (!modules.has(token.split("-")[1])) continue
+    for (const ref of references(src, isShaped)) {
       checked++
-      if (declared.has(token)) continue
-      const line = lineAt(src, m.index)
-      if (MARKER.test(lineAndPrev(src, line))) continue
-      const key = `${token}:${line}`
-      if (seen.has(key)) continue
-      seen.add(key)
+      if (declared.has(ref.token)) continue
       findings.push({
         file: r,
-        line,
-        message: `\`${token}\` không có lá nào khai tên đó — sửa tên, bỏ dòng, hoặc ghi \`nhắc có chủ đích: <lý do>\``,
+        line: ref.line,
+        message: `\`${ref.token}\` không có lá nào khai tên đó — sửa tên, bỏ dòng, hoặc ghi \`nhắc có chủ đích: <lý do>\``,
       })
     }
-    TOKEN.lastIndex = 0
   }
 
   return result("A04", "tên skill nhắc trong tài liệu trỏ tới lá có thật", findings, checked)

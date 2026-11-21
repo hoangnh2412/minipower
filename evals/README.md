@@ -45,7 +45,7 @@ npm run check                  # gói nhóm A đầy đủ: test + gen:check + l
 
 | Mã | Bắt cái gì | Lối thoát |
 |---|---|---|
-| **A04** | Tên skill nhắc trần trong văn xuôi (không phải link) trỏ tới lá không ai khai — bảng README liệt kê lá chưa tồn tại thì không link nào gãy, không test nào đỏ | `nhắc có chủ đích: <lý do>` cùng dòng hoặc dòng trên |
+| **A04** | Tên skill nhắc trần trong văn xuôi (không phải link) trỏ tới lá không ai khai — bảng README liệt kê lá chưa tồn tại thì không link nào gãy, không test nào đỏ | Ngữ cảnh phủ nhận sự tồn tại thì tự được miễn: mục `## Sẽ có` / `dự kiến` · bảng có cột `❌` · `chưa có` / `chưa tách` trong ±40 ký tự quanh tên · `không phải` ngay trước tên. Còn lại: `nhắc có chủ đích: <lý do>` |
 | **A05** | Script test/CI/hook tự gọi LLM — `claude -p` hoặc `eval:run` nằm trong closure của `test`/`check*`, kể cả qua `pretest`/`posttest` mà npm chạy tự động. Vi phạm QĐ-7: máy tự tiêu tiền | — (đây là cổng bảo vệ ranh giới người-quyết, không có lối thoát) |
 | **A06** | `SKILL.md` dài quá 150 dòng — lá là thứ agent nạp mỗi lượt nên độ dài là chi phí thật | `dài có chủ đích: <lý do>` trong 800 ký tự đầu của lá |
 | **A07** | Chữ "bắt buộc" trong `SKILL.md` không kèm cổng máy nào — lời mạnh không có gì đỏ khi làm sai | — (ADR-026 §11 Q6: **sửa chữ, không whitelist**) |
