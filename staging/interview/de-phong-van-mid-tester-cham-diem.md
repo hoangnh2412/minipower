@@ -249,7 +249,7 @@ Nếu vị trí yêu cầu xây dựng framework kiểm thử tự động, dùn
 
 ### Đề Automation 3 câu
 
-Đề phát cho ứng viên: [de-phong-van-mid-tester-automation.md](de-phong-van-mid-tester-automation.md). Câu 1 và câu 2 trùng **Câu 1** và **Câu 6** của bộ 8 câu — chấm theo các mục tương ứng phía trên. Câu 3 chấm theo mục dưới đây.
+Đề phát cho ứng viên: [de-phong-van-tester.md](de-phong-van-tester.md). Câu 1 và câu 2 trùng **Câu 1** và **Câu 6** của bộ 8 câu — chấm theo các mục tương ứng phía trên. Câu 3 chấm theo mục dưới đây.
 
 **Cách tính điểm:** mỗi câu 1–5, ba câu trọng số bằng nhau. Tổng = (điểm câu 1 + câu 2 + câu 3) / 15 × 100, phân loại theo [bảng chung](#phân-loại-kết-quả). Thời lượng gợi ý: 10 phút mỗi câu 1, 2 và 20–25 phút cho câu 3.
 
