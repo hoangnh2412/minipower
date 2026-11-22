@@ -203,6 +203,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-ops-metrics](src/ops/skills/minipower-ops-metrics/README.md)** | Grafana, Prometheus, spike | *Lấy panel 6h job X* |
 | **[minipower-ops-deploy](src/ops/skills/minipower-ops-deploy/README.md)** | DOC-17, cutover | *Soạn runbook deploy staging* |
 | **[minipower-ops-incident](src/ops/skills/minipower-ops-incident/README.md)** | SEV, postmortem | *Ghi incident SEV2 + postmortem* |
+| **[minipower-ops-gateway](src/ops/skills/minipower-ops-gateway/README.md)** | OmniRoute, quota, chi phí model, combo | *Quota provider còn bao nhiêu, tuần này tốn bao nhiêu* — bản nháp #21 |
 
 ### Backend .NET — [`backend/`](src/backend/)
 

@@ -11,6 +11,7 @@ Manifest máy-đọc: [PACK.md](PACK.md).
 | **minipower-ops-metrics** | [skills/minipower-ops-metrics/README.md](./skills/minipower-ops-metrics/README.md) | Thu thập metrics Grafana/Prometheus → JSON chuẩn hoá cho AI |
 | **minipower-ops-deploy** | [skills/minipower-ops-deploy/README.md](./skills/minipower-ops-deploy/README.md) | DOC-17 / cutover / runbook triển khai |
 | **minipower-ops-incident** | [skills/minipower-ops-incident/README.md](./skills/minipower-ops-incident/README.md) | Incident report + postmortem |
+| **minipower-ops-gateway** | [skills/minipower-ops-gateway/README.md](./skills/minipower-ops-gateway/README.md) | Vận hành AI gateway OmniRoute qua MCP: quota, chi phí, route, combo (L1–L3) — bản nháp #21 |
 
 ## Sẽ có — viết dần, không tạo folder rỗng (ADR-023 QĐ-3)
 

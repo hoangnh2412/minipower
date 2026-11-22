@@ -13,5 +13,5 @@ consumes: [DOC-17, "dashboard Grafana", "metrics Prometheus"]
 produces: ["metrics JSON chuẩn hoá", "chẩn đoán sự cố", "incident report đầu vào"]
 handoff-in:  [H6]
 memory: memory/ops/
-mcp: [runtime]                 # tên trừu tượng (ADR-022 QĐ-9) — dự kiến grafana/prometheus; hiện tools gọi API trực tiếp
+mcp: [runtime, gateway]        # tên trừu tượng (ADR-022 QĐ-9) — runtime: dự kiến grafana/prometheus, hiện tools gọi API trực tiếp · gateway: MCP OmniRoute (lá minipower-ops-gateway, bản nháp #21)
 ```
