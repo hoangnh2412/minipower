@@ -163,10 +163,28 @@ Việc của Đ0 ở A8 vì thế là **in thêm hai tỷ lệ**, không phải 
 
 | Mã | File | Mức | Số đo hôm nay |
 |---|---|---|---|
-| A04 | [`a04-skill-reference.mjs`](../../evals/checks/a04-skill-reference.mjs) | WARN | 0 phát hiện / 1.449 đã soát |
+| A03 | [`a03-hard-condition-wiring.mjs`](../../evals/checks/a03-hard-condition-wiring.mjs) | WARN | 4 phát hiện / 16 đã soát |
+| A17 | [`a17-description-budget.mjs`](../../evals/checks/a17-description-budget.mjs) | WARN | 11 phát hiện / 75 đã soát |
+| A04 | [`a04-skill-reference.mjs`](../../evals/checks/a04-skill-reference.mjs) | WARN | 0 phát hiện / 1.455 đã soát |
 | A05 | [`a05-no-llm-in-ci.mjs`](../../evals/checks/a05-no-llm-in-ci.mjs) | **chặn** | 0 phát hiện / 76 đã soát |
 | A06 | [`a06-skill-length.mjs`](../../evals/checks/a06-skill-length.mjs) | WARN | 3 phát hiện / 113 đã soát |
 | A07 | [`a07-must-without-gate.mjs`](../../evals/checks/a07-must-without-gate.mjs) | WARN | 23 phát hiện / 24 ứng viên |
+
+**A17 — ngân sách `description`, tiêu chí mới ngoài §7.1.** Chủ repo chốt nguyên tắc 2026-11-23: *"càng ngắn càng tốt mà vẫn đủ keyword để dùng, không mô tả dài dòng"*. Hai nửa kéo ngược nhau nên check hai nửa: trần mỗi lá + trần tổng (ngắn), và bắt buộc mệnh đề "Dùng khi" (đủ dùng — lá không nói *khi nào* thì AI không có căn cứ chọn).
+
+Đo thật: 75 lá, tổng **18.882** ký tự, trung vị 207, dài nhất 586. Đây là chi phí trả **mỗi lượt**, và công cụ nền cắt phần vượt — phần bị cắt thì lá vô hình dù ruột đúng hết.
+
+**Trần là bánh răng, không phải số bịa.** `rules.json → description_budget` chốt ở mức đo được hôm nay, luật là chỉ được **giảm**; A17 báo cả chiều ngược (tổng tụt dưới trần hơn 5% thì nhắc hạ trần, kẻo chỗ vừa dọn lại phình). Trần mỗi lá khởi điểm **400** vì đo ra nó bắt đúng 9 lá lệch hẳn (8 lá `frontend-*-react` + 1 backend) trong khi 320 bắt 20 — rộng tới mức thành tiếng ồn.
+
+**Đã đo rồi BỎ luật so trùng description.** 8 cặp trùng ≥35% từ, nhưng phần lớn là song song **có chủ đích**: `backend-plan-dotnet` ↔ `frontend-plan-react` 66% (ADR-045 cố ý tạo cặp), `analyst-impact` ↔ `architecture-impact` 58% (BA vs SA). Bắt chúng là ~70% báo oan. Rủi ro thật — AI chọn sai lá trong cặp song song — là câu hỏi **định tuyến**, phải đo bằng câu người thật gõ, không bằng độ trùng chữ. Phủ định cũng không bị tính dài dòng: 52/75 lá dùng "không …" để chống nhầm lá, đó là đặc sản repo.
+
+**A3 — chỉ làm nửa đi dây.** Công thức §7.1 là *"điều kiện cứng có ≥1 test làm nó FAIL"*. A03 nhận nửa **đi dây**: mỗi điều kiện khai ở `rules.json → hard_conditions` có thật sự nối vào máy hay không, soát **hai chiều**. Nửa *"có test làm nó FAIL"* **chưa làm** — "một test làm điều kiện này đỏ" là phán đoán: một file test mang tên đúng chưa chứng minh nó assert vào nhánh chặn. Đo riêng trước khi viết.
+
+Nửa đi dây đã đủ đáng có, vì nó bắt ngay bốn chỗ lệch mà không gì đỏ: `trace:check` được kê là điều kiện cứng chạy ở CI nhưng **không workflow nào gọi nó** · `decision-staleness` là hook thật mà **không được khai** · CI chạy `test` và `version:check` mà **cũng không được khai**. `AGENTS.md` là file agent đọc đầu tiên, và nó đang kê một danh sách bảy món lệch thực tế theo cả hai chiều.
+
+**Số liệu dùng chung — cơ chế mới 2026-11-23.** Chủ repo chốt: số nào suy ra được thì không ai viết tay. [`lib/facts.js`](../../src/router/hooks/lib/facts.js) quét cây repo; `lib/facts.json` là bản sinh cho script đọc; markdown nhận giá trị **tiêm vào** giữa cặp marker `<!--f:đường.dẫn-->giá trị<!--/f-->`, và `gen:check` đỏ nếu lệch. Đã gắn ở README hai pack (sửa 17→20, 9→10), footer `ADRs/README.md`, `AGENTS.md` (số điều kiện cứng), `evals/README.md`. Cơ chế tự chứng minh ngay trong lượt dựng nó: thêm A03 thì mọi chỗ ghi "10 check" tự thành 11 mà không ai chạm tay.
+
+Ranh giới cố ý: `facts.json` chỉ giữ số **suy ra được**; số **khai** (danh sách điều kiện cứng, Node tối thiểu, trần ngân sách) thuộc `rules.json` — trộn vào một file sinh tự động thì `npm run gen` ghi đè mất phần người khai.
 
 **A4 — đính chính phạm vi.** Phần lớn công thức A4 đã có người canh: `name` ≡ thư mục và README gốc liệt kê mọi lá do `test/minipower-catalog.test.js` lo; link `[x](../x/SKILL.md)` do `link:check` lo; còn "tên skill trỏ từ `rules.json`" thì **mẫu số rỗng** — `rules.json` không chứa tên lá nào. Khoảng trống thật là **tên nhắc trần trong văn xuôi, không phải link**: một bảng README liệt kê `| minipower-ops-log-flow | Đọc log |` thì người đọc và agent đều tin lá đó tồn tại, mà không link nào gãy. A04 nhận đúng phần đó.
 
@@ -474,7 +492,7 @@ flowchart LR
 
 | Đợt | Việc | Done khi |
 |---|---|---|
-| **Đ0** — nhóm A (0 LLM call) | ✅ A4 (phần còn trống) · A5 · A6 · A7 · `npm run check` (2026-11-15) — ❌ còn A3 (phủ điều kiện cứng) · A8 (hai tỷ lệ coverage, **hoãn sang cùng lượt với [#8](https://github.com/hoangnh2412/minipower/issues/8)** vì `lib/trace-check.js` thuộc vùng sở hữu S2) | `npm run check` xanh ✅; A6/A7 **0 false-positive** ❌ — còn 23 ứng viên A07 chờ sửa câu chữ (M2 cũ) |
+| **Đ0** — nhóm A (0 LLM call) | ✅ A3 (nửa đi dây) · A4 · A5 · A6 · A7 · A17 · `npm run check` · số liệu dùng chung — ❌ còn nửa "test làm điều kiện FAIL" của A3 · A8 (hai tỷ lệ coverage, **hoãn sang cùng lượt với [#8](https://github.com/hoangnh2412/minipower/issues/8)** vì `lib/trace-check.js` thuộc vùng sở hữu S2) | `npm run check` xanh ✅; A6/A7 **0 false-positive** ❌ — còn 23 ứng viên A07 chờ sửa câu chữ (M2 cũ) |
 | **Đ1** — spike 1 case | `version.js` · `runner.js` · grader chung C1–C7 + riêng readiness S1–S3 + test trên transcript tĩnh · 1 case readiness `standard` | Chạy 3 lần; đo chi phí/run, flaky, S1/C2 đọc được từ transcript |
 | **Điểm dừng** | Đọc 3 số | `F ≤ 0.25` và grader đọc được → Đ2. Không đạt → **dừng nhóm B**, hạ về checklist người (QĐ-9) |
 | **Đ2** — nhân bộ + baseline | Readiness 6 kịch bản × mode thưa ≈ 9–10 case · deliberation ≥ 5 case · routing (nếu §11-Q3) · `plan` · `compare` · `audit` | **Baseline commit vào `results/` trước khi refactor**; κ đầu tiên; hiệu chỉnh ngưỡng §7.5 |

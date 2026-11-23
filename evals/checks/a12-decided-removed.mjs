@@ -14,10 +14,16 @@
  * Sổ trống thì A12 soát 0 từ khoá — đó là đúng, không phải hỏng.
  *
  * Trạng thái `đang gỡ` thì A12 im: việc chưa xong, còn sót là bình thường.
+ *
+ * Lối thoát theo TỪNG CHỖ: `nhắc tên cũ có chủ đích: <lý do>` cùng dòng hoặc
+ * dòng ngay trên. Cần vì có hai cách nhắc tên cũ mà đúng: (a) code/test **cố ý
+ * phát hiện bản cũ** để hướng dẫn người nâng cấp; (b) câu đang nói chính xác
+ * rằng cơ chế đó **không còn**. Hạ cả từ khoá về `đang gỡ` thì mất luôn phần
+ * canh thật, nên phải miễn được từng chỗ.
  */
 
 import { join } from "node:path"
-import { walk, readText, relTo, lineAt, result, REPO_ROOT } from "./lib.mjs"
+import { walk, readText, relTo, lineAt, lineAndPrev, result, REPO_ROOT } from "./lib.mjs"
 
 const LEDGER_REL = ["evals", "decided-removed.md"]
 /** `- \`project_mode\` — đã gỡ — ADR-0NN ngày …` */
@@ -25,6 +31,7 @@ const ENTRY = /^\s*-\s*`([^`]+)`\s*—\s*(đã gỡ|đang gỡ)\s*—\s*(.*)$/u
 /** Thư mục không soát: bản ghi lịch sử, và chính sổ. */
 const SKIP_TOP = new Set(["ADRs", "evals"])
 const SCAN_EXTS = [".md", ".js", ".mjs", ".cjs", ".ts", ".json", ".yml", ".yaml", ".mdc"]
+const MARKER = /nhắc tên cũ có chủ đích\s*:/i
 
 /** @returns {{token:string, status:string, note:string}[]} */
 export function parseLedger(text) {
@@ -63,13 +70,21 @@ export function run(root = REPO_ROOT) {
     const src = readText(f)
     if (src === null) continue
     for (const e of retired) {
+      // Báo MỌI chỗ, không chỉ chỗ đầu: một file nhắc ba lần là ba chỗ phải sửa.
+      const seen = new Set()
       let at = src.indexOf(e.token)
-      if (at < 0) continue
-      findings.push({
-        file: relTo(root, f),
-        line: lineAt(src, at),
-        message: `còn nhắc \`${e.token}\` — đã quyết gỡ (${e.note}); sửa chỗ này, hoặc hạ trạng thái về \`đang gỡ\` nếu việc chưa xong`,
-      })
+      while (at >= 0) {
+        const line = lineAt(src, at)
+        if (!seen.has(line) && !MARKER.test(lineAndPrev(src, line))) {
+          seen.add(line)
+          findings.push({
+            file: relTo(root, f),
+            line,
+            message: `còn nhắc \`${e.token}\` — đã quyết gỡ (${e.note}); sửa chỗ này, ghi \`nhắc tên cũ có chủ đích: <lý do>\`, hoặc hạ trạng thái về \`đang gỡ\` nếu việc chưa xong`,
+          })
+        }
+        at = src.indexOf(e.token, at + 1)
+      }
     }
   }
   return result("A12", "cơ chế đã quyết gỡ không còn dấu vết", findings, retired.length * files.length)

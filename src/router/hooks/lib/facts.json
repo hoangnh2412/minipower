@@ -1,0 +1,73 @@
+{
+  "leaves": {
+    "by_pack": {
+      "router": 10,
+      "discovery": 2,
+      "analyst": 4,
+      "architecture": 6,
+      "pm": 2,
+      "support": 2,
+      "qa": 2,
+      "presales": 2,
+      "ops": 3,
+      "backend": 20,
+      "frontend": 10,
+      "toolbox": 2,
+      "docs": 1,
+      "tasks": 3,
+      "chat": 1,
+      "vcs": 1,
+      "work": 4
+    },
+    "total": 75
+  },
+  "description": {
+    "chars": 18882,
+    "longest": 586
+  },
+  "adr": {
+    "by_state": {
+      "pending": 0,
+      "todo": 9,
+      "doing": 11,
+      "done": 19,
+      "cancel": 7
+    },
+    "total": 46,
+    "next_code": "ADR-047"
+  },
+  "checks": {
+    "total": 12,
+    "ids": [
+      "A03",
+      "A04",
+      "A05",
+      "A06",
+      "A07",
+      "A09",
+      "A10",
+      "A11",
+      "A12",
+      "A13",
+      "A16",
+      "A17"
+    ]
+  },
+  "hard_conditions": {
+    "total": 7,
+    "ids": [
+      "profile-guard",
+      "prereq-gate",
+      "baseline-guard",
+      "token-guard",
+      "auto-routing",
+      "trace:check",
+      "link:check"
+    ]
+  },
+  "repo": {
+    "modules": 17,
+    "skill_packs": 17,
+    "hook_tests": 38
+  }
+}

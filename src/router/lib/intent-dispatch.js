@@ -1,7 +1,7 @@
 /**
  * Intent → gợi ý skill (test vàng / khóa). Route lúc làm việc = LLM (ADR-034 QĐ-4).
  *
- * Không đặt trong sdlc/hooks/lib — tầng cứng hook cấm phụ thuộc SOP maintain.
+ * Không đặt trong `hooks/lib` — tầng cứng hook cấm phụ thuộc SOP maintain.
  */
 
 function fold(s) {

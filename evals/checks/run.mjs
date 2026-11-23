@@ -12,6 +12,7 @@
 import { resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import { REPO_ROOT } from "./lib.mjs"
+import { run as a03 } from "./a03-hard-condition-wiring.mjs"
 import { run as a04 } from "./a04-skill-reference.mjs"
 import { run as a05 } from "./a05-no-llm-in-ci.mjs"
 import { run as a06 } from "./a06-skill-length.mjs"
@@ -22,9 +23,10 @@ import { run as a11 } from "./a11-hardcoded-counts.mjs"
 import { run as a12 } from "./a12-decided-removed.mjs"
 import { run as a13 } from "./a13-silent-catch.mjs"
 import { run as a16 } from "./a16-hook-runnable.mjs"
+import { run as a17 } from "./a17-description-budget.mjs"
 
 /** A05 đứng đầu vì là check duy nhất ở mức chặn. */
-export const CHECKS = [a05, a13, a11, a10, a09, a12, a16, a04, a06, a07]
+export const CHECKS = [a05, a13, a11, a10, a09, a12, a16, a03, a04, a06, a07, a17]
 
 export function runAll(root = REPO_ROOT) {
   return CHECKS.map((fn) => fn(root))

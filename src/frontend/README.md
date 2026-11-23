@@ -1,6 +1,6 @@
 # Code frontend React (frontend) — kit `@platform/core`
 
-Module `frontend` của **Minipower** — 9 skill **lá-rời** dạy dựng frontend React theo kit UI chuẩn công ty `@platform/core` (React 19 · PrimeReact 11 · Tailwind · Zod + react-hook-form · axios). Lá-rời nghĩa là: mô tả việc bằng lời (*"thêm màn danh sách nhân viên"*, *"form tạo hợp đồng có validate"*) là skill tương ứng **tự kích hoạt** — không cần nhớ tên. Trong quy trình chung, module này nhận bàn giao tại **H4**: DOC-12 (API Spec) · DOC-19 (Prototype) + UC/FR/AC theo module — xem [PACK.md](PACK.md).
+Module `frontend` của **Minipower** — <!--f:leaves.by_pack.frontend-->10<!--/f--> skill **lá-rời** dạy dựng frontend React theo kit UI chuẩn công ty `@platform/core` (React 19 · PrimeReact 11 · Tailwind · Zod + react-hook-form · axios). Lá-rời nghĩa là: mô tả việc bằng lời (*"thêm màn danh sách nhân viên"*, *"form tạo hợp đồng có validate"*) là skill tương ứng **tự kích hoạt** — không cần nhớ tên. Trong quy trình chung, module này nhận bàn giao tại **H4**: DOC-12 (API Spec) · DOC-19 (Prototype) + UC/FR/AC theo module — xem [PACK.md](PACK.md).
 
 Mỗi skill có **README** (người dùng) và **SKILL.md** (agent). Code mẫu nằm trong `templates/` của từng skill — tự đứng, thay placeholder rồi dùng.
 

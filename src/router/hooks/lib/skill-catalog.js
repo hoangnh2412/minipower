@@ -2,6 +2,7 @@
  * Catalog lá đăng ký + agent guardrail — toàn repo.
  * Consumer: test/minipower-catalog.test.js
  *
+ * nhắc tên cũ có chủ đích: câu dưới nói chính xác rằng kho cũ không còn
  * ADR-037: runtime + skeleton + templates-TPL ở `src/router/`; không còn kho `src/sdlc/`.
  */
 

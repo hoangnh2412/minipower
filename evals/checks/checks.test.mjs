@@ -16,11 +16,13 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 
+import { run as a03 } from "./a03-hard-condition-wiring.mjs"
 import { run as a04 } from "./a04-skill-reference.mjs"
 import { run as a05 } from "./a05-no-llm-in-ci.mjs"
 import { run as a06 } from "./a06-skill-length.mjs"
 import { run as a07 } from "./a07-must-without-gate.mjs"
 import { run as a09 } from "./a09-hook-registry.mjs"
+import { run as a17 } from "./a17-description-budget.mjs"
 import { run as a10 } from "./a10-duplicate-content.mjs"
 import { run as a11 } from "./a11-hardcoded-counts.mjs"
 import { run as a12 } from "./a12-decided-removed.mjs"
@@ -376,5 +378,118 @@ test("A04 âm — tám ngữ cảnh hợp lệ: lá đã khai · marker · fragm
   const r = a04(root)
   assert.deepEqual(r.findings, [])
   assert.equal(r.checked, 3)
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A12 — lối thoát theo từng chỗ ────────────────────────────────────────────
+
+test("A12 dương — từ khoá `đã gỡ` còn sót thì báo MỌI dòng, không chỉ dòng đầu", () => {
+  const root = fixture({
+    "evals/decided-removed.md": "- `oldthing` — đã gỡ — ADR-999\n",
+    "docs.md": "Dùng `oldthing` ở đây.\nVà `oldthing` lần nữa ở dòng khác.\n",
+  })
+  const r = a12(root)
+  assert.equal(r.findings.length, 2)
+  assert.deepEqual(r.findings.map((f) => f.line), [1, 2])
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A12 âm — marker `nhắc tên cũ có chủ đích` miễn từng chỗ; `đang gỡ` miễn cả từ khoá", () => {
+  const root = fixture({
+    "evals/decided-removed.md": "- `oldthing` — đã gỡ — ADR-999\n- `halfway` — đang gỡ — chưa xong\n",
+    "code.js": "// nhắc tên cũ có chủ đích: phát hiện bản cũ\nconst x = 'oldthing'\n",
+    "same-line.md": "Câu có `oldthing` — nhắc tên cũ có chủ đích: nói đúng là nó đã mất.\n",
+    "wip.md": "Còn `halfway` ở đây, việc chưa xong.\n",
+  })
+  const r = a12(root)
+  assert.deepEqual(r.findings, [])
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A03 ──────────────────────────────────────────────────────────────────────
+
+test("A03 dương — bốn kiểu lệch: hook khai thiếu shim · CI khai không ai gọi · shim không khai · cổng CI không khai", () => {
+  const root = fixture({
+    [RULES]: JSON.stringify({
+      hard_conditions: [
+        { id: "ghost-guard", kind: "hook" },
+        { id: "ghost:check", kind: "ci" },
+      ],
+      install_hooks: [{ shim: "real-guard", slot: "prompt" }],
+    }),
+    ".github/workflows/ci.yml": "jobs:\n  a:\n    steps:\n      - run: npm run link:check\n",
+  })
+  const r = a03(root)
+  const msgs = r.findings.map((f) => f.message).join(" | ")
+  assert.match(msgs, /ghost-guard.*không có shim/)
+  assert.match(msgs, /ghost:check.*không workflow nào/)
+  assert.match(msgs, /real-guard.*không được khai/)
+  assert.match(msgs, /link:check.*không được khai/)
+  assert.equal(r.findings.length, 4)
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A03 âm — khai khớp shim, khai khớp dòng run: của CI, không chiều nào lệch", () => {
+  const root = fixture({
+    [RULES]: JSON.stringify({
+      hard_conditions: [
+        { id: "real-guard", kind: "hook" },
+        { id: "link:check", kind: "ci" },
+      ],
+      install_hooks: [{ shim: "real-guard", slot: "prompt" }],
+    }),
+    ".github/workflows/ci.yml": "jobs:\n  a:\n    steps:\n      - run: npm run link:check\n",
+  })
+  const r = a03(root)
+  assert.deepEqual(r.findings, [])
+  assert.ok(r.checked > 0, "không soát được gì")
+  rmSync(root, { recursive: true, force: true })
+})
+
+// ── A17 ──────────────────────────────────────────────────────────────────────
+
+const BUDGET = (per, total) =>
+  JSON.stringify({ description_budget: { per_leaf_max: per, total_max: total } })
+
+const leafMd = (desc) => `---\nname: x\ndescription: ${desc}\n---\n`
+
+test("A17 dương — vượt trần mỗi lá, thiếu mệnh đề kích hoạt, và vượt trần tổng", () => {
+  const long = `Lá dài. ${"x".repeat(60)}`
+  const root = fixture({
+    [RULES]: BUDGET(40, 50),
+    "src/p/skills/a/SKILL.md": leafMd(`${long} Dùng khi cần.`),
+    "src/p/skills/b/SKILL.md": leafMd("Ngắn nhưng không nói khi nào."),
+  })
+  const r = a17(root)
+  const msgs = r.findings.map((f) => f.message).join(" | ")
+  assert.match(msgs, /quá trần 40/)
+  assert.match(msgs, /không nói \*\*khi nào\*\*/)
+  assert.match(msgs, /quá trần 50/)
+  assert.equal(r.checked, 2)
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A17 âm — trong trần, có mệnh đề kích hoạt, phủ định không bị tính là dài dòng", () => {
+  const dA = "Viết FR. Dùng khi cần đặc tả — không báo giá, không viết test."
+  const dB = "Soát code .NET. Dùng khi review diff — không nitpick format."
+  // trần tổng đặt ĐÚNG bằng tổng thật: dưới trần quá 5% là bánh răng bắn (xem test dưới)
+  const root = fixture({
+    [RULES]: BUDGET(200, dA.length + dB.length),
+    "src/p/skills/a/SKILL.md": leafMd(dA),
+    "src/p/skills/b/SKILL.md": leafMd(dB),
+  })
+  const r = a17(root)
+  assert.deepEqual(r.findings, [])
+  rmSync(root, { recursive: true, force: true })
+})
+
+test("A17 — bánh răng: tổng tụt sâu dưới trần thì nhắc hạ trần", () => {
+  const root = fixture({
+    [RULES]: BUDGET(200, 5000),
+    "src/p/skills/a/SKILL.md": leafMd("Ngắn gọn. Dùng khi cần."),
+  })
+  const r = a17(root)
+  assert.equal(r.findings.length, 1)
+  assert.match(r.findings[0].message, /hạ `total_max`/)
   rmSync(root, { recursive: true, force: true })
 })

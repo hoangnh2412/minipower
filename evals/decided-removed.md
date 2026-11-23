@@ -20,6 +20,5 @@ A12 **không** soát `ADRs/` và chính sổ này: ADR là bản ghi lịch sử
 
 ## Sổ
 
-<!-- Chưa có dòng nào. Thêm dòng khi một cơ chế được quyết gỡ — đổi `đang gỡ` thành `đã gỡ` ở commit cuối cùng của việc gỡ, rồi chạy `npm run check:integrity` để soát phần chữ còn sót. -->
-
-*(trống)*
+- `sdlc/` — đã gỡ — ADR-037 xoá thư mục gốc `sdlc/`; runtime + skeleton + template chuyển sang `src/router/`.
+- `project_mode` — đang gỡ — chủ repo chốt gỡ 2026-11-23; việc chưa làm nên còn sót là bình thường (xem thẻ #13 / S7).

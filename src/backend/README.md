@@ -1,6 +1,6 @@
 # Code backend .NET (backend) — framework Jarvis
 
-Module `backend` của **Minipower** — 17 skill **lá-rời** dạy dựng backend .NET theo framework Jarvis chuẩn công ty. Lá-rời nghĩa là: mô tả việc bằng lời (*"thêm cache Redis"*, *"API cần JWT"*) là skill tương ứng **tự kích hoạt** — không cần nhớ tên. Trong quy trình chung, module này nhận bàn giao từ **Quy trình phát triển** (`sdlc`) tại H4: DOC-08 (SAD) · DOC-11 (data model) · DOC-12 (API) + FR/AC theo module — xem [PACK.md](PACK.md).
+Module `backend` của **Minipower** — <!--f:leaves.by_pack.backend-->20<!--/f--> skill **lá-rời** dạy dựng backend .NET theo framework Jarvis chuẩn công ty. Lá-rời nghĩa là: mô tả việc bằng lời (*"thêm cache Redis"*, *"API cần JWT"*) là skill tương ứng **tự kích hoạt** — không cần nhớ tên. Trong quy trình chung, module này nhận bàn giao từ **Quy trình phát triển** (`sdlc`) tại H4: DOC-08 (SAD) · DOC-11 (data model) · DOC-12 (API) + FR/AC theo module — xem [PACK.md](PACK.md).
 
 Mỗi skill có **README** (người dùng) và **SKILL.md** (agent).
 

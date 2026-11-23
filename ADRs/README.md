@@ -58,7 +58,7 @@ Bảng xếp theo **thứ tự ưu tiên hành động**: Doing → Todo → Pen
 | **ADR-009** | 2026-07-25 | [Orchestrator analysis](cancel/ADR-009-2026-07-25-minipower-orchestrator-analysis.md) | 🟣 Cancel | Huỷ 2026-08-20 — câu hỏi chặn đã được **ADR-017** trả lời (Q2 = wrap MCP 4 công cụ · Q3 = cả 7 vai · Q6 = bỏ Calendar/Zoom). Phân loại **L1/L2/L3** và ranh giới "không agent-tự-bàn-giao" kế thừa vào ADR-017 |
 | **ADR-015** | 2026-07-29 | [Phê duyệt Jira/Lark + Outline](cancel/ADR-015-2026-07-29-minipower-phe-duyet-jira-lark-publish-outline.md) | 🟣 Cancel | Huỷ 2026-08-20 — Jira/Lark rời lộ trình (ADR-017 QĐ-3), Q1 "Jira hay Lark" mất nghĩa. Mô hình 3 mặt phẳng viết lại tại **ADR-018** |
 
-*Cập nhật lần cuối: 2026-11-15 · 46 ADR · mã kế tiếp: **ADR-047***
+*Cập nhật lần cuối: 2026-11-15 · <!--f:adr.total-->46<!--/f--> ADR · mã kế tiếp: **<!--f:adr.next_code-->ADR-047<!--/f-->***
 
 ---
 

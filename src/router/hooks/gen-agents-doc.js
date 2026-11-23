@@ -39,6 +39,7 @@ import {
   jsonFile,
 } from "./lib/install-fragments.js"
 import { scanModuleRegistry } from "./lib/module-registry.js"
+import { scanFacts, markdownFiles, injectInto } from "./lib/facts.js"
 import { ROUTER } from "./lib/skill-catalog.js"
 import { join } from "node:path"
 
@@ -170,16 +171,16 @@ for (const target of TARGETS) {
 
 const PLUGIN_HOOKS = rel("hooks.json")
 
-function writeJsonTarget(file, next, name) {
+function writeJsonTarget(file, next, name, src = "rules.json install_hooks") {
   const current = existsSync(file) ? readFileSync(file, "utf8") : ""
   if (check) {
     if (next !== current) {
       drift = true
-      process.stderr.write(`${name} lệch install_hooks. Chạy \`npm run gen\` rồi commit.\n`)
+      process.stderr.write(`${name} lệch ${src}. Chạy \`npm run gen\` rồi commit.\n`)
     }
   } else if (next !== current) {
     writeFileSync(file, next)
-    process.stdout.write(`Đã cập nhật ${name} từ rules.json install_hooks.\n`)
+    process.stdout.write(`Đã cập nhật ${name} từ ${src}.\n`)
   } else {
     process.stdout.write(`${name} đã đồng bộ — không đổi.\n`)
   }
@@ -197,6 +198,33 @@ writeJsonTarget(
 )
 writeJsonTarget(PLUGIN_HOOKS, jsonFile(pluginHooksJson()), "hooks/hooks.json")
 writeJsonTarget(rel("lib/module-registry.json"), jsonFile(scanModuleRegistry()), "hooks/lib/module-registry.json")
+
+// ── Số liệu suy ra được: facts.json + tiêm vào marker trong markdown ────────
+const FACTS = scanFacts()
+writeJsonTarget(rel("lib/facts.json"), jsonFile(FACTS), "hooks/lib/facts.json", "cây repo")
+
+const REPO = rel("../../../")
+let injected = 0
+for (const file of markdownFiles(REPO)) {
+  const current = readFileSync(file, "utf8")
+  if (!current.includes("<!--f:")) continue
+  const { next, bad } = injectInto(current, FACTS)
+  const name = file.slice(REPO.length)
+  if (bad.length) {
+    drift = true
+    process.stderr.write(`${name}: marker trỏ fact không có — ${[...new Set(bad)].join(", ")}\n`)
+  }
+  if (next === current) continue
+  if (check) {
+    drift = true
+    process.stderr.write(`${name} lệch số liệu. Chạy \`npm run gen\` rồi commit.\n`)
+  } else {
+    writeFileSync(file, next)
+    injected++
+    process.stdout.write(`Đã tiêm số liệu vào ${name}.\n`)
+  }
+}
+if (!check && injected === 0) process.stdout.write("Số liệu trong markdown đã đồng bộ — không đổi.\n")
 
 if (check) {
   if (drift) process.exit(1)

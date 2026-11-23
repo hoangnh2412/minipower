@@ -6,7 +6,7 @@ Manifest máy-đọc của module (schema: [contracts/pack-manifest.md](../../co
 pack: frontend
 version: 0.1.0
 owner: hoangnh
-roles: [frontend-react]        # 9 lá phục vụ 2 lăng kính: DEV · QC (review)
+roles: [frontend-react]        # phục vụ 2 lăng kính: DEV · QC (review)
 stage: implementation
 repo: code
 consumes: [DOC-12, DOC-19, "{MOD}-UC-*", "{MOD}-FR-*", "{MOD}-AC-*"]

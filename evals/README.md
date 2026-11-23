@@ -1,6 +1,6 @@
 # evals — đo chất lượng Minipower
 
-**Trạng thái:** 🟡 Một phần sống — nhóm A có 10 check (A04 · A05 · A06 · A07 · A09 · A10 · A11 · A12 · A13 · A16); nhóm B đã kiểm chứng runner chạy được nhưng chưa có case nào.
+**Trạng thái:** 🟡 Một phần sống — nhóm A có <!--f:checks.total-->12<!--/f--> check (<!--f:checks.ids-->A03 · A04 · A05 · A06 · A07 · A09 · A10 · A11 · A12 · A13 · A16 · A17<!--/f-->); nhóm B đã kiểm chứng runner chạy được nhưng chưa có case nào.
 
 Bộ này đo **chính repo Minipower**, không đo dự án khách. Thiết kế gốc: [ADR-026](../ADRs/doing/ADR-026-2026-08-27-phuong-phap-danh-gia-chat-luong-minipower.md).
 
@@ -10,7 +10,7 @@ Bộ này đo **chính repo Minipower**, không đo dự án khách. Thiết k�
 |---|---|---|
 | Cần LLM | không | có |
 | Chạy khi nào | mọi lúc, vào CI | chỉ khi người tự chạy |
-| Trạng thái | 10 check đã có | runner đã kiểm chứng, chưa có case |
+| Trạng thái | <!--f:checks.total-->12<!--/f--> check đã có | runner đã kiểm chứng, chưa có case |
 
 Nhóm B **không** được gắn vào CI, hook, hay `npm test` — nó tốn tiền và cần người đọc kết quả.
 
@@ -38,17 +38,19 @@ Bốn điều phải sửa trong ADR-026 trước khi viết case:
 npm run check:integrity        # 10 check, in báo cáo
 npm run check:integrity -- --json
 npm run check:integrity:test   # test của chính bộ check
-npm run check                  # gói nhóm A đầy đủ: test + gen:check + link:check + trace:check + 10 check này
+npm run check                  # gói nhóm A đầy đủ: test + gen:check + link:check + trace:check + <!--f:checks.total-->12<!--/f--> check này
 ```
 
-## Mười check hiện có
+## <!--f:checks.total-->12<!--/f--> check hiện có
 
 | Mã | Bắt cái gì | Lối thoát |
 |---|---|---|
+| **A03** | Điều kiện cứng khai ở `rules.json` ↔ cưỡng chế thật, hai chiều: khai hook mà không có shim · khai CI mà không workflow nào gọi · có shim/cổng CI mà không ai khai | — (lệch thì sửa một trong hai đầu, không miễn) |
 | **A04** | Tên skill nhắc trần trong văn xuôi (không phải link) trỏ tới lá không ai khai — bảng README liệt kê lá chưa tồn tại thì không link nào gãy, không test nào đỏ | Ngữ cảnh phủ nhận sự tồn tại thì tự được miễn: mục `## Sẽ có` / `dự kiến` · bảng có cột `❌` · `chưa có` / `chưa tách` trong ±40 ký tự quanh tên · `không phải` ngay trước tên. Còn lại: `nhắc có chủ đích: <lý do>` |
 | **A05** | Script test/CI/hook tự gọi LLM — `claude -p` hoặc `eval:run` nằm trong closure của `test`/`check*`, kể cả qua `pretest`/`posttest` mà npm chạy tự động. Vi phạm QĐ-7: máy tự tiêu tiền | — (đây là cổng bảo vệ ranh giới người-quyết, không có lối thoát) |
 | **A06** | `SKILL.md` dài quá 150 dòng — lá là thứ agent nạp mỗi lượt nên độ dài là chi phí thật | `dài có chủ đích: <lý do>` trong 800 ký tự đầu của lá |
 | **A07** | Chữ "bắt buộc" trong `SKILL.md` không kèm cổng máy nào — lời mạnh không có gì đỏ khi làm sai | — (ADR-026 §11 Q6: **sửa chữ, không whitelist**) |
+| **A17** | Ngân sách `description` — trần mỗi lá + trần tổng (bánh răng, chỉ được giảm) + bắt buộc mệnh đề "Dùng khi". AI đọc mọi description mỗi lượt, công cụ nền cắt phần vượt | — (dài thì viết ngắn lại) |
 | **A09** | Sổ `install_hooks` và cây `bin/` lệch nhau — hai chiều: khai mà thiếu file, hoặc có file shim mà quên đăng ký | `không đăng ký: <lý do>` ở header file |
 | **A10** | Hai file nội dung giống hệt — tức hai nguồn chân lý cho một sự thật | `bản sao có chủ đích: <lý do>` trong một bản |
 | **A11** | Test chép tay con số **tồn kho của repo** (hằng nhập từ `lib/`, hoặc biến từ phép quét cây file) | `khoá có chủ đích: <lý do>` cùng dòng hoặc dòng trên |

@@ -163,6 +163,7 @@ function isOurs(cmd) {
     s.includes("minipower-router") ||
     s.includes(`${join("sdlc", "hooks", "bin")}`) ||
     s.includes(`${join("router", "hooks", "bin")}`) ||
+    // nhắc tên cũ có chủ đích: phát hiện shim bản cũ để hướng dẫn chạy lại `minipower install`
     s.includes("minipower/sdlc/hooks") ||
     s.includes("minipower/src/router/hooks")
   )
@@ -889,6 +890,7 @@ function checkInit(target) {
   const launcher = join(mp, "bin", "minipower")
   if (existsSync(mp) && existsSync(launcher)) {
     const body = readFileSync(launcher, "utf8")
+    // nhắc tên cũ có chủ đích: phát hiện shim bản cũ
     const stale = body.includes("sdlc/install/minipower.mjs")
     const ok = body.includes('"cli", "minipower.mjs"') || body.includes("cli/minipower.mjs")
     if (stale || !ok) {

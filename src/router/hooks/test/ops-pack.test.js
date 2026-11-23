@@ -14,7 +14,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { dirname, join } from "node:path"
 
-// test/ → hooks/ → sdlc/ → repo root
+// test/ → hooks/ → router/ → src/
 const ROOT = dirname(dirname(dirname(dirname(fileURLToPath(import.meta.url)))))
 const SKILLS = join(ROOT, "ops", "skills")
 

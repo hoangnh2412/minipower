@@ -287,6 +287,7 @@ test("init surfaces id lạ → FAIL", () => {
   }
 })
 
+// nhắc tên cũ có chủ đích: test canh đúng việc phát hiện shim bản cũ
 test("init --check FAIL khi shim trỏ sdlc/install", () => {
   const dir = mkdtempSync(join(tmpdir(), "mp-stale-"))
   const answers = join(dir, "a.json")
@@ -313,6 +314,7 @@ test("init --check FAIL khi shim trỏ sdlc/install", () => {
     writeFileSync(
       join(dir, ".minipower", "bin", "minipower"),
       `#!/usr/bin/env node
+// nhắc tên cũ có chủ đích: fixture dựng shim bản cũ để test phát hiện
 const cli = join(cfg.factory_root, "sdlc/install/minipower.mjs")
 `,
     )
