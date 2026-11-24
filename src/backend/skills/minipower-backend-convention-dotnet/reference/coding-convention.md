@@ -97,56 +97,69 @@ namespace MyCompany.MyProduct.Features.Orders
 
 ## 3. Xử lý lỗi và exception
 
-**Nguyên tắc**
+**Nguyên tắc chung**
 
 - Throw kiểu cụ thể, không `throw new Exception(...)`.
-- Không nuốt exception trừ trường hợp đặc biệt có lý do rõ ràng.
-- Ưu tiên `ArgumentException`, `ArgumentNullException`, `InvalidOperationException`, hoặc exception domain (ví dụ `NotFoundException` tự định nghĩa).
+- Không nuốt exception (`catch { }`, `catch` rồi `return` mà không ném lại hoặc không bọc `BusinessException`).
+- Không dùng exception để điều khiển luồng thông thường — ưu tiên `TryParse`, kiểm tra `null`, v.v.
+- Guard tham số trong domain/helper thuần: `ArgumentException`, `ArgumentNullException`.
 
-**Đúng**
+### 3.1 API Platform — `BusinessException` và `ApiResponseWrapperMiddleware`
+
+Áp handler/command/query và controller API có envelope `BaseResponse` (`erp_core/platform`, product Host CQRS).
+
+| Việc | Quy tắc |
+|------|---------|
+| Ném lỗi | `throw new BusinessException(mã, systemMessage?)` hoặc subtype (`NotFoundException`, `BadRequestException`, `UnauthorizedException`, `ForbiddenException`, `ConflictException`) khi HTTP status khác 422 mặc định của `BusinessException`. |
+| Ném ở đâu | **Chỉ** tầng Application / Domain / Infrastructure — handler, application service, entity / domain service, repository / adapter. Guard đầu vào (thiếu field, `Guid.Empty`, file rỗng), kiểm tra phạm vi tenant / org, "không tìm thấy" đều nằm ở Application và ném exception có mã. |
+| Controller (Host) | **Không** `try`/`catch`, **không** `throw`, **không** trả lỗi tay (`BadRequest(...)`, `NotFound()`, `Unauthorized()`, `Forbid()`, `Conflict(...)`, `StatusCode(4xx/5xx)`, `Problem(...)`). Controller nhận request → gọi Application → `Ok` / `Created` / `NoContent`; lỗi nổi lên `ApiResponseWrapperMiddleware`. |
+| Mã | Hằng trong class implement `IErrorCode`, `[Display(Description = "...")]`. Message user qua `ErrorCodeHelper.GetMessage(mã)` — không hard-code thay catalog (mục 14). |
+| Middleware | `ApiResponseWrapperMiddleware` map exception chưa bắt → `BaseResponse` + HTTP status. Handler/controller **để exception nổi lên** — không `catch` rồi `return Unauthorized()` / `NotFound()` / `UnprocessableEntity(...)`. |
+| Cấm (lỗi nghiệp vụ API) | `UnauthorizedAccessException`, `KeyNotFoundException`, `InvalidOperationException`, `throw new Exception(...)`, `return` status lỗi tay trong controller thay cho throw có mã. |
+| Lỗi kỹ thuật nội bộ | Có thể `InvalidOperationException` khi không ra client; nếu response đi qua middleware vẫn ưu tiên `BusinessException` + mã module. |
+
+Tham chiếu: `Platform.DDD.Domain.Shared/ExceptionHandling/BusinessException.cs` · `Platform.Mvc/ExceptionHandling/ApiResponseWrapperMiddleware.cs`.
+
+**Đúng (handler + controller)**
 
 ```csharp
-public Customer GetCustomer(int id)
-{
-    if (id <= 0)
-        throw new ArgumentException("ID must be positive", nameof(id));
+// Handler
+if (user is null)
+    throw new BusinessException(AccountErrorCode.InvalidCredentials);
 
-    var customer = _repository.GetById(id);
-    if (customer == null)
-        throw new KeyNotFoundException($"Customer {id} not found");
-
-    return customer;
-}
+// Controller
+var result = await login.HandleAsync(command, cancellationToken);
+return Ok(result);
 ```
 
-**Tránh**
+**Tránh (nuốt — client mất code/message chuẩn)**
 
 ```csharp
-// Quá chung chung
-throw new Exception("Something went wrong");
-
-// Nuốt exception
-try { Convert.ToInt32(input); } catch { }
-
-// Dùng exception để điều khiển luồng — nên dùng TryParse
-try { return Parse(input); } catch { return defaultValue; }
+catch (UnauthorizedAccessException) { return Unauthorized(); }
+catch (BusinessException ex) { return UnprocessableEntity(ex.Message); }
 ```
 
-**Giữ stack trace khi throw lại**
-
-- Sau khi xử lý/log, muốn ném tiếp cùng exception: dùng `throw;` (không `throw ex;`).
-- Bọc exception mới: `throw new InvalidOperationException("...", ex);` để giữ `InnerException`.
+**Tránh (controller tự xử lý lỗi — chuyển xuống Application)**
 
 ```csharp
-try
-{
-    await SaveAsync(cancellationToken);
-}
+// Controller
+if (request.File is null) return BadRequest(new { message = "Thiếu file." });   // guard ⇒ handler ném BadRequestException(mã)
+if (request.File is null) throw new BadRequestException(ImportErrorCode.FileRequired); // controller không throw
+return item is null ? NotFound() : Ok(item);                                      // service ném NotFoundException(mã)
+```
+
+### 3.2 Khi cần `try` / `catch`
+
+- **Controller: không bao giờ** `try`/`catch` — `ApiResponseWrapperMiddleware` đã bắt mọi exception (mục 3.1).
+- Handler / service (Application, Infrastructure): **mặc định không** thêm `try`/`catch` mới. Muốn bắt (retry, fallback, map hạ tầng, transaction, idempotent) → **hỏi người xác nhận** trước, nêu file và lý do.
+- Đã được OK: log + `throw;` hoặc `throw new BusinessException(mã, systemMessage, innerException: ex)` — không `catch { }`, không đổi sang `IActionResult` lỗi tay.
+- `catch` chỉ để `return` kết quả nghiệp vụ hợp lệ (vd. “đã cài rồi”) vẫn cần người OK và comment ngắn tại chỗ.
+
+```csharp
 catch (DbUpdateException ex)
 {
     _logger.LogError(ex, "Save failed");
-    throw; // đúng — giữ stack
-    // throw ex; // sai — mất stack gốc
+    throw; // giữ stack — chỉ khi đã OK pattern catch này
 }
 ```
 
@@ -487,14 +500,49 @@ Phần *file đặt ở đâu* của các marker này thuộc [minipower-backend
 
 | Việc | Quy tắc |
 |------|---------|
-| Khai báo | Class implement `IErrorCode` (`Jarvis.DDD.Domain.Shared.ExceptionHandling`), hằng `const string`, `[Display(Description = "...")]`. Namespace `{Product}.ErrorCodes`. Mẫu: `Sample/ErrorCodes/SampleErrorCode.cs` trong repo Jarvis |
+| Khai báo | Class implement `IErrorCode` (`Platform.DDD.Domain.Shared.ExceptionHandling`), hằng `const string`, `[Display(Description = "...")]`. Namespace `{Product}.ErrorCodes` hoặc `{Module}ErrorCode.cs`. Mẫu: `Sample/ErrorCodes/SampleErrorCode.cs`, `Platform.Modules.Account/AccountErrorCode.cs` |
 | Ném | `BusinessException` kèm mã đã khai. Không ném chuỗi tự do thay mã; không `throw new Exception("...")` cho lỗi nghiệp vụ (mục 3) |
-| Giá trị `code` | Token mà API và UI dùng chung, theo họ: `{MOD}-VAL-NNN` (đầu vào không hợp lệ) · `{MOD}-BR-NN` (vi phạm business rule) · `{MOD}-API-NNN` (từ chối ở use case) · `SYS-NNN` (hệ thống, mất kết nối, không có quyền). Dự án thêm họ riêng cho đối tác ngoài khi cần |
-| Message | Tiếng Việt, câu đầy đủ, gắn với mã. Chi tiết kỹ thuật ghi log, không thay message |
+| Giá trị `code` | Chuỗi **đúng 5 chữ số** (`"98501"`) — constructor `BusinessException` chạy `int.Parse(code)`, mã chữ (`nameof`, `{MOD}-VAL-001`) là `FormatException`. Dải theo bảng *Dải mã lỗi* dưới đây |
+| Không trùng | Mã duy nhất trên **toàn solution**: `ErrorCodeHelper` gộp mọi class `IErrorCode` bằng `Dictionary.Add` — trùng một mã là mọi `BusinessException` lỗi theo. Class mã lỗi không implement `IErrorCode` thì không vào catalog (message rỗng) |
+| Trên dây | `code` trả ra là `{EntryAssembly}:{mã}` (vd `Sample.Api:98501`) — `BaseResponse.GenerateCode` tự ghép, **không** tự thêm tiền tố. FE hiện nguyên văn `[Sample.Api:98501] message` |
+| Message | Tiếng Việt, câu đầy đủ, gắn với mã — là **câu cuối** người dùng đọc: FE hiện nguyên văn, không dịch, không ghép. Câu sai / khó hiểu ⇒ sửa `Description` của mã ở backend, không chờ FE vá. Chi tiết kỹ thuật ghi log / `systemMessage`, không thay message |
+| Câu có tham số | `Description` có chỗ trống `{0}`, `{1}`… (định dạng invariant, vd `'{0:N0}'`); ném `new BusinessException(mã, new ErrorMessageArgs(cột, số dòng…))` — câu vẫn lấy từ catalog, framework điền tham số. Tham số chỉ là dữ liệu nghiệp vụ (tên cột, mã template, số dòng); **không** truyền `ex.Message`, stack, connection string, PII. Lớp con (`NotFoundException`…) chưa có overload này — cần thì ném `BusinessException` rồi override `HttpStatusCode` như các exception domain |
 | Bọc lỗi kỹ thuật | `catch (Exception ex) { log kèm id / dữ liệu lỗi; throw new BusinessException(mã, message, ex); }` — stack gốc nằm ở `InnerException`. Không `throw new BusinessException(...)` tại `catch` mà bỏ inner |
-| Ra dây | API chỉ trả `code` + `message` (hình dạng body theo `BaseResponse` — [swashbuckle](../../minipower-backend-swashbuckle-dotnet/SKILL.md)); UI bọc `[code] message`. Không stack, không message exception của framework |
+| Ra dây | Mọi response lỗi (4xx / 5xx) trả `code` + `error.message` (hình dạng body theo `BaseResponse` — [swashbuckle](../../minipower-backend-swashbuckle-dotnet/SKILL.md)); `error.systemMessage` chỉ cho kỹ thuật, FE không hiển thị. UI hiện nguyên `[code] message`, **không bọc lại** ([frontend convention § 5.1](../../../../frontend/skills/minipower-frontend-convention-react/reference/coding-convention.md#51-lỗi-từ-backend--không-bọc-lại)). Không stack, không message exception của framework trong `error.message` |
+| Lỗi thiếu message | Không trả 401 / 403 / 404 / 5xx body rỗng hoặc chỉ có `code` — FE khi đó chỉ hiện được reason phrase của HTTP status (`[Sample.Api:99404] Not Found`), người dùng không biết lỗi gì. Lỗi chưa map (500) vẫn trả `code` + câu chung của catalog, message exception vào `systemMessage` / log |
+| Middleware | Handler/controller **không** bọc `BusinessException` trong `try`/`catch` để trả `IActionResult` lỗi. Middleware map exception → HTTP status (`BusinessException` mặc định 422; `NotFoundException` 404; …) + `BaseResponse`. |
+| `try`/`catch` | Chỉ khi người đã OK slice. Không nuốt; không `return` status tay thay throw. |
 
 Mã lỗi không phải chỗ để `NoWarn`: hằng chưa khai thì khai thêm, không nối chuỗi tạm.
+
+### 14.1 Dải mã lỗi
+
+| Dải | Dành cho | Chia khối |
+|-----|----------|-----------|
+| `0xxxx` – `8xxxx` | **Sản phẩm** dựng trên Platform | Mỗi module một khối **10.000** — `M0000` … `M9999`, `M` là số module |
+| `9xxxx` | **Platform** — framework và module đi kèm | Khối 100 trong `98xxx`; module Platform mới xin khối trống |
+| `99xxx` | Mã đặc biệt của framework — **bọc HTTP status**: `99` + status (`99400`, `99401`, `99403`, `99404`, `99409`, `99422`, `99500`…) | Dùng khi lỗi không có mã nghiệp vụ riêng — `ApiResponseWrapperMiddleware` tự gán `99{status}` cho body lỗi 400/401/403/404 không có mã (câu lấy `Description` nếu body không có), lỗi chưa map ⇒ `99500`. Module (Platform hay sản phẩm) **không** cấp mã trong `99xxx` |
+
+Bảng khối dưới đây là **nguồn duy nhất** — module mới (Platform hay sản phẩm) xin khối bằng cách thêm dòng vào bảng này, không khai ở tài liệu dự án, không tự chọn số.
+
+Khối đang dùng:
+
+| Khối | Class | Module |
+|------|-------|--------|
+| `1xxxx` | `SampleErrorCode` | host `Sample` (demo Platform) — khối sản phẩm số 1 |
+| `980xx` | `AccountErrorCode` | identity · Account |
+| `981xx` | `SettingErrorCode` | settings |
+| `982xx` | `NotificationErrorCode` | notifications |
+| `983xx` | `OrgErrorCode` | orgs |
+| `984xx` | `TenantErrorCode` | tenants |
+| `985xx` | `OrgStructureErrorCode` | orgstructure |
+| `986xx` | `IdentityAdminErrorCode` | identity · IdentityAdmin |
+| `987xx` | `CompanyProfileErrorCode` | companyprofile |
+| `988xx` | `FileErrorCode` | files |
+| `989xx` | `ImportExportErrorCode` | importexport |
+| `99xxx` | `BaseErrorCode` | framework — `99{status}` bọc HTTP status · `99001`–`99003` (rate limit, captcha, sửa đồng thời) · `99999` lỗi chung |
+
+**Platform:** `BusinessException` — `erp_core/platform/frameworks/Platform.DDD.Domain.Shared/ExceptionHandling/BusinessException.cs`.
 
 ---
 
@@ -509,3 +557,22 @@ Không viết code tạo hoặc sửa bảng trong logic ứng dụng. Service, 
 | `EnsureCreated` để “vá” bảng mới vào database đã tồn tại | `Database.Migrate` khi host khởi động |
 
 Migration nằm cạnh `DbContext` của host (thư mục `Migrations/`). Entity và `OnModelCreating` mô tả model; file migration là chỗ duy nhất sinh DDL. Trong file đó dùng API `migrationBuilder`. `migrationBuilder.Sql` chỉ khi builder không diễn được thao tác (ví dụ áp lên database đã có bảng nhưng chưa có `__EFMigrationsHistory`). Database đã có từ trước khi có history thì migration mới phải áp được bằng `Migrate`, không vá bằng SQL trong request.
+
+---
+
+## 16. Catalog quyền (`IPermissionDefinition`)
+
+Mỗi **vùng nghiệp vụ / module package** sở hữu một class quyền riêng — **một class, một file**, không gom mọi `Platform.*` vào một `*Permissions` khổng lồ.
+
+| Quy tắc | Chi tiết |
+|---------|----------|
+| Vị trí | Package sở hữu API: ví dụ `Platform.Tenants/Authorization/PlatformTenantPermissions.cs`, `Platform.Orgs/Authorization/PlatformOrgPermissions.cs`, identity admin trong `Platform.Modules.IdentityAdmin/Authorization/`. |
+| Interface | `public sealed class XPermissions : IPermissionDefinition` + reference `Platform.Permissions.Abstractions`. |
+| Hiển thị UI | Class: `[Display(Name = "Platform", Description = "<vùng>", Order = n)]`. Field: `[Display(Description = "…", GroupName = "…", Order = n)]` — nhãn ngắn thêm `Name` trên field khi cần. |
+| Mã quyền | Chuỗi ổn định `Platform.{Area}.{Action}` (ví dụ `Platform.Tenant.Create`). Hằng field PascalCase ngắn: `View`, `Create`, `Update`, `Delete`, `Manage`, `Connection` — **không** prefix lặp `TenantView` trên class `PlatformTenantPermissions`. |
+| `Manage` | Chỉ mở menu FE — **không** dùng làm wildcard API; handler không coi `Manage` = full CRUD. |
+| Cấm alias | Không class wrapper chỉ re-export chuỗi; không duplicate file `TenantPermissions` song song `PlatformTenantPermissions` cùng mã. |
+| Policy ASP.NET | `[Authorize(Policy = XPermissions.View)]` — policy name **trùng** mã quyền; đăng ký qua `PlatformPermissionCodes` / `PermissionCatalogBuilder.Build`. |
+| Host | `Platform.Host.Authorization.PlatformPermissionAssemblies` liệt kê assembly module; `AddPlatformIdentityAdmin` merge với `permissionAssemblies` của product (`PermissionCatalogBuilder.Build`). **Không** đặt danh sách assembly trong IdentityAdmin. |
+
+Quyền **App** (tenant/org trong phiên nghiệp vụ, ví dụ `Org.View` trong `SystemPermissions`) tách khỏi **Platform** (`Platform.Org.View`) — không trộn namespace hay class.

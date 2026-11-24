@@ -26,7 +26,7 @@ Feature Employee: nối GET/POST/PUT/DELETE v1/hrm/employees theo DOC-12 §4.1, 
 
 - Một axios instance cho cả app: `configurePlatformHttp` ở bootstrap, feature dùng `platformHttp` qua `services/req.ts`.
 - Path tương đối lấy từ DOC-12; `call*` trả AxiosResponse, page lấy body bằng `unwrap*`.
-- Lỗi đến `catch` là **body** lỗi của backend — hiện bằng `getErrorMessage`, không đọc `error.response.status`.
+- Lỗi đến `catch` là **body** lỗi của backend kèm `status` — hiện nguyên `[code] message` bằng `getErrorMessage`, không tự dựng câu, không đọc `error.response.status`. Client riêng (`fetch`, axios khác) reject theo cùng hợp đồng.
 - Mock là nhánh tạm ngoài luồng mặc định, cùng chữ ký `call*`. Page còn gọi `mock*` thì lint M1 cảnh báo trên máy dev và **báo lỗi trong CI** — không merge được.
 
 ## Xác thực

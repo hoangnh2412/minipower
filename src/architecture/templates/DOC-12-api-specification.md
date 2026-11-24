@@ -59,24 +59,24 @@ Body lỗi có đúng hai thành phần người dùng cần; UI hiển thị `[
 
 ```json
 {
-  "code": "INV-API-012",
+  "code": "Invoice.Api:10012",
   "message": "Không thể ký hoá đơn — chưa cấu hình chứng thư số"
 }
 ```
 
 | Thành phần | Quy tắc |
 |------------|---------|
-| `code` | Token đã khai trong `IErrorCode` phía backend; UI bọc `[]` |
+| `code` | `{EntryAssembly}:{mã}` — mã 5 chữ số đã khai trong `IErrorCode` phía backend, framework tự ghép tiền tố; UI hiện nguyên văn trong `[]` |
 | `message` | Tiếng Việt, câu đầy đủ, cho người dùng cuối |
 | Cấm | Stack trace, message exception của framework, object domain, body lỗi không có `code` |
 
-| Họ `code` | Khi nào |
-|-----------|---------|
-| `{MOD}-VAL-NNN` | Dữ liệu đầu vào không hợp lệ |
-| `{MOD}-BR-NN` | Vi phạm business rule |
-| `{MOD}-API-NNN` | Từ chối ở use case API |
-| `SYS-NNN` | Lỗi hệ thống, mất kết nối, không có quyền (`SYS-403`) |
-| *(dự án)* | Họ riêng cho đối tác ngoài — khai trong convention dự án |
+| Dải mã | Dành cho |
+|--------|----------|
+| `0xxxx` – `8xxxx` | Sản phẩm — mỗi module một khối 10.000 (`M0000` – `M9999`); khối của từng module khai ở bảng *Khối đang dùng* của backend convention § 14.1 |
+| `9xxxx` | Platform — framework và module đi kèm |
+| `99xxx` | Mã framework bọc HTTP status (`99400`, `99403`, `99404`, `99500`…) khi lỗi không có mã nghiệp vụ riêng |
+
+Mỗi mã lỗi của endpoint ghi kèm ID nó trace về (`{MOD}-BR-NN`, `{MOD}-FR-NNN`) trong bảng lỗi của endpoint — mã là số, liên kết nghiệp vụ nằm ở cột trace. Quy tắc đầy đủ: [backend convention § 14.1](../../backend/skills/minipower-backend-convention-dotnet/reference/coding-convention.md#141-dải-mã-lỗi).
 
 Wrapper response của framework (Jarvis `BaseResponse`) bao ngoài hai field này — hình dạng theo `minipower-backend-swashbuckle-dotnet`. HTTP status đi kèm, không thay `code`.
 

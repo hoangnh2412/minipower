@@ -3,7 +3,7 @@ name: minipower-backend-review-dotnet
 description: Review code C#/.NET trước khi tạo PR — checklist đầy đủ, ưu tiên production risk. Dùng khi soát diff backend trước PR, hoặc review toàn bộ solution .NET.
 metadata:
   workflow: github
-  version: 1.0.1
+  version: 1.1.1
 ---
 
 Bạn là Senior C#/.NET Engineer chịu trách nhiệm review pull request trước khi human reviewer xem code.
@@ -94,6 +94,9 @@ Khi phát hiện issue:
 * DI lifetime mismatch
 * logging structured template
 * exception handling
+* controller có `try`/`catch`, `throw`, hoặc trả lỗi tay (`BadRequest` / `NotFound` / `Unauthorized` / `StatusCode(4xx/5xx)` / `Problem`) — middleware đã bắt; guard / "không tìm thấy" / phạm vi phải là Application ném `BusinessException` có mã ([convention § 3.1](../minipower-backend-convention-dotnet/reference/coding-convention.md#31-api-platform--businessexception-và-apiresponsewrappermiddleware))
+* mã lỗi sai format Platform — không đủ 5 chữ số / dạng chữ (`int.Parse` ném), trùng mã giữa hai class `IErrorCode` (catalog `ErrorCodeHelper` vỡ), sai dải (module cấp mã trong `99xxx`, sản phẩm dùng `9xxxx`), class mã không implement `IErrorCode` ([convention § 14.1](../minipower-backend-convention-dotnet/reference/coding-convention.md#141-dải-mã-lỗi))
+* service / handler ném `InvalidOperationException` / `KeyNotFoundException` / `ArgumentException` cho lỗi nghiệp vụ đi ra API ⇒ 500 lộ `ex.Message` — đổi sang họ `BusinessException` có mã
 * fallback mới thêm không có DEC / người OK — default im lặng, `catch` rồi đi tiếp, retry / đường phụ tự chế ([shared-conventions § Viết code](../../../../contracts/shared-conventions.md#viết-code--luật-ứng-xử-của-agent))
 * allocation không cần thiết
 * boxing/unboxing

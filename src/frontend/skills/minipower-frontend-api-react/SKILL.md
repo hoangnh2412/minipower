@@ -1,9 +1,9 @@
 ---
 name: minipower-frontend-api-react
-description: Tích hợp API backend cho frontend kit @platform/core — configurePlatformHttp, service dùng chung, tham số khớp PagedListRequest, unwrap { items, total }, Bearer token qua interceptor, mock tạm khi DOC-12 đã có mà backend chưa chạy. Dùng khi thêm service gọi REST, nối màn hình với endpoint DOC-12, đổi mock sang API thật, hoặc gặp lỗi baseURL / proxy / 401.
+description: Tích hợp API backend cho frontend kit @platform/core — configurePlatformHttp, service dùng chung, PagedListRequest, unwrap { items, total }, lỗi qua getErrorMessage ([code] message + status), Bearer token qua interceptor, mock tạm khi DOC-12 có mà backend chưa chạy. Dùng khi thêm service REST, nối màn hình endpoint DOC-12, đổi mock sang API thật, hoặc lỗi baseURL/proxy/401.
 metadata:
   workflow: github
-  version: 1.0.1
+  version: 1.1.1
 ---
 
 # Tích hợp API (@platform/core) — Orchestrator
@@ -28,7 +28,7 @@ Mock ở đây là **chỗ đứng tạm cho code thật**, không phải protot
 ```text
 page / hook ──handleAction──▶ call{…}{Feature}()  ──▶ services/req.ts = platformHttp (axios dùng chung)
                                                           │ request: baseURL ← VITE_API_URL · header API key (nếu cấu hình)
-                                                          │ response lỗi: reject BODY lỗi (không phải AxiosError)
+                                                          │ response lỗi: reject BODY lỗi + status (không phải AxiosError)
 page ◀── unwrap{Feature}ListResult / unwrap{Feature} ◀────┘
 ```
 
@@ -44,9 +44,18 @@ Host gọi `configurePlatformHttp({ baseURL, apiKey, apiKeyHeader })` **một l�
 
 ## Hợp đồng lỗi
 
-- Interceptor của kit reject bằng **`error.response.data`** (body lỗi backend). Không có response (mất mạng, timeout, CORS) ⇒ `{ Status: 0, Message: 'Không thể kết nối tới máy chủ' }`. Response có nhưng body rỗng ⇒ reject bằng chuỗi `''` — mất cả mã HTTP.
-- Hệ quả: trong `catch`, **không có** `error.response.status`. Hiển thị lỗi bằng `getErrorMessage(error, fallback)` — đọc `message`/`Message`/`title`/`detail`/`error.message` của body, không đọc được thì dùng `fallback`.
-- Cần phân biệt 401/403: backend phải trả mã trong body (`status` của ProblemDetails, hoặc `Status`) — đừng trả 401 body rỗng.
+Mã và câu lỗi là của backend — FE **không bọc lại** ([convention § 5.1](../minipower-frontend-convention-react/reference/coding-convention.md#51-lỗi-từ-backend--không-bọc-lại)).
+
+| Interceptor kit nhận | Reject bằng |
+|---|---|
+| Response có body JSON (kể cả body `Blob` JSON của request tải file) | **Nguyên body** backend + `status` HTTP |
+| Response có body rỗng / không phải JSON | `{ status }` |
+| Không có response (mất mạng, timeout, CORS) | `{ status: 0, Message: 'Không thể kết nối tới máy chủ' }` |
+
+- Trong `catch`, **không có** `error.response` — có `error.status`. Rẽ nhánh **hành vi** theo `status` / `code` được (vd 401 → đăng nhập lại); đổi **câu** thì không.
+- Hiển thị bằng `getErrorMessage(error, fallback)` ⇒ `[code] message` của backend; thiếu message ⇒ `[code | HTTP {status}] {reason phrase}`; `fallback` chỉ cho lỗi không phải HTTP. Không đọc `systemMessage`.
+- **Client riêng** — axios instance khác (vd `accountHttp`), `fetch`, SSE, wrapper quanh `platformHttp` — theo **cùng hợp đồng**: reject nguyên body kèm `status`. Không `throw new Error(text)`, không thêm / bớt / dịch câu, không tự đọc `error.message` / `systemMessage` để dựng câu mới.
+- Backend phải trả `code` + `error.message` cho mọi lỗi — đừng trả 401/403/404 body rỗng ([backend convention § 14](../../../backend/skills/minipower-backend-convention-dotnet/reference/coding-convention.md#14-mã-lỗi-nghiệp-vụ--ierrorcode)).
 
 ## Quy tắc cốt lõi
 
@@ -88,7 +97,7 @@ Nhánh mock tạm — **chỉ** theo [workflows/add-mock.md](workflows/add-mock.
 - Không file nào trong feature import `axios` — `npm run lint` xanh (R2)
 - Khi merge: không page nào còn gọi `mock*` — `CI=true npm run lint` xanh (M1)
 - `npm run typecheck` xanh
-- Chạy thật: danh sách tải được qua proxy `/api`; lỗi backend hiện toast có nghĩa (không phải *"Request failed with status code 500"*)
+- Chạy thật: danh sách tải được qua proxy `/api`; lỗi backend hiện toast `[code] message` nguyên văn backend (không phải *"Request failed with status code 500"*, không phải câu FE tự đặt)
 - Code theo [minipower-frontend-convention-react](../minipower-frontend-convention-react/SKILL.md); file đặt đúng folder theo [minipower-frontend-architecture-react](../minipower-frontend-architecture-react/SKILL.md)
 
 ## Liên quan

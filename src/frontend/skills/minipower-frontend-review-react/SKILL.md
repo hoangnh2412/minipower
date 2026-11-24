@@ -3,7 +3,7 @@ name: minipower-frontend-review-react
 description: Review code TypeScript/React trước khi tạo PR/MR — ưu tiên rủi ro production (bảo mật, mất dữ liệu, race condition, logic sai), checklist hooks/effect/async/form/API/hiệu năng và luật kit @platform/core (handleAction, platformHttp, NavigateBridge, PrimeReact 11 compound, Tailwind @source). Dùng khi review diff frontend, soát PR .tsx/.ts, hoặc cần ý kiến thứ hai trước merge.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 Bạn là Senior Frontend Engineer (TypeScript/React) review pull request trước khi người review xem code.
@@ -71,6 +71,7 @@ Dữ liệu & hiển thị:
 * số tiền / thập phân làm tròn ở FE khác BE
 * `key` là index trong danh sách thêm / xoá / sắp xếp được
 * toast / inline hiện `error.message` thô hoặc câu không có mã — người dùng không báo được lỗi gì, QA không trace về BR / API (`[code] message`)
+* FE bọc lại lỗi backend — ghép tiền tố / hậu tố vào câu backend, đổi `status` / `code` / chuỗi lỗi sang câu FE, `isError ? 'Không tải được…'` bỏ qua `error`, hiện `systemMessage`, service / wrapper / `fetch` riêng `throw new Error(text)` làm mất `code` ([convention § 5.1](../minipower-frontend-convention-react/reference/coding-convention.md#51-lỗi-từ-backend--không-bọc-lại))
 * cột tiền / số lượng / % căn trái hoặc thiếu `tabular-nums` — số không thẳng hàng, đọc nhầm hàng nghìn
 
 Form:
