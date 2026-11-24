@@ -1,6 +1,6 @@
 # Trace spine — xương sống ID (LUẬT)
 
-**Trạng thái:** 🟡 Một phần sống — luật `UC→FR→AC→Test` + `trace:check` đang chạy thật trong `sdlc/`; ba ID mở rộng (`CMP`/`TEST`/`DEPLOY`) **chưa áp dụng** — bật khi pack code cắm vào spine.
+**Trạng thái:** 🟡 Một phần sống — luật `UC→FR→AC→Test` + `trace:check` đang chạy thật trong `src/router/hooks/`; ba ID mở rộng (`CMP`/`TEST`/`DEPLOY`) **chưa áp dụng** — bật khi pack code cắm vào spine.
 
 `sdlc` trace `Goal → … → AC → Test`. Contract **kéo dài xuống code + ops** để pack downstream (backend, frontend, QA, ops) cắm vào cùng một xương sống.
 

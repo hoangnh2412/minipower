@@ -1,6 +1,6 @@
 # Shared conventions — quy ước dùng chung (QUY ƯỚC)
 
-**Trạng thái:** 🟡 Đang sống trong `sdlc/` (memory · decision-log · versioning · ownership); phần mở rộng prefix DEC theo vai (`DEC-BE-`…) **chưa áp dụng** — bật cùng pack code cắm vào spine.
+**Trạng thái:** 🟡 Đang sống trong `src/router/` (memory · decision-log · versioning · ownership); phần mở rộng prefix DEC theo vai (`DEC-BE-`…) **chưa áp dụng** — bật cùng pack code cắm vào spine.
 
 Mọi pack — bất kể repo — "nói cùng ngôn ngữ". Đây là phần khiến agent ở pack A hiểu output của pack B mà không cần đọc lại từ đầu.
 

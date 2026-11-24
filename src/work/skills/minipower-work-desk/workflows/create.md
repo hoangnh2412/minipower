@@ -28,7 +28,7 @@ Tên việc chỉ có động từ (*"sửa lỗi login"*) ⇒ đề nghị đ�
 
 Assign và PIC có thể trùng một người khi người nói vậy. Thiếu một trong hai thì vẫn hỏi.
 
-Chưa có deadline thực hiện: không bịa ngày khác. Gán đúng ngày người đưa vào Start Date và Due Date. Khi ghi qua Lark, comment đúng câu `Ngày … là mốc phản hồi deadline thực hiện`, và trình thêm subtask `Due thực tế` — [tasks-lark › l3-write](../../../tasks/skills/minipower-tasks-lark/workflows/l3-write.md) § Subtask.
+Chưa có deadline thực hiện: không bịa ngày khác. Gán đúng ngày người đưa vào Start Date và Due Date. Khi ghi qua Lark, comment đúng câu `Ngày … là mốc phản hồi deadline thực hiện`, và trình thêm subtask `Due thực tế` — [tasks-lark › l3-write](../../../../tasks/skills/minipower-tasks-lark/workflows/l3-write.md) § Subtask.
 
 Thiếu nhiều thứ ⇒ hỏi **trọn gói một lượt**, không nhỏ giọt. Còn thiếu mục bắt buộc ⇒ không trình L2.
 

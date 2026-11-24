@@ -1,9 +1,9 @@
 ---
 name: minipower-frontend-customization-react
-description: Tuỳ biến page có sẵn của kit @platform/core (TenantListPage, TenantFormPage, RoleListPage, LoginPage, ImportPage…) mà không fork — slot content (ReactNode hoặc (ctx) => ReactNode với DefaultTable/DefaultContent), callback kiểu jQuery ajax (before/onSubmit/success/error/complete) để thay API mock bằng API thật, chế độ controlled (items/total/loading/onQueryChange), withShell/withDialogs/useRoutes, ẩn thao tác theo quyền. Dùng khi cần thêm nút toolbar hoặc banner vào page kit, nối login với backend, đổi API mặc định, ẩn nút theo quyền, hoặc nhúng page kit vào dialog / layout riêng.
+description: Tuỳ biến page có sẵn của kit @platform/core mà không fork — slot content, callback before/success/error, chế độ controlled, ẩn thao tác theo quyền. Dùng khi thêm nút toolbar hoặc banner vào page kit, nối login với backend, đổi API mặc định, ẩn nút theo quyền, nhúng page kit vào dialog hoặc layout riêng.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # Tuỳ biến page của kit — Orchestrator

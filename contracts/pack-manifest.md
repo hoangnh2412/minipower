@@ -1,6 +1,6 @@
 # Pack manifest — schema `PACK.md` (SCHEMA)
 
-**Trạng thái:** 🟢 **Load-bearing** — schema cho `PACK.md` của `sdlc/` và `backend/` (đợt ADR-022 bước 7). Bốn consumer: installer `--with` · bảng router sinh tự động · trace liên-pack · hạt giống Skill Registry.
+**Trạng thái:** 🟢 **Load-bearing** — schema cho `PACK.md` của `router/` và `backend/` (đợt ADR-022 bước 7). Bốn consumer: installer `--with` · bảng router sinh tự động · trace liên-pack · hạt giống Skill Registry.
 
 Mỗi pack thêm **một khai báo nhỏ** (`PACK.md` ở root pack — file `.md` chứa một khối yaml) để agent bất kỳ trả lời được *"input của tôi từ đâu, output giao cho ai, theo boundary nào"*. Đây là cơ chế khiến pack **tự phối hợp**.
 

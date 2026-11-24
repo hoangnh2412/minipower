@@ -23,7 +23,7 @@ Manifest: [PACK.md](PACK.md).
 
 - [docs/router-and-skills.md](docs/router-and-skills.md) — router, hook, phụ thuộc skill & handoff pack
 
-## Hook (Đợt D2 — luật; máy còn ở sdlc/hooks)
+## Hook (luật và máy cùng ở `src/router/hooks/`)
 
 - [rules/dispatch.md](rules/dispatch.md) · [rules/identity.md](rules/identity.md) · [rules/l3.md](rules/l3.md)
 - [hooks/face-mismatch.md](hooks/face-mismatch.md) — L3 lệch provider → dừng (QĐ-6)

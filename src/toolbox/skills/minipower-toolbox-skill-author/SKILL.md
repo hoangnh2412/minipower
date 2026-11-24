@@ -3,14 +3,14 @@ name: minipower-toolbox-skill-author
 description: Viết và soát skill lá-rời Minipower (minipower-{module}-{capability}) — chọn module bằng 3 câu hỏi ADR-022, dựng cây SKILL.md/README.md/workflows/providers, đặt description kích hoạt được, cập nhật hub và test canh. Hỏi người xác nhận trước mọi quyết định, không tự chốt. Dùng khi tạo skill mới, thêm provider/pattern/workflow, mở module mới, hoặc soát skill có sẵn lệch chuẩn.
 metadata:
   workflow: github
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 # Viết skill Minipower — Orchestrator
 
 Skill lá-rời sống nhờ `description`: người dùng mô tả việc bằng lời, loader chọn skill. Một skill có `description` mơ hồ là skill **không bao giờ được gọi** — dù ruột đúng hết. Đó là lỗi đắt nhất khi viết skill, và không máy nào bắt được.
 
-Phạm vi: **skill lá-rời trong module** (`backend/` · `ops/` · `toolbox/` · module mới). Skill nội bộ `sdlc/` đi qua router — luật khác, xem [reference/anatomy.md § sdlc khác gì](reference/anatomy.md#sdlc-khác-gì).
+Phạm vi: **skill lá-rời trong module** (`backend/` · `ops/` · `toolbox/` · module mới). Skill router (`src/router/skills/`) đi qua dispatcher — luật khác, xem [reference/anatomy.md § Skill router khác gì](reference/anatomy.md#skill-router-khác-gì).
 
 Hướng dẫn người: [README.md](README.md) · giải phẫu đầy đủ: [reference/anatomy.md](reference/anatomy.md).
 

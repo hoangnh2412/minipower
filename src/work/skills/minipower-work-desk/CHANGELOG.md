@@ -1,5 +1,9 @@
 # Changelog — minipower-work-desk
 
+## 1.2.1 · 2026-11-23
+
+- Sửa link tới `tasks-lark › l3-write` thiếu một cấp `../` — link:check báo gãy mới.
+
 ## 1.2.0 · 2026-11-21
 
 - Tạo ticket không trình L2 khi thiếu dự án, loại việc, Assign, PIC, Start Date, Due Date. PIC không còn mặc định thành người đang gõ. Ước lượng vẫn được để trống.

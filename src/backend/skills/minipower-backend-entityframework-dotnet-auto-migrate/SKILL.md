@@ -1,10 +1,10 @@
 ---
 name: minipower-backend-entityframework-dotnet-auto-migrate
-description: Bật auto migrate EF khi Host start — chỉ EnsureMigrateDb và EnsureMigrateTemplateDb (Platform.ORM.EntityFramework). EnsureMigrateTemplateDb chỉ khi model có ITenantEntity.
+description: Bật auto migrate EF khi Host start — chỉ EnsureMigrateDb và EnsureMigrateTemplateDb (Platform.ORM.EntityFramework). Dùng khi muốn DB tự migrate lúc khởi động, hoặc model có ITenantEntity cần migrate cả template. Không phủ dotnet ef migrations.
 dependencies:
   - Platform.ORM.EntityFramework
 metadata:
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # Auto migrate (Host startup)

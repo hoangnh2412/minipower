@@ -1,5 +1,9 @@
 # Changelog — minipower-toolbox-skill-author
 
+## 1.1.1 · 2026-11-23
+
+- Dọn tham chiếu `sdlc/` đã chết (ADR-037): đổi sang `src/router/`, đổi tiêu đề `## sdlc khác gì` → `## Skill router khác gì` cùng anchor trỏ tới nó.
+
 ## 1.1.0 · 2026-11-07
 
 - Thêm workflow `upgrade-from-lesson` (hai chế độ: đánh giá / thi hành) + `templates/CHANGELOG.md.tpl` (ADR-044 §8.2).

@@ -3,7 +3,7 @@ name: minipower-work-desk
 description: Làm việc trên ticket của board mà không mở app — tạo, sửa nội dung, chuyển trạng thái đúng luồng, bình luận, đóng việc. Dùng khi người nói "tạo task", "chuyển sang review", "xong rồi", "ghi chú vào ticket". Không dùng để xem tình hình hay làm báo cáo.
 metadata:
   workflow: github
-  version: 1.2.0
+  version: 1.2.1
 ---
 
 # minipower-work-desk

@@ -2,8 +2,9 @@
  * A12 — cơ chế đã quyết gỡ không được còn dấu vết trong repo.
  *
  * Luật: đọc sổ `evals/decided-removed.md`; với mỗi từ khoá mang trạng thái
- * `đã gỡ`, soát toàn repo xem còn chỗ nào nhắc tới. Bỏ qua `ADRs/` và chính
- * sổ đó — ADR là bản ghi lịch sử, nhắc tên cơ chế đã chết ở đó là đúng.
+ * `đã gỡ`, soát toàn repo xem còn chỗ nào nhắc tới. Bỏ qua `ADRs/`, chính sổ
+ * đó, và mọi `CHANGELOG.md` — cả ba là **bản ghi lịch sử**: một dòng changelog
+ * ghi "đã gỡ X" thì buộc phải nhắc tên X, và sẽ nhắc mãi mãi.
  *
  * Vì sao cần: khi gỡ một cơ chế, code đi trước chữ. Tài liệu, `description`
  * của lá, hợp đồng, README còn mô tả thứ không còn tồn tại — và không test nào
@@ -62,7 +63,8 @@ export function run(root = REPO_ROOT) {
 
   const files = walk(root, { exts: SCAN_EXTS }).filter((f) => {
     const r = relTo(root, f)
-    return !SKIP_TOP.has(r.split("/")[0])
+    if (SKIP_TOP.has(r.split("/")[0])) return false
+    return !r.endsWith("CHANGELOG.md")
   })
 
   const findings = []

@@ -27,7 +27,7 @@ New-Item -ItemType SymbolicLink -Force -Path .claude\skills\minipower-router -Ta
 
 ## Cài bằng plugin (tùy chọn — gộp skill + hook)
 
-Thay cho symlink skill + wire hook thủ công, có thể nạp cả pack như **plugin**. Gốc plugin = `sdlc/`, manifest ở `.claude-plugin/plugin.json`.
+Thay cho symlink skill + wire hook thủ công, có thể nạp cả pack như **plugin**. Gốc plugin = `src/router/`, manifest ở `.claude-plugin/plugin.json`.
 
 ```bash
 # Dev/local — không cần marketplace
@@ -66,7 +66,7 @@ Fragment gồm:
 
 > Cài tay: vẫn merge [settings.fragment.json](settings.fragment.json) rồi thay mọi `/ABSOLUTE/PATH/TO/minipower/src/router` bằng path thật. Script ở trên làm đúng việc đó, có kiểm tra.
 
-Tất cả gọi `node "…/sdlc/hooks/bin/*.js"` — **một implementation dùng chung** với Cursor/OpenCode ([hooks/lib/*.js](../../src/router/hooks/)). Yêu cầu: **Node ≥ 18** + `git` (cho staleness). **Không còn cần `python3`**; bản `.sh`/`.ps1` cũ đã bỏ.
+Tất cả gọi `node "…/src/router/hooks/bin/*.js"` — **một implementation dùng chung** với Cursor/OpenCode ([hooks/lib/*.js](../../src/router/hooks/)). Yêu cầu: **Node ≥ 18** + `git` (cho staleness). **Không còn cần `python3`**; bản `.sh`/`.ps1` cũ đã bỏ.
 
 > Trước đây chỉ `SessionStart` (staleness) được wire, 2 prompt-guard là file chết. Nay wire đủ; staleness chuyển sang keyword-gated trên `UserPromptSubmit` như Cursor.
 

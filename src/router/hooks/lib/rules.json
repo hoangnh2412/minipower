@@ -452,7 +452,7 @@
     }
   ],
   "description_budget": {
-    "per_leaf_max": 400,
-    "total_max": 18882
+    "per_leaf_max": 377,
+    "total_max": 17434
   }
 }

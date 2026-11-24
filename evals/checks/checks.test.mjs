@@ -493,3 +493,15 @@ test("A17 — bánh răng: tổng tụt sâu dưới trần thì nhắc hạ tr�
   assert.match(r.findings[0].message, /hạ `total_max`/)
   rmSync(root, { recursive: true, force: true })
 })
+
+test("A12 âm — CHANGELOG.md là bản ghi lịch sử, nhắc tên đã gỡ ở đó là đúng", () => {
+  const root = fixture({
+    "evals/decided-removed.md": "- `oldthing` — đã gỡ — ADR-999\n",
+    "src/p/skills/a/CHANGELOG.md": "## 1.0.1\n\n- Dọn tham chiếu `oldthing` đã chết.\n",
+    "src/p/skills/a/SKILL.md": "Vẫn dùng `oldthing` ở đây.\n",
+  })
+  const r = a12(root)
+  assert.equal(r.findings.length, 1, "chỉ SKILL.md bị bắt, CHANGELOG thì không")
+  assert.match(r.findings[0].file, /SKILL\.md$/)
+  rmSync(root, { recursive: true, force: true })
+})

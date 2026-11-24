@@ -53,7 +53,7 @@ Skill thu thập log từ Loki cho module ops
 
 Hỏi **theo thứ tự**, dừng ở câu đầu tiên trả lời *có* (ADR-022 QĐ-7):
 
-1. Tác động lên chính tài liệu / pipeline `sdlc` sở hữu? → skill core trong `sdlc/`, không phải lá-rời.
+1. Tác động lên chính tài liệu / pipeline `sdlc` sở hữu? → skill router (`src/router/skills/minipower-router*`), không phải lá-rời.
 2. Gắn framework/stack có vòng đời riêng, hoặc người dùng khác hẳn? → **module mới** (kèm ADR + `PACK.md` + hub + test).
 3. Chỉ là một năng lực của skill đã có? → `workflows/` hoặc `providers/` bên trong skill đó.
 

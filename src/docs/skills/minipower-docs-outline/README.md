@@ -1,6 +1,6 @@
 # minipower-docs-outline
 
-SOP **Outline** cho mặt `docs`. Pack tự chứa SOP; không phụ thuộc `sdlc/agents`.
+SOP **Outline** cho mặt `docs`. Pack tự chứa SOP; không phụ thuộc `router/agents`.
 
 ## L1 / L2 / L3
 
