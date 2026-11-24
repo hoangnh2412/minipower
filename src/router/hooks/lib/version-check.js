@@ -6,8 +6,14 @@
  */
 
 import { execFileSync } from "node:child_process"
-import { relative, dirname } from "node:path"
+import { relative, dirname, sep } from "node:path"
 import { frontmatter, fmVersion } from "./skill-catalog.js"
+
+/** Git coi path sau `--`/trong `rev:path` là đường dẫn trong object, luôn dùng `/`
+ *  — trên Windows `relative()` trả về `\`, phải đổi trước khi đưa cho git. */
+function toGitPath(p) {
+  return p.split(sep).join("/")
+}
 
 function git(root, args) {
   try {
@@ -34,8 +40,8 @@ export function checkVersionBumps(leaves, root, base) {
   if (git(root, ["rev-parse", "--verify", base]) === null) return []
   const warnings = []
   for (const leaf of leaves) {
-    const relDir = relative(root, dirname(leaf.skillMd))
-    const relSkillMd = relative(root, leaf.skillMd)
+    const relDir = toGitPath(relative(root, dirname(leaf.skillMd)))
+    const relSkillMd = toGitPath(relative(root, leaf.skillMd))
     const changed = git(root, ["diff", "--name-only", base, "--", relDir])
     if (!changed || !changed.trim()) continue
     const baseVersion = versionAt(root, base, relSkillMd)
