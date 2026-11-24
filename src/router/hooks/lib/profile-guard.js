@@ -27,7 +27,6 @@ const VALID_PHASES = new Set(RULES.phase_order)
 const VALID_ROLES = new Set(RULES.roles.map((r) => r.id))
 const VALID_EXPERIENCE = new Set(["new", "returning"])
 const VALID_HONORIFIC = new Set(["anh", "chi"])
-const VALID_MODES = new Set(Object.keys(RULES.project_modes))
 const PROVIDERS = RULES.profile_providers
 const FACES = ["docs", "tasks", "chat", "code"]
 const NO_MCP = new Set(["local", "none"])
@@ -134,9 +133,6 @@ export function validateProfile(obj) {
   if (!VALID_EXPERIENCE.has(exp)) errors.push("minipower_experience phải là new hoặc returning")
 
   if (p.version === 2) {
-    if (!VALID_MODES.has(String(p.project_mode || ""))) {
-      errors.push(`project_mode phải là một trong: ${[...VALID_MODES].join(", ")}`)
-    }
     const src = p.approval_source
     if (!src || typeof src !== "object" || Array.isArray(src)) {
       errors.push("approval_source phải là object { docs, tasks, code }")
@@ -158,9 +154,6 @@ export function validateProfile(obj) {
 function validateProjectV3(p, errors) {
   for (const key of ["project_name", "project_summary"]) {
     if (typeof p[key] !== "string" || !String(p[key]).trim()) errors.push(`thiếu ${key}`)
-  }
-  if (!VALID_MODES.has(String(p.project_mode || ""))) {
-    errors.push(`project_mode phải là một trong: ${[...VALID_MODES].join(", ")}`)
   }
   if (!VALID_PHASES.has(String(p.current_phase || ""))) {
     errors.push("current_phase không hợp lệ")
@@ -236,53 +229,6 @@ export function validateUserProfile(obj) {
     errors.push("thiếu os_username")
   }
   return { valid: errors.length === 0, errors }
-}
-
-/**
- * Đọc `project_mode` + `approval_source` (3 mặt cũ) từ profile, có mặc định an toàn.
- * v3 map 4 provider → 3 kind (chat không vào đây). tasks `none` giữ nguyên chữ none.
- * **Fail-open (R2):** không có profile / v1 / trường thiếu → mode mặc định và local.
- * @param {string} root
- * @returns {{mode:string, approvalSource:Record<string,string>, legacy:boolean}}
- */
-export function readProjectMode(root) {
-  const fallback = {
-    mode: RULES.default_project_mode,
-    approvalSource: Object.fromEntries(RULES.approval_source_kinds.map((k) => [k, "local"])),
-    legacy: true,
-  }
-  const data = loadProfile(root)
-  if (!data) return fallback
-
-  if (data.version === 3) {
-    const mode = VALID_MODES.has(String(data.project_mode))
-      ? String(data.project_mode)
-      : RULES.default_project_mode
-    const docs = String(data.docs_provider || "local")
-    const tasksRaw = String(data.tasks_provider || "none")
-    const tasks = tasksRaw === "none" ? "none" : tasksRaw
-    const code = String(data.code_provider || "local")
-    return {
-      mode,
-      approvalSource: { docs, tasks, code },
-      legacy: false,
-    }
-  }
-
-  if (data.version !== 2) return fallback
-
-  const mode = VALID_MODES.has(String(data.project_mode))
-    ? String(data.project_mode)
-    : RULES.default_project_mode
-  const src = { ...fallback.approvalSource }
-  const raw = data.approval_source
-  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
-    for (const kind of RULES.approval_source_kinds) {
-      const v = /** @type {Record<string, unknown>} */ (raw)[kind]
-      if (typeof v === "string" && v.trim()) src[kind] = v.trim()
-    }
-  }
-  return { mode, approvalSource: src, legacy: false }
 }
 
 /**
@@ -409,7 +355,7 @@ export function isMinipowerWorkPrompt(prompt, filePaths) {
 
 const BLOCK_PROJECT = `Chưa có memory/profile.json hợp lệ (cấu hình **dự án**).
 
-Chạy: **Init project {tên}** hoặc **Hoàn tất profile** — hỏi trọn gói: project_mode + 4 provider (docs/tasks/chat/code). Schema v3 — [TPL-agent-profile](templates/TPL-agent-profile.md).
+Chạy: **Init project {tên}** hoặc **Hoàn tất profile** — hỏi trọn gói: 4 provider (docs/tasks/chat/code). Schema v3 — [TPL-agent-profile](templates/TPL-agent-profile.md).
 Không ghi user_name vào file git.
 Gỡ tạm: BYPASS ở đầu dòng.`
 

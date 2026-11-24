@@ -300,7 +300,6 @@ test("T4 — sqlite thiếu link FR→AC → WARN (không FAIL), markdown im", a
       project_name: "d",
       project_summary: "d",
       current_phase: "requirements",
-      project_mode: "standard",
       docs_provider: "outline",
       tasks_provider: "none",
       chat_provider: "none",

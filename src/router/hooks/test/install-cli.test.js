@@ -145,7 +145,6 @@ test("init --answers + --check", () => {
     JSON.stringify({
       project_name: "sample",
       project_summary: "demo",
-      project_mode: "mvp",
       current_phase: "discovery",
       docs_provider: "local",
       tasks_provider: "none",
@@ -197,7 +196,6 @@ test("init hỏi lựa chọn qua stdin (không LLM)", () => {
     })
     const p = JSON.parse(readFileSync(join(dir, "memory", "profile.json"), "utf8"))
     assert.equal(p.version, 3)
-    assert.equal(p.project_mode, "mvp")
     assert.equal(p.docs_provider, "local")
     assert.equal(p.tasks_provider, "none")
     assert.deepEqual(p.surfaces, ["docs"])
@@ -214,7 +212,6 @@ function answersFile(dir, extra = {}) {
     JSON.stringify({
       project_name: "sample",
       project_summary: "demo",
-      project_mode: "standard",
       current_phase: "discovery",
       docs_provider: "local",
       tasks_provider: "none",
@@ -296,7 +293,6 @@ test("init --check FAIL khi shim trỏ sdlc/install", () => {
     JSON.stringify({
       project_name: "sample",
       project_summary: "demo",
-      project_mode: "mvp",
       current_phase: "discovery",
       docs_provider: "local",
       tasks_provider: "none",

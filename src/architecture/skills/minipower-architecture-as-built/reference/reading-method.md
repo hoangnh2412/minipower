@@ -33,7 +33,7 @@ Mọi phát hiện mang **một** nhãn. Không chuyển Inferred hay Unknown th
 | **Inferred** | Suy ra từ nhiều bằng chứng ghép lại | Gắn `[Suy luận]` và nêu các bằng chứng gốc |
 | **Unknown** | Chưa đủ bằng chứng | Gắn `[Chưa xác minh]`; vào `memory/open-questions.md` khi cần người trả lời |
 
-**Quy tắc dẫn xuất — Mâu thuẫn ⛔:** cùng một điểm có dòng Documented và dòng Observed nói khác nhau → gom thành **một mục riêng**, nêu cả hai bên và nguồn, **không** tự chọn bên đúng. Việc chọn là của người. Ở chế độ `maintain` đây thường là phát hiện giá trị nhất.
+**Quy tắc dẫn xuất — Mâu thuẫn ⛔:** cùng một điểm có dòng Documented và dòng Observed nói khác nhau → gom thành **một mục riêng**, nêu cả hai bên và nguồn, **không** tự chọn bên đúng. Việc chọn là của người. Khi tiếp quản hệ cũ đây thường là phát hiện giá trị nhất.
 
 Ba bẫy quen: ẩn một nút trên UI không chứng minh server từ chối thao tác đó · một effect hay lifecycle gọi API không chứng minh đó là đường data chính nếu route hay store đã load trước · tên method (`validateInvoice`) không chứng minh business rule — phải đọc thân, caller, test và cấu hình.
 

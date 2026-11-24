@@ -1,5 +1,9 @@
 # Changelog — minipower-router-retro
 
+## 1.1.1 · 2026-11-24
+
+- Workflow capture: bối cảnh bài học không còn hỏi chế độ dự án.
+
 ## 1.1.0 · 2026-11-08
 
 - Nhãn chuyển sang nguồn chân lý GitHub: bỏ bảng sinh tự động từ `rules.json`, skill đọc nhãn thật trước khi gắn.

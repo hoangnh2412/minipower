@@ -3,7 +3,7 @@ name: minipower-router-deliberation
 description: Premise check trước khi làm việc Full: PROCEED RESHAPE STOP. Dùng khi có nên làm, nghị luận, deliberation — verdict người, máy không FAIL.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # minipower-router-deliberation
@@ -43,22 +43,22 @@ Trước khi bỏ công phân tích/viết: xác nhận **việc này đáng t�
 
 **Reassessment trigger:** đang giữa phase mà #6 bật (bằng chứng mới) → **dừng**, chạy lại Premise Check.
 
-### Theo chế độ dự án
+### Rút gọn theo tình huống
 
-Chế độ đọc từ `memory/profile.json`; định nghĩa ở [minipower-router § Chế độ dự án](../minipower-router/SKILL.md#chế-độ-dự-án-project_mode) — **không lặp lại ở đây**.
+Tình huống do người nêu lúc giao việc; không chắc thì hỏi, không đoán.
 
-| | `standard` | `mvp` | `maintain` |
+| | Làm chuẩn (bàn giao) | Làm nhanh (demo) | Hệ cũ (tiếp quản) |
 |---|---|---|---|
 | Premise Check | **đủ 6 câu** ở Full | rút còn **1 · 2 · 4** (gốc · ai đau · do-nothing) | rút còn **1 · 4 · 6**; thêm *"hệ cũ đang làm gì ở chỗ này?"* |
-| Câu 5 (DOC có consumer?) | luôn hỏi | bỏ — `docs_focus` đã chọn sẵn DOC nào cần | hỏi theo vùng chạm |
+| Câu 5 (DOC có consumer?) | luôn hỏi | bỏ — bộ DOC lõi đã chọn trước | hỏi theo vùng chạm |
 | Nghị luận đa góc nhìn | ≥3 góc | 1–2 góc, hoặc bỏ nếu quyết định đảo ngược được rẻ | ≥2 góc — sửa hệ đang chạy khó đảo ngược |
 | Verdict | ghi `decision-log.md` | ghi khi là quyết định thật, không ghi cho mọi lựa chọn | ghi — hệ cũ thiếu "vì sao" là nợ đắt nhất |
 
-Vì sao `mvp` giữ câu 1 · 2 · 4: chúng chặn thứ **tốn nhất là làm nhầm việc**. Bỏ câu 3 và 5 vì ở `mvp` chưa có bộ DOC để hỏi "có consumer không", còn "đã có giải pháp chưa" thường đã rõ lúc chọn làm MVP.
+Vì sao làm nhanh giữ câu 1 · 2 · 4: chúng chặn thứ **tốn nhất là làm nhầm việc**. Bỏ câu 3 và 5 vì chưa có bộ DOC để hỏi "có consumer không", còn "đã có giải pháp chưa" thường đã rõ lúc chọn làm nhanh.
 
-`maintain` giữ câu 6 (**tiền đề còn đúng?**) vì đây là chế độ dễ dính nhất: tài liệu cũ mô tả một hệ không còn tồn tại, tin theo là quyết định sai từ gốc.
+Hệ cũ giữ câu 6 (**tiền đề còn đúng?**) vì đây là tình huống dễ dính nhất: tài liệu cũ mô tả một hệ không còn tồn tại, tin theo là quyết định sai từ gốc.
 
-> Gate này **mềm ở mọi chế độ** — không hook nào chặn trên verdict PROCEED/RESHAPE/STOP (QĐ-11). Verdict là **phán đoán ngữ nghĩa**, máy không kiểm được; nó chỉ thành điều kiện máy kiểm khi vật chất hoá thành DEC hoặc thành DOC mà `prereq-gate` soát sự tồn tại.
+> Gate này **mềm** — không hook nào chặn trên verdict PROCEED/RESHAPE/STOP (QĐ-11). Verdict là **phán đoán ngữ nghĩa**, máy không kiểm được; nó chỉ thành điều kiện máy kiểm khi vật chất hoá thành DEC hoặc thành DOC mà `prereq-gate` soát sự tồn tại.
 
 ---
 

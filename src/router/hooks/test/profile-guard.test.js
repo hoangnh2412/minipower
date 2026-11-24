@@ -18,7 +18,6 @@ import {
   providersFromProfile,
   validateProfile,
   validateUserProfile,
-  readProjectMode,
   PROFILE_VERSION,
 } from "../lib/profile-guard.js"
 
@@ -61,12 +60,11 @@ test("validateProfile", async (t) => {
   })
 })
 
-// ─── ADR-020 — schema v2 (project_mode + approval_source) ───────────────────
+// ─── ADR-020 — schema v2 (approval_source) ──────────────────────────────────
 
 const VALID_PROFILE_V2 = {
   ...VALID_PROFILE,
   version: 2,
-  project_mode: "standard",
   approval_source: { docs: "local", tasks: "local", code: "local" },
 }
 
@@ -87,19 +85,10 @@ test("profile v2 (QĐ-1, QĐ-12)", async (t) => {
     assert.equal(validateProfile({ ...VALID_PROFILE_V2, version: 99 }).valid, false)
   })
 
-  await t.test("v2 thiếu project_mode → không hợp lệ", () => {
-    const r = validateProfile({ ...VALID_PROFILE_V2, project_mode: undefined })
-    assert.equal(r.valid, false)
-    assert.ok(r.errors.some((e) => e.includes("project_mode")))
-  })
-
-  await t.test("v2 project_mode lạ → không hợp lệ", () => {
-    assert.equal(validateProfile({ ...VALID_PROFILE_V2, project_mode: "turbo" }).valid, false)
-  })
-
-  await t.test("v2 mode mvp / maintain đều hợp lệ", () => {
-    for (const m of ["mvp", "maintain"]) {
-      assert.equal(validateProfile({ ...VALID_PROFILE_V2, project_mode: m }).valid, true, m)
+  // nhắc tên cũ có chủ đích: test tương thích — profile đã cài còn trường này phải vẫn hợp lệ
+  await t.test("v2 còn trường project_mode cũ (bất kỳ giá trị) → vẫn hợp lệ, không chặn oan dự án đã cài", () => {
+    for (const m of ["standard", "mvp", "maintain", "turbo"]) {
+      assert.equal(validateProfile({ ...VALID_PROFILE_V2, project_mode: m }).valid, true, m) // nhắc tên cũ có chủ đích: tương thích
     }
   })
 
@@ -119,74 +108,6 @@ test("profile v2 (QĐ-1, QĐ-12)", async (t) => {
     })
     assert.equal(r.valid, true)
   })
-})
-
-test("readProjectMode — fail-open (R2)", async (t) => {
-  const root = makeProject()
-  try {
-    await t.test("chưa có profile → standard + local, legacy=true, không ném", () => {
-      const r = readProjectMode(root)
-      assert.equal(r.mode, "standard")
-      assert.deepEqual(r.approvalSource, { docs: "local", tasks: "local", code: "local" })
-      assert.equal(r.legacy, true)
-    })
-
-    await t.test("root không tồn tại → vẫn trả mặc định", () => {
-      const r = readProjectMode(join(root, "khong-ton-tai"))
-      assert.equal(r.mode, "standard")
-      assert.equal(r.legacy, true)
-    })
-
-    await t.test("profile v1 → đọc như standard + local (legacy)", () => {
-      writeFileSync(
-        join(root, "memory", "profile.json"),
-        JSON.stringify(VALID_PROFILE, null, 2),
-        "utf8",
-      )
-      const r = readProjectMode(root)
-      assert.equal(r.mode, "standard")
-      assert.equal(r.legacy, true)
-    })
-
-    await t.test("profile v2 → đọc đúng mode + nguồn phê duyệt", () => {
-      writeFileSync(
-        join(root, "memory", "profile.json"),
-        JSON.stringify(
-          {
-            ...VALID_PROFILE_V2,
-            project_mode: "maintain",
-            approval_source: { docs: "outline", tasks: "openproject", code: "local" },
-          },
-          null,
-          2,
-        ),
-        "utf8",
-      )
-      const r = readProjectMode(root)
-      assert.equal(r.mode, "maintain")
-      assert.equal(r.legacy, false)
-      assert.equal(r.approvalSource.docs, "outline")
-      assert.equal(r.approvalSource.code, "local")
-    })
-
-    await t.test("v2 mode lạ → rơi về standard, không ném", () => {
-      writeFileSync(
-        join(root, "memory", "profile.json"),
-        JSON.stringify({ ...VALID_PROFILE_V2, project_mode: "turbo" }, null, 2),
-        "utf8",
-      )
-      assert.equal(readProjectMode(root).mode, "standard")
-    })
-
-    await t.test("profile.json hỏng JSON → mặc định, không ném", () => {
-      writeFileSync(join(root, "memory", "profile.json"), "{ khong phai json", "utf8")
-      const r = readProjectMode(root)
-      assert.equal(r.mode, "standard")
-      assert.equal(r.legacy, true)
-    })
-  } finally {
-    rmSync(root, { recursive: true, force: true })
-  }
 })
 
 test("isMinipowerProject", async (t) => {
@@ -284,7 +205,6 @@ const VALID_PROFILE_V3 = {
   project_name: "demo",
   project_summary: "Hệ thống hóa đơn điện tử",
   current_phase: "discovery",
-  project_mode: "standard",
   docs_provider: "local",
   tasks_provider: "none",
   chat_provider: "none",
@@ -358,19 +278,9 @@ test("providersFromProfile — map v2 local tasks → none", () => {
   assert.equal(p.code, "local")
 })
 
-test("readProjectMode v3", async (t) => {
-  const root = makeProject()
-  try {
-    writeFileSync(join(root, "memory", "profile.json"), JSON.stringify(VALID_PROFILE_V3), "utf8")
-    const r = readProjectMode(root)
-    assert.equal(r.mode, "standard")
-    assert.equal(r.legacy, false)
-    assert.equal(r.approvalSource.docs, "local")
-    assert.equal(r.approvalSource.tasks, "none")
-    assert.equal(r.approvalSource.code, "local")
-  } finally {
-    rmSync(root, { recursive: true, force: true })
-  }
+// nhắc tên cũ có chủ đích: test tương thích — profile đã cài còn trường này phải vẫn hợp lệ
+test("profile v3 còn trường project_mode cũ → vẫn hợp lệ (dự án đích không phải sửa gì)", () => {
+  assert.equal(validateProfile({ ...VALID_PROFILE_V3, project_mode: "mvp" }).valid, true) // nhắc tên cũ có chủ đích: tương thích
 })
 
 test("identity T7 — os_username lệch", async (t) => {

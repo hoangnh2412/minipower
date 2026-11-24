@@ -10,7 +10,7 @@ assets/archive/  →  (khảo sát + xác nhận)  →  docs/
 
 Không copy thẳng nội dung từ đây vào `docs/`. Mỗi mục kéo sang phải có người xác nhận còn đúng, và có ID để trace.
 
-> Chủ yếu dùng ở chế độ **`maintain`** (tiếp quản hệ cũ). Chế độ khác vẫn dùng được khi khách hàng gửi tài liệu cũ.
+> Chủ yếu dùng khi tiếp quản hệ cũ. Dự án khác vẫn dùng được khi khách hàng gửi tài liệu cũ.
 
 ## Chỉ mục nguồn
 

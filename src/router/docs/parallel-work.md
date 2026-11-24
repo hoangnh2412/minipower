@@ -8,7 +8,7 @@ Dự án lớn thường chia **theo bounded context (module)** và **theo vai t
 >
 > **Mô hình: pipeline theo module, không phải barrier** (ADR-020 QĐ-14). Mỗi module một nhịp riêng; module xong trước đi tiếp trước, **không chờ nhau**. Con người mở từng nhánh — không agent bàn giao cho agent.
 >
-> **Mỗi module một nhịp riêng** ([ADR-020](../../../ADRs/todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-14): module xong trước đi tiếp trước, **không** chờ nhau ở vạch đích nào. Con người quyết từng nhánh đã đủ thông tin để chảy tiếp chưa — đó chính là mô hình cả trang này mô tả.
+> **Mỗi module một nhịp riêng** ([ADR-020](../../../ADRs/cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-14): module xong trước đi tiếp trước, **không** chờ nhau ở vạch đích nào. Con người quyết từng nhánh đã đủ thông tin để chảy tiếp chưa — đó chính là mô hình cả trang này mô tả.
 
 ## Phân vai mẫu
 

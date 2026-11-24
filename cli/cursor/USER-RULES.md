@@ -36,11 +36,11 @@ Không ghi `state.vscdb` / cloud account bằng script (Cursor đè lại, khôn
 Pass:
 
 - Không `Sẽ chạy minipower-*`
-- Không bảng DOC-03/`standard`/readiness-gate
+- Không bảng DOC-03/readiness-gate
 - Xin mô tả nghiệp vụ **hoặc** viết FR thường
 - Tối đa một dòng: muốn Minipower thì `minipower init` trên folder đang mở
 
-Fail: Phase requirements, DOC-06, mode mặc định `standard` → User Rules chưa vào phiên (sai ô, chat cũ, hoặc nhiều root).
+Fail: Phase requirements, DOC-06 → User Rules chưa vào phiên (sai ô, chat cũ, hoặc nhiều root).
 
 **T6 — có marker** (sau `install` + `init` trên sample)
 

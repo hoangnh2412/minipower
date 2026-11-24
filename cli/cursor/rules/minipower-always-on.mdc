@@ -20,7 +20,7 @@ Khi không có marker:
 - **Không** announce / đọc skill `minipower-*`.
 - **Không** mở, grep, hay đối chiếu folder khác (workspace khác, `sample-*`, factory, sibling).
 - **Không** lấy marker, `profile.json`, DOC hay tên project từ **chat / transcript trước**. Chỉ CWD hiện tại.
-- **Không** giả định DOC / `project_mode` / `profile.json`.
+- **Không** giả định DOC / `profile.json`.
 - **Không** phỏng vấn init. Một câu tùy chọn: muốn Minipower thì `minipower init` trên **folder này**.
 
 Khi **có** `.minipower/` trên cây CWD:

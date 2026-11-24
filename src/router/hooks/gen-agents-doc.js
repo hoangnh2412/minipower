@@ -12,7 +12,6 @@
  * Target:
  *   skills/minipower-router-readiness/SKILL.md — bảng tiền đề theo intent (N1)
  *   roles/README.md                 — chỉ mục vai trò (N3)
- *   skills/minipower-router/SKILL.md — bảng project_mode
  *   contracts/doc-mode.md           — DOC × pack
  *   hooks.json, cli/claude/settings.fragment.json,
  *   cli/cursor/hooks/hooks.fragment.json — wiring hook (SSOT: rules.json install_hooks)
@@ -26,8 +25,6 @@ import { fileURLToPath } from "node:url"
 import {
   ROLES,
   PREREQ_BY_INTENT,
-  PROJECT_MODES,
-  formatDocRanges,
   docLabel,
   docScope,
   PHASE_BY_DOC,
@@ -47,12 +44,6 @@ const rel = (p) => fileURLToPath(new URL(p, import.meta.url))
 /** Router — agents/roles (ADR-037 E2). */
 const rt = (...p) => join(ROUTER, ...p)
 
-/** Mô tả tình huống mỗi mode — chữ cho NGƯỜI, không phải luật máy (luật ở rules.json). */
-const MODE_NOTE = {
-  standard: "Sản phẩm mới / outsource; hoặc MVP lên đời",
-  mvp: "Chỉ cần chạy được, tài liệu cơ bản",
-  maintain: "Hệ chạy nhiều năm, tài liệu cũ rời rạc",
-}
 const marker = (id) =>
   `<!-- BEGIN generated: ${id} (nguồn: hooks/lib/rules.json — chạy \`npm run gen\`) -->`
 const END = (id) => `<!-- END generated: ${id} -->`
@@ -71,24 +62,6 @@ function prereqTable() {
         : "theo module"
       : "cấp dự án"
     rows.push(`| **${it.label}** | ${reqs} | ${where} |`)
-  }
-  return rows.join("\n")
-}
-
-function projectModesTable() {
-  const rows = [
-    "| Chế độ | Tình huống | DOC cần điền (`docs_focus`) | prereq | `02-baseline` | `_legacy` |",
-    "|--------|------------|------------------------------|:------:|:-------------:|:---------:|",
-  ]
-  for (const [id, cfg] of Object.entries(PROJECT_MODES)) {
-    const focus =
-      cfg.docs_focus === "all"
-        ? "**tất cả 19 DOC**"
-        : `DOC-${formatDocRanges(cfg.docs_focus.map(Number))}`
-    const g = cfg.gates
-    rows.push(
-      `| **${cfg.label}** (\`${id}\`) | ${MODE_NOTE[id] || ""} | ${focus} | ${g.prereq} | ${g.baseline} | ${g.legacy_read} |`,
-    )
   }
   return rows.join("\n")
 }
@@ -127,7 +100,6 @@ function rolesTable() {
 const TARGETS = [
   { file: rt("skills", "minipower-router-readiness", "SKILL.md"), id: "prereq-by-intent", build: prereqTable },
   { file: rt("roles", "README.md"), id: "roles-index", build: rolesTable },
-  { file: rt("skills", "minipower-router", "SKILL.md"), id: "project-modes", build: projectModesTable },
   { file: rel("../../../contracts/doc-mode.md"), id: "doc-mode", build: docModeTable },
 ]
 

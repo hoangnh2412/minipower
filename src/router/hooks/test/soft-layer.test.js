@@ -9,7 +9,6 @@ import assert from "node:assert/strict"
 import { readFileSync, readdirSync, existsSync } from "node:fs"
 import { join } from "node:path"
 
-import { PROJECT_MODES } from "../lib/rules.js"
 import { ROUTER, SRC } from "../lib/skill-catalog.js"
 
 const readRouter = (...p) => readFileSync(join(ROUTER, ...p), "utf8")
@@ -18,7 +17,6 @@ const GATE_SKILLS = [
   "minipower-router-deliberation",
   "minipower-router-readiness",
 ]
-const MODE_IDS = Object.keys(PROJECT_MODES)
 
 function markdownFiles() {
   const out = []
@@ -45,37 +43,6 @@ function markdownFiles() {
   }
   return out
 }
-
-test("#7 — mỗi skill gate có mục 'Theo chế độ dự án' phủ đủ 3 chế độ", () => {
-  for (const s of GATE_SKILLS) {
-    const text = readRouter("skills", s, "SKILL.md")
-    assert.match(text, /[Tt]heo chế độ dự án/, `${s}: thiếu mục theo chế độ`)
-    for (const id of MODE_IDS) {
-      assert.match(text, new RegExp(`\`${id}\``), `${s}: chưa khai chế độ \`${id}\``)
-    }
-  }
-})
-
-test("#7 — skill gate KHÔNG lặp lại định nghĩa chế độ, phải trỏ về router", () => {
-  for (const s of GATE_SKILLS) {
-    const text = readRouter("skills", s, "SKILL.md")
-    assert.match(
-      text,
-      /không lặp lại ở đây/i,
-      `${s}: phải nói rõ không lặp định nghĩa chế độ`,
-    )
-    assert.match(
-      text,
-      /SKILL\.md#chế-độ-dự-án-project_mode/,
-      `${s}: phải trỏ về router § Chế độ dự án`,
-    )
-    assert.doesNotMatch(
-      text,
-      /DOC cần điền \(`docs_focus`\)/,
-      `${s}: copy bảng chế độ từ router — chỉ được trỏ`,
-    )
-  }
-})
 
 test("#7 — skill gate nói rõ mình MỀM, phần cứng do hook làm", () => {
   for (const s of GATE_SKILLS) {

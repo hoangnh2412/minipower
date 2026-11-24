@@ -44,7 +44,6 @@ import { resolveSurfaces, validateProfile, validateUserProfile } from "../src/ro
 import { RULES } from "../src/router/hooks/lib/rules.js"
 import { listLeafSkills } from "../src/router/hooks/lib/skill-catalog.js"
 
-const MODE_ORDER = ["mvp", "standard", "maintain"]
 const CLIENT_ORDER = ["cursor", "claude", "opencode"]
 const FACES = ["docs", "tasks", "chat", "code"]
 const NO_MCP = new Set(["local", "none"])
@@ -478,7 +477,6 @@ function requiredAnswers() {
   return [
     "project_name",
     "project_summary",
-    "project_mode",
     "current_phase",
     "docs_provider",
     "tasks_provider",
@@ -650,11 +648,6 @@ async function promptAnswers(target) {
     const project_name = await nextLine(iter, basename(target))
     stdout.write(`Tóm tắt một dòng [dự án Minipower]: `)
     const project_summary = await nextLine(iter, "dự án Minipower")
-    const modeOpts = MODE_ORDER.filter((id) => RULES.project_modes[id]).map((id) => ({
-      value: id,
-      label: `${id} — ${RULES.project_modes[id].label}`,
-    }))
-    const project_mode = await askChoiceFrom(iter, "Chế độ dự án", modeOpts, 0)
     const phaseOpts = RULES.phase_order.map((id) => ({ value: id, label: id }))
     const current_phase = await askChoiceFrom(iter, "Phase hiện tại", phaseOpts, 0)
     const mcp = {}
@@ -702,7 +695,7 @@ async function promptAnswers(target) {
       0,
     )
     stdout.write(
-      `\n${project_name} · ${project_mode} · ${current_phase} · ${surfaces.join("+")} · ${user_name} (${honorific}) · ${roles.join("+")}\n`,
+      `\n${project_name} · ${current_phase} · ${surfaces.join("+")} · ${user_name} (${honorific}) · ${roles.join("+")}\n`,
     )
     stdout.write("Ghi cây dự án? [Y/n]\n")
     const ok = (await nextLine(iter, "Y")).toLowerCase()
@@ -710,7 +703,6 @@ async function promptAnswers(target) {
     return {
       project_name,
       project_summary,
-      project_mode,
       current_phase,
       ...providers,
       mcp: Object.keys(mcp).length ? mcp : undefined,
@@ -773,7 +765,6 @@ async function cmdInit(flags) {
     project_name: a.project_name,
     project_summary: a.project_summary,
     current_phase: a.current_phase,
-    project_mode: a.project_mode,
     docs_provider: a.docs_provider,
     tasks_provider: a.tasks_provider,
     chat_provider: a.chat_provider,
@@ -805,10 +796,8 @@ async function cmdInit(flags) {
   ensureSqlite(mp)
   if (!existsSync(join(mp, "clients.json"))) writeFileSync(join(mp, "clients.json"), jsonFile({ clients: [] }))
 
-  if (a.project_mode === "mvp" || a.project_mode === "maintain") {
-    const debt = join(target, "memory", "doc-debt.md")
-    if (!existsSync(debt)) copyFileSync(join(ROUTER, "project-skeleton", "memory", "doc-debt.md"), debt)
-  }
+  const debt = join(target, "memory", "doc-debt.md")
+  if (!existsSync(debt)) copyFileSync(join(ROUTER, "project-skeleton", "memory", "doc-debt.md"), debt)
 
   writeFactoryLauncher(target)
   printAgentsHint(target, profile)
@@ -833,7 +822,6 @@ Viết file AGENTS.md mới, cùng cấu trúc mục 0–8, tiếng Việt, đú
 
 project_name: ${profile.project_name}
 project_summary: ${profile.project_summary}
-project_mode: ${profile.project_mode}
 current_phase: ${profile.current_phase}
 docs_provider: ${profile.docs_provider}
 tasks_provider: ${profile.tasks_provider}
@@ -897,15 +885,8 @@ function checkInit(target) {
       errors.push(".minipower/bin/minipower (shim cũ — chạy lại minipower install)")
     }
   }
-  if (existsSync(pf)) {
-    const mode = JSON.parse(readFileSync(pf, "utf8")).project_mode
-    if (
-      surfaces.includes("docs") &&
-      (mode === "mvp" || mode === "maintain") &&
-      !existsSync(join(target, "memory", "doc-debt.md"))
-    ) {
-      errors.push("memory/doc-debt.md")
-    }
+  if (surfaces.includes("docs") && !existsSync(join(target, "memory", "doc-debt.md"))) {
+    errors.push("memory/doc-debt.md")
   }
   return errors
 }

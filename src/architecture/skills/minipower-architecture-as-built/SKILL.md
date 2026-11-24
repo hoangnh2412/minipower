@@ -3,7 +3,7 @@ name: minipower-architecture-as-built
 description: Đọc source để khai quật hệ đang chạy thành tài liệu as-built — trace một luồng theo 6 tầng / 5 câu hỏi, bằng chứng path:line với 4 nhãn, pattern theo stack .NET · Java · React · Flutter, CodeGraph tuỳ chọn. Dùng khi maintain, legacy, hệ cũ không tài liệu, đọc source, reverse-engineer, hiểu luồng, trace flow, codebase lạ — người trigger.
 metadata:
   workflow: github
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # minipower-architecture-as-built
@@ -14,7 +14,7 @@ Khai quật hệ đang chạy thành bản vẽ hoàn công. **Người trigger*
 
 *As-built* là thuật ngữ xây dựng: **bản vẽ hoàn công** — mô tả cái **đã xây**, ngược chiều bản thiết kế mô tả cái **sắp xây**. Toàn bộ 19 DOC còn lại của minipower đặc tả cái sắp làm; skill này là chiều ngược.
 
-**Điểm vào của chế độ `maintain`** ([minipower-router § Chế độ dự án](../../../router/skills/minipower-router/SKILL.md#chế-độ-dự-án-project_mode)). Dùng được ở mọi chế độ khi cần khai quật một vùng code không ai còn nhớ.
+**Điểm vào khi tiếp quản hệ đang chạy.** Dùng được ở mọi dự án khi cần khai quật một vùng code không ai còn nhớ.
 
 ---
 
@@ -70,7 +70,7 @@ Wrap [codegraph](https://github.com/colbymchenry/codegraph) (tree-sitter → SQL
 
 ## Đích đến theo DOC
 
-Bám `docs_focus` của chế độ `maintain`:
+Bộ DOC hệ cũ cần trước:
 
 | DOC | Khai quật cái gì | Bằng chứng điển hình |
 |-----|------------------|----------------------|
@@ -84,7 +84,7 @@ Bám `docs_focus` của chế độ `maintain`:
 
 Flow Map nháp distill về: luồng → **DOC-05**, rule lộ trong `if` / validator → **DOC-04**, endpoint → **DOC-12**, hệ ngoài → **DOC-10**. Không giữ bộ artifact riêng (`01-system-context.md`, `flows/`) song song hệ DOC.
 
-**DOC-17 (runbook) thường có giá trị cao nhất** ở `maintain`: người tiếp quản cần biết *deploy thế nào, hỏng thì làm gì* trước khi cần biết use case là gì.
+**DOC-17 (runbook) thường có giá trị cao nhất** khi tiếp quản: người tiếp quản cần biết *deploy thế nào, hỏng thì làm gì* trước khi cần biết use case là gì.
 
 ## Sự cố vận hành
 

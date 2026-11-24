@@ -21,4 +21,4 @@ A12 **không** soát `ADRs/` và chính sổ này: ADR là bản ghi lịch sử
 ## Sổ
 
 - `sdlc/` — đã gỡ — ADR-037 xoá thư mục gốc `sdlc/`; runtime + skeleton + template chuyển sang `src/router/`.
-- `project_mode` — đang gỡ — chủ repo chốt gỡ 2026-11-23; việc chưa làm nên còn sót là bình thường (xem thẻ #13 / S7).
+- `project_mode` — đã gỡ — S7 (#13) thi hành 2026-11-24; mức gate thành số khai `rules.json → gate_levels`; ADR-020 → cancel.

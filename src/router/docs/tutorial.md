@@ -37,7 +37,7 @@ Trong folder dự án (ví dụ `acme-order/`):
 node .minipower/bin/minipower init
 ```
 
-Script hỏi `project_mode` và bề mặt (`docs`, `backend`, `frontend`…). Kết quả:
+Script hỏi provider và bề mặt (`docs`, `backend`, `frontend`…). Kết quả:
 
 | Thư mục | Vai trò |
 |---------|---------|
@@ -46,17 +46,17 @@ Script hỏi `project_mode` và bề mặt (`docs`, `backend`, `frontend`…). K
 | `docs/` | Artifact chính thức (DOC-01 → DOC-19) |
 | `memory/` | Sổ đội: `decision-log.md`, `open-questions.md`, `doc-debt.md` |
 
-Cấu trúc `docs/` copy từ [docs-skeleton](../docs-skeleton/README.md). Mọi chế độ (`mvp` · `standard` · `maintain`) dùng **cùng khung folder** — chỉ khác *DOC nào cần điền ngay*.
+Cấu trúc `docs/` copy từ [docs-skeleton](../docs-skeleton/README.md). Mọi dự án dùng **cùng khung folder** — khác nhau chỉ ở *DOC nào cần điền ngay*; phần thiếu ghi `memory/doc-debt.md`.
 
-### Chọn chế độ dự án
+### Điền tài liệu tới đâu
 
-| Chế độ | Khi nào | DOC ưu tiên điền trước |
-|--------|---------|------------------------|
-| **`mvp`** | Demo nhanh, 2–4 tuần | DOC-01, 03, 06, 07, 09, 17 |
-| **`standard`** | Outsource, nghiệm thu theo tài liệu | Đủ 19 DOC + baseline |
-| **`maintain`** | Tiếp quản hệ cũ, tài liệu thất lạc | DOC-04, 08–12, 17, 18 (khai quật as-built) |
+| Tình huống | DOC ưu tiên điền trước |
+|------------|------------------------|
+| Demo nhanh, 2–4 tuần | DOC-01, 03, 06, 07, 09, 17 |
+| Outsource, nghiệm thu theo tài liệu | Đủ 19 DOC + baseline |
+| Tiếp quản hệ cũ, tài liệu thất lạc | DOC-04, 08–12, 17, 18 (khai quật as-built) |
 
-Phần còn lại của tutorial mô tả luồng **`standard`** (đầy đủ). Cuối bài có [lối tắt MVP](#lối-tắt-mvp).
+Phần còn lại của tutorial mô tả luồng **đầy đủ**. Cuối bài có [lối tắt MVP](#lối-tắt-mvp).
 
 ---
 
@@ -256,7 +256,7 @@ Khi DOC-01–07 + trace matrix + review DOC-08–12 đạt mức ký:
 
 Sau baseline, **không sửa trực tiếp** file đã ký — mọi thay đổi qua CR.
 
-**Rà còn thiếu:** `minipower-support-registry` — so với `project_mode`, nhắc DOC chưa điền (không sửa nội dung FR).
+**Rà còn thiếu:** `minipower-support-registry` — nhắc DOC chưa điền (không sửa nội dung FR).
 
 ---
 
@@ -347,7 +347,7 @@ flowchart TB
 
 ## Lối tắt MVP
 
-Với `project_mode: mvp`, ưu tiên đường ngắn:
+Dự án cần demo nhanh, ưu tiên đường ngắn:
 
 ```text
 assets/ (file thô)
@@ -358,9 +358,9 @@ assets/ (file thô)
   → code + demo
 ```
 
-DOC chưa điền ghi vào `memory/doc-debt.md` — trả nợ khi lên `standard`.
+DOC chưa điền ghi vào `memory/doc-debt.md` — trả nợ trước khi chốt baseline.
 
-Hook `prereq-gate` ở MVP chỉ **nhắc**, không chặn cứng như `standard`.
+Hook `prereq-gate` chỉ **nhắc**, không chặn — mức khai ở `rules.json → gate_levels`.
 
 ---
 

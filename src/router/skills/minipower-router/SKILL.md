@@ -3,7 +3,7 @@ name: minipower-router
 description: Phân loại intent Minipower, triage đơn hay phức, rồi gợi ý đúng một lá cho mỗi task. Dùng khi làm gì tiếp, chọn skill, dispatcher, không biết mở pack nào — không tự gọi MCP L3, không agent bàn giao agent.
 metadata:
   workflow: github
-  version: 1.0.1
+  version: 1.1.0
 ---
 
 # minipower-router
@@ -42,7 +42,7 @@ Bảng dưới là **gợi ý pack** khi LLM định hướng, không phải mat
 
 | Intent (gõ) | Pack / skill |
 |---|---|
-| init project, khởi tạo, project_mode | `minipower-router-init` |
+| init project, khởi tạo | `minipower-router-init` |
 | premise, có nên làm, nghị luận | `minipower-router-deliberation` |
 | soát tiền đề trước code/test/deploy | `minipower-router-readiness` |
 | lập kế hoạch nhiều skill, chia task, plan trước khi làm | `minipower-router-plan` |
@@ -96,36 +96,6 @@ Loader Cursor có thể tự gắn lá theo `description`; dispatcher vẫn bắ
 - `discovery` (scope dự án mới) và `change-control` (CR sau baseline) **luôn Full**.
 - Đụng `docs/02-baseline/` → **luôn Full**; baseline-guard chặn baseline ở **mọi** tầng và **mọi** chế độ.
 - Không chắc micro hay light → chọn **light** (an toàn hơn: micro sai bỏ mất gate).
-
-## Chế độ dự án (`project_mode`)
-
-**Chiều thứ hai, độc lập với phân tầng.** Tầng (micro/light/full) hỏi *"việc này to hay nhỏ"*; chế độ hỏi *"dự án này cần bao nhiêu tài liệu"*. Chế độ sống ở `memory/profile.json`, hỏi khi init (câu 6), đổi được nhưng phải kèm DEC.
-
-<!-- BEGIN generated: project-modes (nguồn: hooks/lib/rules.json — chạy `npm run gen`) -->
-
-| Chế độ | Tình huống | DOC cần điền (`docs_focus`) | prereq | `02-baseline` | `_legacy` |
-|--------|------------|------------------------------|:------:|:-------------:|:---------:|
-| **Chuẩn chỉnh** (`standard`) | Sản phẩm mới / outsource; hoặc MVP lên đời | **tất cả 19 DOC** | block | deny | deny |
-| **MVP** (`mvp`) | Chỉ cần chạy được, tài liệu cơ bản | DOC-01, 03, 06–07, 09, 17 | warn | deny | deny |
-| **Maintain legacy** (`maintain`) | Hệ chạy nhiều năm, tài liệu cũ rời rạc | DOC-04, 08–12, 17–18 | warn | deny | allow |
-
-<!-- END generated: project-modes -->
-
-**Một cấu trúc folder cho cả 3 chế độ.** Init luôn copy **đủ** 7 folder `docs/` + 6 folder `memory/` ở **mọi** chế độ; folder chưa dùng thì để rỗng kèm README nêu lý do. Chế độ chỉ đổi *điền gì trước*, **không** cắt khung — nhờ vậy `mvp`/`maintain` lên `standard` **không có bước di trú cấu trúc**, chỉ điền tiếp.
-
-**Chế độ × tầng:**
-
-| | `mvp` | `standard` | `maintain` |
-|---|---|---|---|
-| Tầng mặc định | light | full | light (theo vùng chạm) |
-| Trần tầng | full khi đụng baseline | — | full khi đụng baseline |
-| `prereq-gate` thiếu DOC | nhắc, vẫn chạy | **chặn** — gõ `BYPASS` để đi tiếp | nhắc, vẫn chạy |
-| doc-review | rút chiều | đủ 5 chiều, ≥3 góc nhìn | chỉ vùng chạm |
-| Nợ tài liệu | ghi `memory/doc-debt.md` | — | điền dần theo vùng chạm |
-
-**ID ổn định (`{MOD}-FR-`, `DEC-`, `ADR-`) dùng từ ngày đầu ở CẢ 3 chế độ** — rẻ lúc viết, và là thứ khiến bước lên `standard` khả thi.
-
-> Chế độ **không** nới hai thứ: `docs/02-baseline/` luôn deny, và `token-guard` luôn chặn `@` cả thư mục.
 
 ## Cursor — hooks (`profile-guard`, …)
 

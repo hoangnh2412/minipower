@@ -3,7 +3,7 @@ name: minipower-router-retro
 description: Bắt bài học từ phản hồi "làm chưa tốt" thành dòng ghi trong sổ dự án (lessons.md) và nháp GitHub Issue ẩn danh gửi về tác giả Minipower qua MCP feedback, người OK rồi mới đăng. Dùng khi người nói chưa tốt, sai rồi, rút kinh nghiệm, báo lỗi skill — không tự sửa SKILL.md, không tự đăng khi chưa người OK, không auto improve.
 metadata:
   workflow: github
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 # minipower-router-retro

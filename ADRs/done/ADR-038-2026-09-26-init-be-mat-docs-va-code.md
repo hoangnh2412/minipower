@@ -6,7 +6,7 @@
 | **Trạng thái** | Done — 2026-09-27. T1–T5 unit; T6 smoke TTY. Điều chỉnh cùng ngày: init không ghi `AGENTS.md` |
 | **Phạm vi** | `minipower init`: lớp lõi luôn có; lớp tài liệu mặc định; Backend / Frontend / Mobile / Autotest là folder anh em, chỉ tạo khi chọn |
 | **Ngoài phạm vi** | Scaffold solution Jarvis · pack `frontend/` `mobile/` `autotest/` · đường dẫn folder tự khai · repo code tách riêng ([cross-repo-bridge](../../contracts/cross-repo-bridge.md)) |
-| **Nối tiếp** | [ADR-031](../doing/ADR-031-2026-09-01-cli-install-init-thay-llm-thi-hanh.md) QĐ-7–9 · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-2 · [ADR-022](ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-7 · [ADR-035](ADR-035-2026-09-26-memory-mot-file-thay-overview.md) |
+| **Nối tiếp** | [ADR-031](../doing/ADR-031-2026-09-01-cli-install-init-thay-llm-thi-hanh.md) QĐ-7–9 · [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-2 · [ADR-022](ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-7 · [ADR-035](ADR-035-2026-09-26-memory-mot-file-thay-overview.md) |
 | **Mục đích** | Một lệnh init dùng được cho dự án chỉ tài liệu và dự án có thêm code, không bị một skeleton docs |
 | **Ảnh hưởng** | `cli/minipower.mjs` · `src/router/hooks/lib/rules.json` (`project_surfaces`) · `rules.js` · `profile-guard.js` · `src/router/surface-skeleton/` · `project-skeleton/README.md` · `INIT.md` · `minipower-router-init/SKILL.md` · test `install-cli` · `profile-guard` · `rules` |
 

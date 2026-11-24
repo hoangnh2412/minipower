@@ -80,7 +80,7 @@ flowchart LR
   AC -.-> TM
 ```
 
-> **Điểm chốt của người ([ADR-020](../../../ADRs/todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-11):** giữa các bước có những điểm **nên** có người chốt và ghi DEC — nhưng **không hook nào chặn trên chữ ký**. Cái chặn được bằng máy là *tồn tại DOC tiền đề* (`prereq-gate`, theo module), và cả nó cũng mở bằng `BYPASS`. Bảng điểm chốt: [SAMPLE mục 6](../templates/SAMPLE-agents.md) — **dữ liệu tham chiếu**, không phải rào. Mỗi module đi theo nhịp riêng (QĐ-14). Prototype (DOC-19) sinh HTML wireframe qua MCP ngoài (hoãn).
+> **Điểm chốt của người ([ADR-020](../../../ADRs/cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-11):** giữa các bước có những điểm **nên** có người chốt và ghi DEC — nhưng **không hook nào chặn trên chữ ký**. Cái chặn được bằng máy là *tồn tại DOC tiền đề* (`prereq-gate`, theo module), và cả nó cũng mở bằng `BYPASS`. Bảng điểm chốt: [SAMPLE mục 6](../templates/SAMPLE-agents.md) — **dữ liệu tham chiếu**, không phải rào. Mỗi module đi theo nhịp riêng (QĐ-14). Prototype (DOC-19) sinh HTML wireframe qua MCP ngoài (hoãn).
 
 ## Luồng kiến trúc (SA)
 

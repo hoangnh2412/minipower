@@ -1,6 +1,6 @@
 # Minipower
 
-**Minipower** là **AI Operating Model** của doanh nghiệp — mô hình vận hành viết thành dạng AI thi hành được: chứa **kỹ năng của từng vị trí** và **quy trình của từng phòng ban — kể cả quy trình liên phòng ban**, dưới dạng AI thi hành được; tích hợp với bộ công cụ công ty đang dùng (quản lý việc, wiki, Git, giám sát) để doanh nghiệp **vận hành theo quy trình phát triển phần mềm thống nhất** — từ dự án làm nhanh để demo (`mvp`), làm chuẩn để bàn giao (`standard`), tới tiếp quản hệ đang chạy (`maintain`).
+**Minipower** là **AI Operating Model** của doanh nghiệp — mô hình vận hành viết thành dạng AI thi hành được: chứa **kỹ năng của từng vị trí** và **quy trình của từng phòng ban — kể cả quy trình liên phòng ban**, dưới dạng AI thi hành được; tích hợp với bộ công cụ công ty đang dùng (quản lý việc, wiki, Git, giám sát) để doanh nghiệp **vận hành theo quy trình phát triển phần mềm thống nhất** — từ dự án làm nhanh để demo, làm chuẩn để bàn giao, tới tiếp quản hệ đang chạy.
 
 Cách làm dựa trên ba nguyên tắc:
 
@@ -18,7 +18,7 @@ Cách làm dựa trên ba nguyên tắc:
 
 | Thành phần | Loại | Giải quyết việc gì | Bắt đầu |
 |------------|------|--------------------|---------|
-| **Dispatcher / runtime** — [`router/`](src/router/) | Dispatcher | Hook, skeleton, TPL, plugin root; gợi ý pack; init `project_mode` + provider (`minipower-router`) | [router/README.md](src/router/README.md) |
+| **Dispatcher / runtime** — [`router/`](src/router/) | Dispatcher | Hook, skeleton, TPL, plugin root; gợi ý pack; init provider + bề mặt (`minipower-router`) | [router/README.md](src/router/README.md) |
 | **Code backend .NET** — [`backend/`](src/backend/) | Module nghề | Dựng backend .NET theo framework Jarvis chuẩn công ty: scaffold chạy được ngay, gắn auth / cache / EF / observability theo nhu cầu, review PR trước khi merge — 15 skill `minipower-backend-*` (lá EF auto-migrate tách riêng) | [backend/README.md](src/backend/README.md) · cài: [§ Cài vào Cursor](src/backend/README.md#cài-vào-cursor) |
 | **Code frontend React** — [`frontend/`](src/frontend/) | Module nghề | Dựng frontend React theo kit UI `@platform/core` chuẩn công ty: app host chạy được ngay, feature module đúng cấu trúc kit (API · form · CRUD · route · quyền), tuỳ biến page có sẵn của kit không fork, lint ép convention + kiến trúc, review PR — 9 skill `minipower-frontend-*` (ADR-040) | [frontend/README.md](src/frontend/README.md) · cài: [§ Cài vào Cursor](src/frontend/README.md#cài-vào-cursor) |
 | **Vận hành hạ tầng** — [`ops/`](src/ops/) | Module nghề | Kỹ năng DevOps/SRE: thu thập metrics Grafana/Prometheus chuẩn hoá cho AI chẩn đoán sự cố; sẽ mở rộng dần sang chẩn đoán theo case (memory leak, deadlock, log flow), cài server, CI/CD — skill `minipower-ops-*` (ADR-023) | [ops/README.md](src/ops/README.md) |
@@ -34,19 +34,17 @@ Cách làm dựa trên ba nguyên tắc:
 
 ---
 
-## Ba chế độ dự án
+## Không dự án nào cũng cần đủ 19 tài liệu
 
-Không dự án nào cũng cần đủ 19 tài liệu. Minipower có **`project_mode`**, chọn khi khởi tạo, quyết định *tài liệu nào cần điền* và *cảnh báo nào bật* — nhưng **dùng chung một cấu trúc thư mục**, nên đổi chế độ về sau không phải di trú gì.
+Minipower **không** bắt chọn chế độ dự án. Mọi dự án dùng **một cấu trúc thư mục**; cần ít tài liệu thì điền ít và ghi phần thiếu vào `memory/doc-debt.md` — nợ hiện hình, trả dần trước khi chốt baseline. Ba tình huống hay gặp:
 
-| Chế độ | Khi nào chọn | Điền gì | Lên đời |
-|--------|--------------|---------|---------|
-| **`mvp`** | *"3 tuần nữa demo, làm chạy được trước"* | BRD + FR + AC + hướng dẫn triển khai rút gọn | Trả nợ theo `doc-debt.md` → chốt baseline → `standard` |
-| **`standard`** | Outsource, sản phẩm mới, khách nghiệm thu theo tài liệu | Đủ 19 DOC, có baseline, sau baseline đổi gì cũng qua CR | Bàn giao / vận hành |
-| **`maintain`** | Tiếp quản hệ chạy nhiều năm, tài liệu thất lạc | Khai quật cái **đang có**: business rule, kiến trúc, data model, runbook | As-built đủ → chốt baseline → `standard` |
+| Tình huống | Điền gì trước | Rồi sao |
+|------------|---------------|---------|
+| *"3 tuần nữa demo, làm chạy được trước"* | BRD + FR + AC + hướng dẫn triển khai rút gọn | Trả nợ theo `doc-debt.md` → chốt baseline |
+| Outsource, sản phẩm mới, khách nghiệm thu theo tài liệu | Đủ 19 DOC, có baseline, sau baseline đổi gì cũng qua CR | Bàn giao / vận hành |
+| Tiếp quản hệ chạy nhiều năm, tài liệu thất lạc | Khai quật cái **đang có**: business rule, kiến trúc, data model, runbook | As-built đủ → chốt baseline |
 
-Chỉ `standard` có cảnh báo **chặn** (và luôn mở được bằng `BYPASS`); hai chế độ kia chỉ nhắc. Ở mọi chế độ, **con người là người ra lệnh** — hệ cảnh báo, bạn xác nhận là chạy.
-
-Chi tiết: [minipower-router § Chế độ dự án](src/router/skills/minipower-router/SKILL.md#chế-độ-dự-án-project_mode)
+Hook `prereq-gate` chỉ **nhắc** khi thiếu tiền đề (mức khai ở `rules.json → gate_levels`). **Con người là người ra lệnh** — hệ cảnh báo, bạn xác nhận là chạy.
 
 ---
 

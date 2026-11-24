@@ -6,7 +6,7 @@
 | **Trạng thái** | QĐ-1…13 chốt 2026-08-28 · 11/11 bước §7 thi hành xong cùng ngày · T4–T9 xanh, **T1–T3 chờ chủ repo chạy trên solution .NET thật** |
 | **Phạm vi** | `backend/skills/` — xoá 2 skill lá, mở 1 skill lá mới `minipower-backend-architecture-dotnet`; thêm template architecture test vào `minipower-backend-scaffold-dotnet` |
 | **Ngoài phạm vi** | Không đụng `sdlc/` · không đụng `rules.json` (skill lá-rời không qua router — [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-5) · không mở module mới · không đổi 12 skill lá còn lại |
-| **Nối tiếp** | [ADR-021](../done/ADR-021-2026-08-24-doi-ten-pack-jarvis-thanh-backend.md) (đặt tên 15 lá) · [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-4/QĐ-5/QĐ-7 (hệ tên, lá-rời, quy tắc 3 câu hỏi) · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3 ("cứng bằng máy, mềm bằng lời") · **[ADR-028](../doing/ADR-028-2026-08-28-ha-fundamentals-thanh-kho-tam.md) §5a hàng #3 + #4** — ADR này là đợt rút hai file đó khỏi `staging/` |
+| **Nối tiếp** | [ADR-021](../done/ADR-021-2026-08-24-doi-ten-pack-jarvis-thanh-backend.md) (đặt tên 15 lá) · [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-4/QĐ-5/QĐ-7 (hệ tên, lá-rời, quy tắc 3 câu hỏi) · [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3 ("cứng bằng máy, mềm bằng lời") · **[ADR-028](../doing/ADR-028-2026-08-28-ha-fundamentals-thanh-kho-tam.md) §5a hàng #3 + #4** — ADR này là đợt rút hai file đó khỏi `staging/` |
 | **Mục đích** | Ghi lại vì sao hai skill lá bị xoá và vì sao thứ thay thế chúng là *một* skill kiến trúc có cổng cứng, không phải hai skill wiring |
 | **Ảnh hưởng** | `backend/skills/minipower-backend-foundation-dotnet/` (xoá) · `backend/skills/minipower-backend-application-dotnet/` (xoá) · `backend/skills/minipower-backend-architecture-dotnet/` (mới) · `backend/skills/minipower-backend-scaffold-dotnet/{SKILL.md,README.md,workflows/add.md,templates/SKILLS.md,templates/docs-Architecture.md,templates/layers/appsettings.json,templates/tests/}` · `backend/skills/minipower-backend-review-dotnet/SKILL.md` · `backend/README.md` · `backend/PACK.md` · `ADRs/ADR-021…md` (gỡ href, giữ chữ) · `staging/dotnet-clean-architecture.md` + `staging/dotnet-ddd.md` (rút, xoá) |
 
@@ -42,7 +42,7 @@ Cùng lúc, README framework Jarvis (`hoangnh2412/jarvis`, đọc 2026-08-28) kh
 | P1 | `foundation-dotnet` trùng ~90% với template scaffold; sau khi scaffold chạy, tần suất kích hoạt thật ≈ 0 | Ba nguồn cho cùng một đoạn wiring Host — sửa một chỗ, hai chỗ kia lệch âm thầm; đã lệch sẵn (`"Cors": {}` có ở foundation, thiếu ở scaffold) |
 | P2 | `application-dotnet` mang tên và `description` của việc *khởi tạo* (`"Thiết lập Jarvis.DDD.Application"`), trong khi giá trị thật nằm ở việc *thêm handler* | Lá-rời sống nhờ `description` ([ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-5b). `description` mô tả việc chỉ chạy một lần ⇒ skill không được gọi vào đúng lúc cần nhất |
 | P3 | Không skill nào giữ **trục dọc**: quy tắc phụ thuộc giữa 5 layer, chỗ đặt Entity/Repository/Handler/Adapter | Agent vibe code tính năng mới không có nguồn tra; sai kiến trúc chỉ lộ ra ở review PR — muộn và đắt |
-| P4 | Nhu cầu *"agent phải LUÔN tuân thủ kiến trúc"* không có cơ chế thi hành | Viết chữ "bắt buộc" vào markdown không FAIL được bằng máy ⇒ vi phạm chính phép thử của [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3 |
+| P4 | Nhu cầu *"agent phải LUÔN tuân thủ kiến trúc"* không có cơ chế thi hành | Viết chữ "bắt buộc" vào markdown không FAIL được bằng máy ⇒ vi phạm chính phép thử của [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3 |
 | P5 | `foundation` giữ 2 anti-pattern có giá trị thật (`UseCoreMiddleware` đặt sau `MapControllers`; bỏ `AddCoreDomain` khi app dùng `IWorkContext`) + note `Jarvis.Mvc` kéo transitive `Common`/`Domain.Shared`/`OpenTelemetry` | Xoá thẳng là mất tri thức |
 
 ## §3. Ràng buộc
@@ -51,7 +51,7 @@ Cùng lúc, README framework Jarvis (`hoangnh2412/jarvis`, đọc 2026-08-28) kh
 |---|---|
 | C1 | Hệ tên giữ nguyên: `minipower-backend-{capability}[-{stack}]`, kebab, ≤64, `name` ≡ tên thư mục ([ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-4; có `backend-pack.test.js` canh) |
 | C2 | Skill lá-rời **không** đăng ký vào `rules.json` / router — sống nhờ `description` ([ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-5) |
-| C3 | "Cứng bằng máy, mềm bằng lời" ([ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3): chỉ viết "bắt buộc" cho thứ FAIL được bằng máy. Không mở lại trong ADR này |
+| C3 | "Cứng bằng máy, mềm bằng lời" ([ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3): chỉ viết "bắt buộc" cho thứ FAIL được bằng máy. Không mở lại trong ADR này |
 | C4 | Không mở module mới ([ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-7 luật 2); skill mới nằm trong `backend/` |
 | C5 | "Co lại trước khi mở rộng" ([AGENTS.md](../../AGENTS.md)): tổng số lá **không được tăng** sau đợt này |
 | C6 | Framework Jarvis là repo ngoài — ADR này **không** đề xuất sửa gì trong `hoangnh2412/jarvis`, chỉ mô tả lại kiến trúc của nó |
@@ -311,7 +311,7 @@ Icon: 🟢 xong · 🟡 có sẵn, cần giữ xanh · 🔴 chưa có. **Không 
 | **Repo (minipower)** | Mọi skill lá **mang theo** cả hai con trỏ ⇒ skill nào kích hoạt thì luật cũng đi cùng | **mới** — 2 test canh trong `backend-pack.test.js` |
 | **Dự án đích** | `.editorconfig` + analyzer + `dotnet format` (convention) · `{Product}.ArchitectureTests` R1–R7 (architecture) | đã có (QĐ-5, QĐ-6) |
 
-Đây đúng "cứng bằng máy, mềm bằng lời" ([ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3): *"agent phải tuân thủ"* không FAIL được bằng máy ⇒ không viết thành lời suông; thứ FAIL được là **invariant repo** (skill nào cũng chở đủ hai luật) và **cổng ở dự án đích**.
+Đây đúng "cứng bằng máy, mềm bằng lời" ([ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3): *"agent phải tuân thủ"* không FAIL được bằng máy ⇒ không viết thành lời suông; thứ FAIL được là **invariant repo** (skill nào cũng chở đủ hai luật) và **cổng ở dự án đích**.
 
 ### Đã làm
 

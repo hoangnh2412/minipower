@@ -159,71 +159,10 @@
       "file": "Support.md"
     }
   ],
-  "project_modes": {
-    "standard": {
-      "label": "Chuẩn chỉnh",
-      "docs_focus": "all",
-      "gates": {
-        "prereq": "block",
-        "baseline": "deny",
-        "legacy_read": "deny"
-      }
-    },
-    "mvp": {
-      "label": "MVP",
-      "docs_focus": [
-        "01",
-        "03",
-        "06",
-        "07",
-        "09",
-        "17"
-      ],
-      "prereq_overrides": {
-        "implement": [
-          "03",
-          "06",
-          "07"
-        ],
-        "deploy": [
-          "17"
-        ]
-      },
-      "gates": {
-        "prereq": "warn",
-        "baseline": "deny",
-        "legacy_read": "deny"
-      }
-    },
-    "maintain": {
-      "label": "Maintain legacy",
-      "docs_focus": [
-        "04",
-        "08",
-        "09",
-        "10",
-        "11",
-        "12",
-        "17",
-        "18"
-      ],
-      "prereq_overrides": {
-        "implement": [],
-        "test": [
-          "07"
-        ],
-        "deploy": [
-          "17"
-        ]
-      },
-      "gates": {
-        "prereq": "warn",
-        "baseline": "deny",
-        "legacy_read": "allow"
-      }
-    }
+  "gate_levels": {
+    "prereq": "warn",
+    "legacy_read": "allow"
   },
-  "default_project_mode": "standard",
   "project_surfaces": [
     {
       "id": "docs",

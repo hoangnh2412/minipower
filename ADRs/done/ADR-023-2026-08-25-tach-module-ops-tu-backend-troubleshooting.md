@@ -5,7 +5,7 @@
 | **Ngày** | 2026-08-25 |
 | **Trạng thái** | 🟢 **DONE — chủ repo xác nhận 2026-08-25.** Duyệt cả 5 QĐ + đợt §2 thi hành 6/6 bước cùng ngày. Verify: 432 test xanh (+5 test `ops-pack`) · `gen:check` đồng bộ · `link:check` 0 link gãy mới · grep tên cũ 0 hit ngoài ADR |
 | **Phạm vi** | `backend/skills/minipower-backend-troubleshooting-dotnet/` → module mới `ops/`; quy ước tên skill nội bộ router-gộp `sdlc/` |
-| **Nối tiếp** | Áp dụng [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-2/QĐ-4 (hệ tên hai tầng) + QĐ-7 (quy tắc 3 câu hỏi) + QĐ-8 (PACK.md manifest) · khuôn thi hành đổi-tên-không-đổi-nội-dung của [ADR-021](../done/ADR-021-2026-08-24-doi-ten-pack-jarvis-thanh-backend.md) QĐ-5 · không đụng [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (ruột `sdlc/` giữ nguyên) |
+| **Nối tiếp** | Áp dụng [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-2/QĐ-4 (hệ tên hai tầng) + QĐ-7 (quy tắc 3 câu hỏi) + QĐ-8 (PACK.md manifest) · khuôn thi hành đổi-tên-không-đổi-nội-dung của [ADR-021](../done/ADR-021-2026-08-24-doi-ten-pack-jarvis-thanh-backend.md) QĐ-5 · không đụng [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (ruột `sdlc/` giữ nguyên) |
 | **Mục đích** | Kỹ năng vận hành (chẩn đoán sự cố, tương lai: cài server, CI/CD) là của người DevOps — người dùng khác hẳn dev .NET → module ngang hàng theo ADR-022 QĐ-7 câu 2. Đồng thời chốt quy ước tên cho skill nội bộ router-gộp để hết di sản `ba-*` |
 | **Ảnh hưởng** | `backend/skills/minipower-backend-troubleshooting-dotnet/` (di chuyển) · `ops/` mới (`PACK.md` + `README.md` + 1 skill) · [backend/PACK.md](../../src/backend/PACK.md) + [backend/README.md](../../src/backend/README.md) (bớt 1 lá) · bảng "Liên quan" trong skill `telemetry`/`healthcheck` · [backend-pack.test.js](../../src/router/hooks/test/backend-pack.test.js) (15→14 lá + canh pack `ops`) · [AGENTS.md](../../AGENTS.md) danh sách module · [README.md](../README.md) bản đồ · `hooks/link-check.baseline.txt` (nếu lệch) · 6 skill phase `sdlc/skills/*/SKILL.md` + [install/claude/README.md](../../cli/claude/README.md) (QĐ-5 — đã sửa) |
 
@@ -44,4 +44,4 @@
 
 ---
 
-*Liên quan:* [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) (hệ tên + quy tắc phân loại) · [ADR-021](../done/ADR-021-2026-08-24-doi-ten-pack-jarvis-thanh-backend.md) (khuôn đổi tên) · [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (as-built/codegraph — QĐ-6)
+*Liên quan:* [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) (hệ tên + quy tắc phân loại) · [ADR-021](../done/ADR-021-2026-08-24-doi-ten-pack-jarvis-thanh-backend.md) (khuôn đổi tên) · [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) (as-built/codegraph — QĐ-6)

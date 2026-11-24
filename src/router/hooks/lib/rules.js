@@ -23,8 +23,7 @@ import { readFileSync } from "node:fs"
  *   doc_scope: Record<string,"project"|"module">,
  *   phase_meta: Record<string,{state:string,role:string}>,
  *   roles: {id:string,title:string,phase:string,file:string}[],
- *   project_modes: Record<string,{label:string,docs_focus:"all"|string[],prereq_overrides?:Record<string,string[]>,gates:Record<string,string>}>,
- *   default_project_mode: string,
+ *   gate_levels: Record<string,string>,
  *   approval_source_kinds: string[],
  *   profile_providers: Record<string,string[]>,
  *   project_surfaces: {id:string,label:string,path:string,default:boolean,role:string}[],
@@ -145,18 +144,15 @@ export function roleForPhase(phase) {
 /** @type {{id:string,title:string,phase:string,file:string}[]} Danh mục vai trò (N3). */
 export const ROLES = RULES.roles
 
-// ─── ADR-020 — chiều thứ hai: project_mode ──────────────────────────────────
+// ─── Mức gate — một số khai cho mọi dự án ───────────────────────────────────
 
 /**
- * @type {Record<string,{label:string,docs_focus:"all"|string[],prereq_overrides?:Record<string,string[]>,gates:Record<string,string>}>}
- * Ba chế độ dự án (QĐ-1). Mode **không** đổi cấu trúc folder (QĐ-2) — chỉ đổi
- * *DOC nào cần điền* (`docs_focus`), *tiền đề nào áp cho intent nào*
- * (`prereq_overrides`) và *gate nào bật ở mức nào* (`gates`).
+ * @type {Record<string,string>}
+ * Mức của từng gate máy, khai thẳng — không còn chiều chế độ dự án (gỡ theo
+ * chốt #3 §8.2). Nền tạm cho `prereq-gate`: khi S1/S4 có bảng input/output
+ * theo lá thì thay nền này, không phải gỡ lần hai.
  */
-export const PROJECT_MODES = RULES.project_modes
-
-/** @type {string} Mode dùng khi profile chưa khai / không đọc được (fail-open — R2). */
-export const DEFAULT_PROJECT_MODE = RULES.default_project_mode
+export const GATE_LEVELS = RULES.gate_levels
 
 /** @type {string[]} Ba loại nguồn phê duyệt tách rời (QĐ-12, schema v2). */
 export const APPROVAL_SOURCE_KINDS = RULES.approval_source_kinds
@@ -167,28 +163,19 @@ export const PROFILE_PROVIDERS = RULES.profile_providers
 /** @type {{id:string,label:string,path:string,default:boolean,role:string}[]} Bề mặt init (ADR-038). */
 export const PROJECT_SURFACES = RULES.project_surfaces
 
-/** Mode name → config; mode lạ/thiếu → config của DEFAULT_PROJECT_MODE. */
-export function modeConfig(mode) {
-  return PROJECT_MODES[String(mode)] || PROJECT_MODES[DEFAULT_PROJECT_MODE]
-}
-
-/** Mức của một gate ở mode đã cho, vd gateLevel("mvp","prereq") → "warn". */
-export function gateLevel(mode, gate) {
-  return modeConfig(mode).gates[String(gate)] || "off"
+/** Mức của một gate, vd gateLevel("prereq") → "warn"; gate không khai → "off". */
+export function gateLevel(gate) {
+  return GATE_LEVELS[String(gate)] || "off"
 }
 
 /** @type {{id:string,label:string,keywords:string[],requires:string[]}[]} Bộ tiền đề theo intent (N1). */
 export const PREREQ_BY_INTENT = RULES.prereq_by_intent
 
 /**
- * Tiền đề thực tế của một intent **sau khi áp `prereq_overrides` của mode**.
- * `mvp`/`maintain` nhẹ tay hơn `standard` (mảng rỗng = intent đó không đòi gì).
+ * Tiền đề của một intent — đúng danh sách `requires` khai trong rules.json.
  * @returns {string[]} danh sách DOC number ("06"…); intent lạ → []
  */
-export function requiresForIntent(intentId, mode) {
-  const cfg = modeConfig(mode)
-  const ov = cfg.prereq_overrides
-  if (ov && Object.prototype.hasOwnProperty.call(ov, String(intentId))) return ov[String(intentId)]
+export function requiresForIntent(intentId) {
   const it = PREREQ_BY_INTENT.find((x) => x.id === String(intentId))
   return it ? it.requires : []
 }

@@ -82,7 +82,7 @@ Vết cắt **có sẵn trong chính tài liệu gốc**: ULNL §6–§8 là *ư
 | C3 | **Rules-as-data**: bảng MH và bảng buffer là **dữ liệu có version**, không phải prose trong `SKILL.md` |
 | C4 | **Không đổi phương pháp ULNL**: công thức §5, ngưỡng ±10%, 7.5 MH/MD, bậc buffer §10.3 giữ nguyên ([ADR-014](../todo/ADR-014-2026-07-28-minipower-spine-tong-hop-wrap-not-build.md) wrap-not-build) |
 | C5 | **Không commit đơn giá / margin / VAT** |
-| C6 | **`sdlc/skills/discovery/` không bị sửa** trong ADR này. Mọi gate của repo vốn đã **mềm** ([ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-11), nên exit criteria *"sponsor xác nhận"* không chặn ai lúc chưa ký — **không cần thêm mode thứ tư** |
+| C6 | **`sdlc/skills/discovery/` không bị sửa** trong ADR này. Mọi gate của repo vốn đã **mềm** ([ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-11), nên exit criteria *"sponsor xác nhận"* không chặn ai lúc chưa ký — **không cần thêm mode thứ tư** |
 | C7 | **Mở module phải kèm skill thật** (ADR-022 QĐ-7 luật 2). Năng lực tương lai chỉ được **ghi tên trong README**, không tạo thư mục rỗng |
 | C8 | **Không rewrite ADR-008** — ghi quan hệ ở index |
 

@@ -11,7 +11,7 @@ Tài liệu mô tả **cách Minipower điều phối** giữa người dùng, h
 | **Router (pack `router/`)** | Dispatcher: triage đơn hay phức, gợi ý **đúng một** skill lá **cho mỗi task**; việc PHỨC → `minipower-router-plan` (ADR-043). **Không** orchestrator runtime, **không** agent bàn giao agent, **không** gọi MCP L3 thay pack nghề. |
 | **Route = LLM** | Agent chọn **đúng một** `name:` trong SKILL.md đã cài cho mỗi task (ADR-034 QĐ-4). |
 | **`intent-dispatch.js`** | Bảng keyword → skill: **gợi ý / test vàng**, không thay bước chọn của LLM. |
-| **`rules.json`** | SSOT cho phase↔DOC, `project_mode`, `prereq_by_intent`, danh sách hook cài. Bảng generated trong SKILL.md: `npm run gen`. |
+| **`rules.json`** | SSOT cho phase↔DOC, `gate_levels`, `prereq_by_intent`, danh sách hook cài. Bảng generated trong SKILL.md: `npm run gen`. |
 | **Pack nghề / kênh** | Đơn vị cài (`discovery`, `analyst`, `backend`, `docs`, …). Manifest: `src/{pack}/PACK.md`. |
 | **Skill lá** | Một thư mục `skills/minipower-{pack}-{capability}/SKILL.md` — SOP thi hành một việc. |
 
@@ -62,7 +62,7 @@ Thứ tự hook cài (SSOT: `install_hooks` trong [hooks/lib/rules.json](../hook
 | `token-guard` | prompt | Scope Phase/Module/DOC; chặn `@` cả thư mục |
 | `auto-routing` | prompt | Map DOC → phase; chèn `Phase:` và `@…/SKILL.md` khi rõ một phase |
 | `profile-guard` | prompt | `memory/profile.json` hợp lệ |
-| `prereq-gate` | prompt | Intent thực thi vs DOC tiền đề (`prereq_by_intent` × `project_mode`) |
+| `prereq-gate` | prompt | Intent thực thi vs DOC tiền đề (`prereq_by_intent`, mức `gate_levels.prereq`) |
 | `decision-staleness` | prompt | DEC cũ / mâu thuẫn |
 | `baseline-guard` | pre_tool | Chặn sửa `docs/02-baseline/` |
 
@@ -97,7 +97,7 @@ Bảng trong [minipower-router/SKILL.md](../skills/minipower-router/SKILL.md) �
 
 | Ngữ cảnh người gõ | Pack / khu vực |
 |-------------------|----------------|
-| init, `project_mode` | `router-init` |
+| init | `router-init` |
 | premise, nghị luận | `router-deliberation` |
 | soát tiền đề trước thực thi | `router-readiness` |
 | DOC-01/02/03, painpoint | `discovery/` |
@@ -150,7 +150,7 @@ Dữ liệu: `prereq_by_intent` trong `rules.json`. Bảng đầy đủ (generat
 | `test` | 06, 07, 16 |
 | `deploy` | 15, 17 |
 
-`project_mode` (`mvp`, `maintain`) có `prereq_overrides` — nhẹ hơn `standard`; gate `prereq` có thể **warn** thay vì block. Kiểm **theo module** khi DOC scope = module ([`doc_scope`](../hooks/lib/rules.json)).
+Mức gate khai ở `rules.json → gate_levels.prereq` (warn / block / off), một mức cho mọi dự án. Kiểm **theo module** khi DOC scope = module ([`doc_scope`](../hooks/lib/rules.json)).
 
 ## 8. Spine pack: handoff H0–H6
 
@@ -223,9 +223,9 @@ src/
 
 Test catalog + intent: `src/router/hooks/test/minipower-catalog.test.js`, `intent-dispatch.test.js`.
 
-## 10. Chế độ dự án (`project_mode`)
+## 10. Mức gate máy
 
-Sống ở `memory/profile.json` (schema v2). Không cắt folder — chỉ đổi DOC cần điền và mức `prereq-gate`. Bảng generated: [minipower-router#chế-độ-dự-án](../skills/minipower-router/SKILL.md#chế-độ-dự-án-project_mode).
+Khai thẳng ở `rules.json → gate_levels` (`prereq`, `legacy_read`) cho mọi dự án — không có chế độ dự án. Dự án cần ít tài liệu ghi nợ `memory/doc-debt.md`, không đổi cấu hình.
 
 ## 11. Tài liệu liên quan
 

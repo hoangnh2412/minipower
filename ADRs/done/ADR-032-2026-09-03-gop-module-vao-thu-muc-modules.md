@@ -43,7 +43,7 @@ Số liệu đọc trực tiếp **2026-09-03**:
 | # | Ràng buộc |
 |---|---|
 | C1 | **Hệ tên hai tầng không mở lại** ([ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-2/QĐ-4): tên skill `minipower-{module}-{capability}` **độc lập với đường dẫn** — đổi thư mục **không** kéo theo đổi tên skill |
-| C2 | Ba (sắp bốn) kênh cài khai **cùng bộ guard** ([ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-4, có test parity) — di trú không được làm lệch kênh nào, và **không được làm chết kênh plugin** đã smoke PASS ([ADR-011](../done/ADR-011-2026-07-26-minipower-claude-code-plugin.md)) |
+| C2 | Ba (sắp bốn) kênh cài khai **cùng bộ guard** ([ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-4, có test parity) — di trú không được làm lệch kênh nào, và **không được làm chết kênh plugin** đã smoke PASS ([ADR-011](../done/ADR-011-2026-07-26-minipower-claude-code-plugin.md)) |
 | C3 | **Co lại trước khi mở rộng**: tổng số mục ở gốc phải **giảm**, không tăng |
 | C4 | ADR đã chốt **không rewrite** — chỉ sửa **href**, giữ nguyên chữ (khuôn [ADR-022](../done/ADR-022-2026-08-24-minipower-nen-tang-cong-cu-ai-toan-cong-ty.md) QĐ-11) |
 | C5 | `link:check` về **0 gãy mới**; `link-check.baseline.txt` chỉ đụng bằng `--update-baseline` sau khi soát diff |
@@ -66,7 +66,7 @@ Số liệu đọc trực tiếp **2026-09-03**:
 | QĐ-3 | **Không symlink tương thích ngược** | Đường dẫn cũ chết hẳn. Không ai đang trỏ vào nó ⇒ không có gì để tương thích |
 | QĐ-4 | **Tên skill đăng ký KHÔNG đổi** | `minipower-{module}-{capability}[-{stack}]` giữ nguyên từng ký tự (C1). Thư mục là *chỗ để file*, tên skill là *namespace*. Có hàng **T4** canh |
 | QĐ-5 | **Di trú bằng script, không sửa tay** | `git mv` + script thay chuỗi, rồi để **`link:check` + `npm test` làm trọng tài**. Sửa tay 44 file là cách chắc chắn nhất để sót |
-| QĐ-6 | Bản đồ **bốn loại** viết vào [README.md](../README.md) + [AGENTS.md](../../AGENTS.md) **trong cùng đợt** | Là **quy ước, không có cổng máy** — không viết chữ "bắt buộc" (phép thử [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3) |
+| QĐ-6 | Bản đồ **bốn loại** viết vào [README.md](../README.md) + [AGENTS.md](../../AGENTS.md) **trong cùng đợt** | Là **quy ước, không có cổng máy** — không viết chữ "bắt buộc" (phép thử [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-3) |
 | QĐ-7 | `presales/` ([ADR-030](../doing/ADR-030-2026-08-29-mo-module-presales-skill-uoc-luong-ulnl.md)) và ADR này **không chặn nhau** | Ra trước thì đặt ở gốc theo quy ước hiện hành, di trú cùng đợt; ra sau thì sinh thẳng vào `src/` |
 | QĐ-8 | **`cli/` = code cài đặt**: `cli/{claude,cursor,opencode}/` + `cli/minipower.mjs` ([ADR-031](../doing/ADR-031-2026-09-01-cli-install-init-thay-llm-thi-hanh.md)). **`hooks/` ở lại `src/router/hooks/`** | Chủ repo đề xuất `cli/` chứa **cả** `hooks/`; §5a là dữ kiện phát hiện sau đó — gộp `hooks/` vào `cli/` **làm chết kênh plugin**. QĐ-8 là phương án duy nhất không phải đánh đổi C2. **Q6 để chủ repo lật lại nếu vẫn muốn gộp** |
 

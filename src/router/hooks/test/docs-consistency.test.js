@@ -11,11 +11,9 @@ import assert from "node:assert/strict"
 import { readFileSync, existsSync, readdirSync } from "node:fs"
 import { join } from "node:path"
 
-import { PROJECT_MODES } from "../lib/rules.js"
 import { ROOT, HOOKS, ROUTER, SRC } from "../lib/skill-catalog.js"
 
 const read = (...p) => readFileSync(join(ROOT, ...p), "utf8")
-const MODE_IDS = Object.keys(PROJECT_MODES)
 
 // ─── #12 — AGENTS.md ────────────────────────────────────────────────────────
 
@@ -32,11 +30,8 @@ test("#12 — AGENTS.md có phép thử 'cái gì FAIL được bằng máy'", (
   assert.match(t, /cứng bằng máy, mềm bằng lời/i)
 })
 
-test("#12 — AGENTS.md khai đủ 3 chế độ + không hứa permissions.deny nữa", () => {
+test("#12 — AGENTS.md không hứa permissions.deny nữa", () => {
   const t = read("AGENTS.md")
-  for (const id of MODE_IDS) {
-    assert.match(t, new RegExp(`\`${id}\``), `AGENTS.md chưa nhắc chế độ \`${id}\``)
-  }
   assert.match(t, /[Kk]hông còn `permissions\.deny` tĩnh/, "phải nói rõ đã bỏ deny tĩnh")
   assert.match(t, /baseline-guard/, "phải nêu hook thay thế")
 })
@@ -69,26 +64,12 @@ test("#12 — contracts/handoff.md: handoff là per-module, không per-project",
 
 // ─── #12 — README use-case ──────────────────────────────────────────────────
 
-test("#12 — README repo có use-case cho cả 3 chế độ", () => {
+test("#12 — README repo nói rõ con người là người ra lệnh", () => {
   const t = read("README.md")
-  for (const id of MODE_IDS) {
-    assert.match(t, new RegExp(`\`${id}\``), `README thiếu use-case chế độ \`${id}\``)
-  }
   assert.match(t, /con người là người ra lệnh|người ra lệnh/i)
-  assert.match(t, /SKILL\.md#chế-độ-dự-án-project_mode/, "phải trỏ bảng chi tiết")
 })
 
 // ─── #10 — change-control ───────────────────────────────────────────────────
-
-test("#10 — change-control có luồng chuyển mode đủ 2 chiều lên + nhắc DEC", () => {
-  const t = readFileSync(join(SRC, "analyst", "skills", "minipower-analyst-cr", "SKILL.md"), "utf8")
-  assert.match(t, /mvp → standard/i, "thiếu luồng mvp → standard")
-  assert.match(t, /maintain → standard/i, "thiếu luồng maintain → standard")
-  assert.match(t, /QĐ-7/, "phải trỏ quyết định nguồn")
-  assert.match(t, /phải kèm DEC|kèm DEC/i, "đổi mode phải kèm DEC (chặn R3)")
-  assert.match(t, /trace:check/, "điều kiện lên standard phải gồm trace:check")
-  assert.match(t, /[Kk]hông có bước di trú cấu trúc/, "phải khẳng định QĐ-2")
-})
 
 test("#10 — change-control định nghĩa format doc-debt khớp file skeleton", () => {
   const skill = readFileSync(join(SRC, "analyst", "skills", "minipower-analyst-cr", "SKILL.md"), "utf8")
@@ -104,10 +85,8 @@ test("#10 — change-control định nghĩa format doc-debt khớp file skeleton
   assert.match(skill, /prereq-gate/, "phải nói rõ KHI NÀO ghi nợ")
 })
 
-test("#10 — change-control khai per-mode và tự nhận là mềm", () => {
+test("#10 — change-control tự nhận là mềm", () => {
   const t = readFileSync(join(SRC, "analyst", "skills", "minipower-analyst-cr", "SKILL.md"), "utf8")
-  for (const id of MODE_IDS) assert.match(t, new RegExp(`\`${id}\``), `thiếu chế độ \`${id}\``)
-  assert.match(t, /không lặp lại ở đây/i)
   assert.match(t, /baseline-guard/, "phải phân biệt cái mềm với cái cứng còn lại")
 })
 

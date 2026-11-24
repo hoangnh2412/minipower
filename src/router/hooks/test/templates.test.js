@@ -109,7 +109,6 @@ test("#8 — TPL-agent-profile khai đúng schema hiện hành", () => {
   const text = readFileSync(join(TPL, "TPL-agent-profile.md"), "utf8")
   assert.match(text, new RegExp(`schema v${PROFILE_VERSION}`), "tiêu đề schema lệch code")
   assert.match(text, /"version": 3/, "ví dụ JSON phải là v3")
-  assert.match(text, /"project_mode"/, "v3 phải có project_mode")
   assert.match(text, /"docs_provider"/)
   assert.match(text, /"tasks_provider"/)
   assert.match(text, /"chat_provider"/)

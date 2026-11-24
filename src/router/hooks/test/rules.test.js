@@ -24,8 +24,7 @@ import {
   ROLES,
   PREREQ_BY_INTENT,
   DOC_SCOPE,
-  PROJECT_MODES,
-  DEFAULT_PROJECT_MODE,
+  GATE_LEVELS,
   APPROVAL_SOURCE_KINDS,
   PROFILE_PROVIDERS,
   PROJECT_SURFACES,
@@ -36,7 +35,6 @@ import {
   stateForPhase,
   roleForPhase,
   matchIntents,
-  modeConfig,
   gateLevel,
   requiresForIntent,
 } from "../lib/rules.js"
@@ -167,7 +165,7 @@ test("intent prototype (A3) — nhận diện, requires DOC-04 (Business Rules �
   assert.ok(impl.requires.includes("19"), "implement phải yêu cầu DOC-19 prototype")
 })
 
-// ─── ADR-020 — project_mode + doc_scope ─────────────────────────────────────
+// ─── ADR-020 — doc_scope + mức gate khai thẳng ──────────────────────────────
 
 test("doc_scope (QĐ-13) — phủ đủ DOC-01..19, chỉ project|module, khớp cây docs/ §2b", () => {
   for (let i = 1; i <= 19; i++) {
@@ -195,65 +193,23 @@ test("doc_scope — intent trộn hai cấp vẫn diễn đạt được (lý do
   assert.deepEqual([...scopes].sort(), ["module", "project"])
 })
 
-test("project_modes (QĐ-1) — đủ 3 mode, mỗi mode có label/docs_focus/gates hợp lệ", () => {
-  assert.deepEqual(Object.keys(PROJECT_MODES).sort(), ["maintain", "mvp", "standard"])
-  assert.ok(PROJECT_MODES[DEFAULT_PROJECT_MODE], "default_project_mode trỏ mode không tồn tại")
-  assert.equal(DEFAULT_PROJECT_MODE, "standard")
+test("gate_levels — hai số khai, chỉ nhận mức máy hiểu", () => {
+  // prereq-gate ra mắt ở mức cảnh báo (#3 §9 / #11); dec-gate đã bỏ (QĐ-11).
+  assert.ok(["block", "warn", "off"].includes(GATE_LEVELS.prereq), `prereq lạ: ${GATE_LEVELS.prereq}`)
+  assert.ok(["allow", "deny"].includes(GATE_LEVELS.legacy_read), `legacy_read lạ: ${GATE_LEVELS.legacy_read}`)
+  assert.equal(GATE_LEVELS.dec, undefined, "khoá gate \"dec\" đã bỏ (QĐ-11)")
 
-  for (const [name, cfg] of Object.entries(PROJECT_MODES)) {
-    assert.ok(cfg.label, `mode ${name} thiếu label`)
-    if (cfg.docs_focus !== "all") {
-      assert.ok(Array.isArray(cfg.docs_focus) && cfg.docs_focus.length, `mode ${name}: docs_focus rỗng`)
-      for (const d of cfg.docs_focus) assert.ok(PHASE_BY_DOC[d], `mode ${name}: docs_focus DOC lạ "${d}"`)
-    }
-    // QĐ-2: mode KHÔNG được cắt folder — cấm tái sinh skeleton_skip.
-    assert.equal(cfg.skeleton_skip, undefined, `mode ${name}: skeleton_skip bị cấm (QĐ-2)`)
-    // QĐ-11: dec-gate đã bỏ — không mode nào được khai khoá "dec".
-    assert.equal(cfg.gates.dec, undefined, `mode ${name}: khoá gate "dec" đã bỏ (QĐ-11)`)
-    for (const g of ["prereq", "baseline", "legacy_read"]) {
-      assert.ok(cfg.gates[g], `mode ${name}: thiếu gate ${g}`)
-    }
-    for (const id of Object.keys(cfg.prereq_overrides || {})) {
-      assert.ok(PREREQ_BY_INTENT.some((it) => it.id === id), `mode ${name}: override intent lạ "${id}"`)
-    }
-  }
+  assert.equal(gateLevel("prereq"), GATE_LEVELS.prereq)
+  assert.equal(gateLevel("legacy_read"), GATE_LEVELS.legacy_read)
+  assert.equal(gateLevel("gate-khong-ton-tai"), "off")
+  assert.equal(gateLevel(undefined), "off")
 })
 
-test("gateLevel — chỉ standard chặn prereq; baseline deny mọi mode (C4); legacy chỉ mở ở maintain (C5)", () => {
-  assert.equal(gateLevel("standard", "prereq"), "block")
-  assert.equal(gateLevel("mvp", "prereq"), "warn")
-  assert.equal(gateLevel("maintain", "prereq"), "warn")
-
-  for (const m of ["standard", "mvp", "maintain"]) {
-    assert.equal(gateLevel(m, "baseline"), "deny", `mode ${m}: baseline phải deny mọi mode`)
-  }
-  assert.equal(gateLevel("maintain", "legacy_read"), "allow")
-  assert.equal(gateLevel("standard", "legacy_read"), "deny")
-  assert.equal(gateLevel("mvp", "legacy_read"), "deny")
-
-  // Fail-open (R2): mode lạ / thiếu → rơi về standard, không ném.
-  assert.equal(gateLevel("mode-khong-ton-tai", "prereq"), "block")
-  assert.equal(gateLevel(undefined, "prereq"), "block")
-  assert.equal(gateLevel("standard", "gate-khong-ton-tai"), "off")
-  assert.equal(modeConfig("linh tinh").label, PROJECT_MODES.standard.label)
-})
-
-test("requiresForIntent — override theo mode, standard giữ nguyên giá trị cũ", () => {
-  // standard = không override → y hệt prereq_by_intent.
-  assert.deepEqual(requiresForIntent("implement", "standard"), ["06", "07", "08", "11", "12", "19"])
-  assert.deepEqual(requiresForIntent("test", "standard"), ["06", "07", "16"])
-
-  // mvp nhẹ tay hơn.
-  assert.deepEqual(requiresForIntent("implement", "mvp"), ["03", "06", "07"])
-  assert.deepEqual(requiresForIntent("deploy", "mvp"), ["17"])
-  // intent không override → dùng bộ gốc kể cả ở mvp.
-  assert.deepEqual(requiresForIntent("prototype", "mvp"), ["04"])
-
-  // maintain: implement không đòi gì (vào code trước).
-  assert.deepEqual(requiresForIntent("implement", "maintain"), [])
-  assert.deepEqual(requiresForIntent("test", "maintain"), ["07"])
-
-  assert.deepEqual(requiresForIntent("intent-khong-ton-tai", "standard"), [])
+test("requiresForIntent — đúng danh sách requires khai trong rules.json", () => {
+  assert.deepEqual(requiresForIntent("implement"), ["06", "07", "08", "11", "12", "19"])
+  assert.deepEqual(requiresForIntent("test"), ["06", "07", "16"])
+  assert.deepEqual(requiresForIntent("prototype"), ["04"])
+  assert.deepEqual(requiresForIntent("intent-khong-ton-tai"), [])
 })
 
 test("approval_source_kinds (QĐ-12) — đúng 3 loại tách rời", () => {

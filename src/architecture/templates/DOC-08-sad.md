@@ -8,10 +8,10 @@
 
 ---
 
-> **Hai mức điền —「lõi」và「full」.** Heading **không** đánh dấu = **lõi**: điền ở mọi chế độ dự án.
-> Heading có **`▸ full`** = chỉ cần ở chế độ `standard`.
-> Bỏ mục `▸ full` ở `mvp`/`maintain` là **có chủ đích**, không phải làm ẩu — nhưng phải ghi nợ vào
-> `memory/doc-debt.md`. **Không xoá heading**: giữ chỗ để lên `standard` chỉ việc điền tiếp.
+> **Hai mức điền —「lõi」và「full」.** Heading **không** đánh dấu = **lõi**: điền ở mọi dự án.
+> Heading có **`▸ full`** = chỉ cần khi làm chuẩn để bàn giao / nghiệm thu.
+> Bỏ mục `▸ full` là **có chủ đích**, không phải làm ẩu — nhưng phải ghi nợ vào
+> `memory/doc-debt.md`. **Không xoá heading**: giữ chỗ để sau chỉ việc điền tiếp.
 
 ## 1. Giới thiệu
 ### 1.1 Mục đích

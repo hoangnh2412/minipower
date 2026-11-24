@@ -38,7 +38,7 @@ cp "$PROJECT/memory/memory.md.example" "$PROJECT/memory/memory.md"
 | `memory/memory.md` | *(copy từ .example)* — cá nhân, **gitignore** (ADR-035) |
 | `memory/decision-log.md` | DEC đội — **một file**, không theo phase |
 | `memory/open-questions.md` | Câu hỏi / nợ tiền đề đội |
-| `memory/doc-debt.md` | Sổ nợ tài liệu — điều kiện lên `standard` |
+| `memory/doc-debt.md` | Sổ nợ tài liệu — điều kiện chốt baseline |
 | `memory/trace.sql` | Khuôn SQLite; DB `trace.db` gitignore — việc đội khi `tasks=none` |
 | `assets/public/`, `internal/` | Tài liệu thô |
 | `assets/archive/` | Tài liệu cũ, rời rạc — nguồn tham chiếu, *không* phải artifact |
@@ -56,7 +56,7 @@ cp "$PROJECT/memory/memory.md.example" "$PROJECT/memory/memory.md"
 
 ## Bề mặt code (ADR-038)
 
-`project_mode` không cắt folder tài liệu. Trục khác là **bề mặt**, ghi trong `memory/profile.json` → `surfaces`.
+Folder tài liệu không bị cắt theo bất kỳ cấu hình nào. Trục duy nhất là **bề mặt**, ghi trong `memory/profile.json` → `surfaces`.
 
 | id | Folder | Mặc định |
 |----|--------|----------|
@@ -70,28 +70,27 @@ Init copy cây của bề mặt được chọn (`backend/src|tests|build`, `fro
 
 `.minipower/` và `memory/` luôn có, kể cả khi bỏ `docs`.
 
-## Copy đủ khung ở MỌI chế độ
+## Copy đủ khung, không cắt theo cấu hình
 
-Init copy **nguyên** skeleton bất kể `project_mode` là `mvp`, `standard` hay `maintain`. **Không** cắt folder theo chế độ.
+Init copy **nguyên** skeleton `docs/`. **Không** cắt folder theo mức tài liệu dự án cần.
 
-Lý do: `mvp`/`maintain` rồi sẽ phải bổ sung tài liệu. Cắt folder hôm nay là tạo việc di trú ngày mai. Giữ nguyên khung thì lên `standard` chỉ là **điền tiếp**.
+Lý do: dự án làm nhanh rồi sẽ phải bổ sung tài liệu. Cắt folder hôm nay là tạo việc di trú ngày mai. Giữ nguyên khung thì về sau chỉ là **điền tiếp**.
 
-Hệ quả: ở `mvp`/`maintain` sẽ có folder `docs/` rỗng có chủ đích — nói ra bằng README.
+Hệ quả: sẽ có folder `docs/` rỗng có chủ đích — nói ra bằng README.
 
 ### README chuẩn cho folder chưa dùng
 
-Agent đặt file `README.md` với nội dung sau vào **mỗi** folder `docs/` nằm ngoài `docs_focus` của chế độ hiện tại:
+Agent đặt file `README.md` với nội dung sau vào **mỗi** folder `docs/` mà dự án chưa cần điền:
 
 ```markdown
 # (chưa điền)
 
-Folder này **cố ý để trống** vì dự án đang ở chế độ **`{mode}`** — `docs_focus` của chế độ
-này chưa gồm {DOC-NN…}.
+Folder này **cố ý để trống** — dự án chưa cần {DOC-NN…} ở giai đoạn này.
 
-Không phải lỗi cài đặt, và **không** xoá folder: khung giữ nguyên để khi lên `standard`
-chỉ cần điền tiếp, không phải di trú cấu trúc.
+Không phải lỗi cài đặt, và **không** xoá folder: khung giữ nguyên để sau chỉ cần
+điền tiếp, không phải di trú cấu trúc.
 
 Món nợ tương ứng ghi ở [`memory/doc-debt.md`](../../memory/doc-debt.md).
 ```
 
-Thay `{mode}` và `{DOC-NN…}` bằng giá trị thật. Bảng `docs_focus`: [SKILL.md § Chế độ dự án](../SKILL.md#chế-độ-dự-án-project_mode).
+Thay `{DOC-NN…}` bằng giá trị thật.

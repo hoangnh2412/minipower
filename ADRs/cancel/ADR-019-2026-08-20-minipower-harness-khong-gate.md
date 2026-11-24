@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Ngày** | 2026-08-20 |
-| **Trạng thái** | 🟣 **CANCEL** (2026-08-20, cùng ngày viết) — thay bởi [ADR-020](../todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md): giữ kiến trúc + tham-số-hoá gate theo **3 chế độ dự án** thay vì bỏ mọi gate. **Kế thừa:** QĐ-5 advisory (→ hành vi mode mvp/maintain) · QĐ-6 `trace:check` CI · §3 ánh xạ vai→công cụ · §2 phân loại gate |
+| **Trạng thái** | 🟣 **CANCEL** (2026-08-20, cùng ngày viết) — thay bởi [ADR-020](../cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md): giữ kiến trúc + tham-số-hoá gate theo **3 chế độ dự án** thay vì bỏ mọi gate. **Kế thừa:** QĐ-5 advisory (→ hành vi mode mvp/maintain) · QĐ-6 `trace:check` CI · §3 ánh xạ vai→công cụ · §2 phân loại gate |
 | **Phạm vi** | Toàn `minipower/` — **pivot định vị**: từ *pipeline 6 phase có cổng* sang *harness hỗ trợ 7 vai, không block ở bước nào*. Chạm §0 và toàn bộ mô hình gatekeeper |
 | **Nối tiếp** | **Huỷ** [ADR-003](../cancel/ADR-003-2026-07-20-minipower-gated-fanout-execution.md) · [ADR-013](../cancel/ADR-013-2026-07-26-minipower-senior-junior-execution.md) · [ADR-017](../cancel/ADR-017-2026-08-20-minipower-toolchain-openproject-github-outline-slack.md) · [ADR-018](../cancel/ADR-018-2026-08-20-minipower-phe-duyet-openproject-publish-outline.md) · **giữ** [ADR-014](../todo/ADR-014-2026-07-28-minipower-spine-tong-hop-wrap-not-build.md) (wrap-not-build) · [ADR-008](../todo/ADR-008-2026-07-25-minipower-proposal-suite.md) · [ADR-016](../todo/ADR-016-2026-08-02-minipower-discovery-tom-tat-tai-lieu-lon.md) |
 | **Mục đích** | Chốt: minipower là **bộ công cụ gọi khi cần** cho mọi vai SDLC; **mọi phê duyệt sống ở công cụ ngoài**; kháng thể chống hallucination giữ lại dưới dạng **khuyến nghị, không chặn** |

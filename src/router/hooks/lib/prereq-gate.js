@@ -1,6 +1,6 @@
 /**
  * Minipower — prereq gate @ UserPromptSubmit (ADR-020 C2 · QĐ-11d · QĐ-13).
- * SSOT: rules.json (`prereq_by_intent` × `project_modes` × `doc_scope`).
+ * SSOT: rules.json (`prereq_by_intent` × `gate_levels.prereq` × `doc_scope`).
  *
  * Đánh thức `matchIntents` — bảng `prereq_by_intent` có từ lâu nhưng CHƯA hook nào
  * gọi, nên tiền đề chỉ là câu chữ. Đây là chỗ nó thành điều kiện máy kiểm được.
@@ -21,7 +21,7 @@ import { existsSync, readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
 
 import { shouldBypass } from "./bypass.js"
-import { isMinipowerProject, projectRoot, readProjectMode } from "./profile-guard.js"
+import { isMinipowerProject, projectRoot } from "./profile-guard.js"
 import { docLabel, docScope, gateLevel, matchIntents, requiresForIntent, stripDiacritics } from "./rules.js"
 
 const MODULES_DIR = ["docs", "03-modules"]
@@ -165,18 +165,15 @@ export function checkPrereqGate(prompt, filePaths, opts) {
   const intents = matchIntents(stripDiacritics(p).toLowerCase())
   if (!intents.length) return { action: "allow" }
 
-  const { mode, legacy } = readProjectMode(root)
-  let level = gateLevel(mode, "prereq")
+  const level = gateLevel("prereq")
   if (level === "off") return { action: "allow" }
-  // R2 — chưa biết chắc mode thì không được chặn.
-  if (legacy && level === "block") level = "warn"
 
   const moduleId = extractModuleId(p, filePaths, { root })
 
   const missing = []
   const seen = new Set()
   for (const it of intents) {
-    for (const doc of requiresForIntent(it.id, mode)) {
+    for (const doc of requiresForIntent(it.id)) {
       if (seen.has(doc)) continue
       seen.add(doc)
       if (docScope(doc) === "module") {

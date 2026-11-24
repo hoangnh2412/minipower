@@ -61,7 +61,7 @@ Script tự suy path pack (không cần gõ), **merge an toàn**: giữ nguyên 
 Fragment gồm:
 
 - **`hooks.UserPromptSubmit`** — token-guard → auto-routing → profile-guard → **prereq-gate** → decision-staleness (cùng logic Cursor).
-- **`hooks.PreToolUse`** (`Read|Write|Edit`) — **baseline-guard**: chặn `02-baseline/` ở mọi mode, `_legacy/` trừ mode `maintain`.
+- **`hooks.PreToolUse`** (`Read|Write|Edit`) — **baseline-guard**: chặn `02-baseline/` luôn; `_legacy/` theo `gate_levels.legacy_read`.
 - **Không còn `permissions.deny`** — dồn về `baseline-guard` để plugin và settings cùng hành vi (ADR-020 QĐ-4).
 
 > Cài tay: vẫn merge [settings.fragment.json](settings.fragment.json) rồi thay mọi `/ABSOLUTE/PATH/TO/minipower/src/router` bằng path thật. Script ở trên làm đúng việc đó, có kiểm tra.

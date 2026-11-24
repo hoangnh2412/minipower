@@ -183,8 +183,8 @@ test("shim decision-staleness", async (t) => {
 
 // ─── ADR-020 việc #3 — shim mới ─────────────────────────────────────────────
 
-/** Dự án minipower giả để shim có mode thật mà đọc. */
-function fixture(mode) {
+/** Dự án minipower giả để shim có profile thật mà đọc. */
+function fixture() {
   const root = mkdtempSync(join(tmpdir(), "mp-shim-"))
   mkdirSync(join(root, "memory"), { recursive: true })
   mkdirSync(join(root, "docs", "01-project"), { recursive: true })
@@ -201,7 +201,6 @@ function fixture(mode) {
       project_summary: "d",
       current_phase: "requirements",
       minipower_experience: "returning",
-      project_mode: mode,
       approval_source: { docs: "local", tasks: "local", code: "local" },
     }),
     "utf8",
@@ -210,14 +209,15 @@ function fixture(mode) {
 }
 
 test("shim prereq-gate", async (t) => {
-  const root = fixture("standard")
+  const root = fixture()
   const env = { MP_PROJECT_ROOT: root }
   try {
-    await t.test("thiếu DOC-03 @ standard → {continue:false} exit 2", () => {
+    await t.test("thiếu DOC-03 → warn: {continue:true} exit 0 + additional_context", () => {
       const r = run("prereq-gate.js", { prompt: "phan tich yeu cau" }, env)
-      assert.equal(r.code, 2)
-      assert.equal(r.json.continue, false)
-      assert.match(r.json.user_message, /DOC-03/)
+      assert.equal(r.code, 0, "mức khai là warn — không được chặn")
+      assert.equal(r.json.continue, true)
+      assert.match(r.json.additional_context, /DOC-03/)
+      assert.equal(r.json.hookSpecificOutput.hookEventName, "UserPromptSubmit")
     })
 
     await t.test("có DOC-03 → {continue:true} exit 0", () => {
@@ -233,10 +233,10 @@ test("shim prereq-gate", async (t) => {
       assert.equal(r.json.continue, true)
     })
 
-    await t.test("module thiếu DOC-04 → block, nêu tên module", () => {
+    await t.test("module thiếu DOC-04 → warn, nêu tên module", () => {
       const r = run("prereq-gate.js", { prompt: "ve prototype cho Module: ORD" }, env)
-      assert.equal(r.code, 2)
-      assert.match(r.json.user_message, /ORD/)
+      assert.equal(r.code, 0)
+      assert.match(r.json.additional_context, /ORD/)
     })
 
     await t.test("attachments → nhận diện module", () => {
@@ -245,7 +245,8 @@ test("shim prereq-gate", async (t) => {
         { prompt: "ve prototype", attachments: [{ file_path: "docs/03-modules/ORD/DOC-06.md" }] },
         env,
       )
-      assert.equal(r.code, 2, "biết module ORD qua attachment nên phát hiện thiếu DOC-04")
+      assert.equal(r.code, 0)
+      assert.match(r.json.additional_context, /DOC-04/, "biết module ORD qua attachment nên phát hiện thiếu DOC-04")
     })
 
     await t.test("prompt không khớp intent → allow", () => {
@@ -264,23 +265,8 @@ test("shim prereq-gate", async (t) => {
   }
 })
 
-test("shim prereq-gate — mvp warn kèm additionalContext", async (t) => {
-  const root = fixture("mvp")
-  try {
-    await t.test("warn → {continue:true} exit 0 + additional_context", () => {
-      const r = run("prereq-gate.js", { prompt: "phan tich yeu cau" }, { MP_PROJECT_ROOT: root })
-      assert.equal(r.code, 0, "mvp không được chặn")
-      assert.equal(r.json.continue, true)
-      assert.match(r.json.additional_context, /DOC-03/)
-      assert.equal(r.json.hookSpecificOutput.hookEventName, "UserPromptSubmit")
-    })
-  } finally {
-    rmSync(root, { recursive: true, force: true })
-  }
-})
-
 test("shim baseline-guard", async (t) => {
-  const root = fixture("standard")
+  const root = fixture()
   const env = { MP_PROJECT_ROOT: root }
   try {
     await t.test("file thường → {permission:allow} exit 0", () => {
@@ -314,13 +300,9 @@ test("shim baseline-guard", async (t) => {
       assert.equal(r.json.permission, "deny")
     })
 
-    await t.test("_legacy @ standard: deny; kèm migrate: allow", () => {
+    await t.test("_legacy: allow theo gate_levels.legacy_read, không cần migrate", () => {
       const f = { file_path: "docs/03-modules/_legacy/old.md" }
-      assert.equal(run("baseline-guard.js", { tool_input: f }, env).json.permission, "deny")
-      assert.equal(
-        run("baseline-guard.js", { tool_input: f, prompt: "migrate" }, env).json.permission,
-        "allow",
-      )
+      assert.equal(run("baseline-guard.js", { tool_input: f }, env).json.permission, "allow")
     })
 
     await t.test("stdin rỗng → allow", () => {
@@ -363,10 +345,11 @@ test("shim baseline-guard", async (t) => {
       assert.equal(r.stdout.trim(), "")
     })
 
-    await t.test("Claude PreToolUse + _legacy @ standard: deny; kèm migrate: im lặng", () => {
-      const base = { hook_event_name: "PreToolUse", tool_name: "Read", tool_input: { file_path: "docs/03-modules/_legacy/old.md" } }
+    await t.test("Claude PreToolUse + baseline: deny; _legacy: im lặng (allow)", () => {
+      const base = { hook_event_name: "PreToolUse", tool_name: "Read", tool_input: { file_path: "docs/02-baseline/v1/x.md" } }
       assert.equal(run("baseline-guard.js", base, env).json.hookSpecificOutput.permissionDecision, "deny")
-      assert.equal(run("baseline-guard.js", { ...base, prompt: "migrate" }, env).stdout.trim(), "")
+      const legacy = { ...base, tool_input: { file_path: "docs/03-modules/_legacy/old.md" } }
+      assert.equal(run("baseline-guard.js", legacy, env).stdout.trim(), "")
     })
 
     await t.test("Cursor beforeReadFile giữ format cũ", () => {
@@ -383,8 +366,8 @@ test("shim baseline-guard", async (t) => {
   }
 })
 
-test("shim baseline-guard — mode maintain mở _legacy (C5)", async (t) => {
-  const root = fixture("maintain")
+test("shim baseline-guard — _legacy mở theo gate_levels (C5)", async (t) => {
+  const root = fixture()
   try {
     await t.test("không cần nhắc migrate", () => {
       const r = run(

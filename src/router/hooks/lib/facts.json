@@ -22,16 +22,16 @@
     "total": 75
   },
   "description": {
-    "chars": 17434,
+    "chars": 17430,
     "longest": 377
   },
   "adr": {
     "by_state": {
       "pending": 0,
-      "todo": 9,
+      "todo": 8,
       "doing": 11,
       "done": 19,
-      "cancel": 7
+      "cancel": 8
     },
     "total": 46,
     "next_code": "ADR-047"

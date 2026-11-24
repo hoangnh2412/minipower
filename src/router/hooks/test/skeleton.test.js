@@ -73,7 +73,7 @@ test("ADR-020 #6 — memory/doc-debt.md ở GỐC memory", () => {
   const p = join(MEMORY, "doc-debt.md")
   assert.ok(existsSync(p), "thiếu memory/doc-debt.md")
   const text = readFileSync(p, "utf8")
-  assert.match(text, /standard/, "phải nêu điều kiện lên standard")
+  assert.match(text, /[Đđ]iều kiện chốt baseline/, "phải nêu điều kiện chốt baseline")
 })
 
 test("ADR-020 #6 — assets/archive/ có README kèm cột độ tin cậy (Q5)", () => {
@@ -98,7 +98,7 @@ test("INIT.md — có README chuẩn cho folder chưa dùng (QĐ-2) + migrate AD
   const text = readFileSync(join(PROJECT_SKELETON, "INIT.md"), "utf8")
   assert.match(text, /chưa điền/i, "INIT.md phải định nghĩa README cho folder rỗng")
   assert.match(text, /doc-debt/, "README folder rỗng phải trỏ về sổ nợ")
-  assert.match(text, /mọi ch[eế] đ[oộ]/i, "INIT.md phải nói rõ copy đủ khung ở mọi chế độ")
+  assert.match(text, /không cắt theo cấu hình|không.*cắt folder/i, "INIT.md phải nói rõ copy đủ khung, không cắt folder")
   assert.match(text, /memory\.md\.example|decision-log\.md/, "INIT phải mô tả memory phẳng ADR-035")
 })
 

@@ -6,11 +6,11 @@
  * — dồn cưỡng chế về một chỗ để hết lệch giữa kênh plugin và kênh settings (QĐ-4).
  *
  * Hai điều kiện cứng:
- *   C4 — docs/02-baseline: DENY ở CẢ 3 MODE, **không BYPASS**. Đây là hook duy nhất
+ *   C4 — docs/02-baseline: DENY luôn, **không BYPASS**. Đây là hook duy nhất
  *        không có lối thoát (§5): snapshot đã ký, đọc qua agent vừa tốn token vừa
  *        mở đường sửa nhầm.
- *   C5 — docs/03-modules/_legacy: deny trừ khi prompt nhắc migrate;
- *        **mode `maintain` mở hẳn** — đọc code/tài liệu cũ chính là công việc.
+ *   C5 — docs/03-modules/_legacy: mở theo số khai `rules.json → gate_levels.legacy_read`
+ *        (hiện `allow` — đọc code/tài liệu cũ chính là công việc của người bảo trì).
  */
 
 import test from "node:test"
@@ -20,6 +20,7 @@ import { join } from "node:path"
 import { tmpdir } from "node:os"
 
 import { checkBaselineGuard } from "../lib/baseline-guard.js"
+import { GATE_LEVELS } from "../lib/rules.js"
 
 const BASE_PROFILE = {
   user_name: "Hoàng",
@@ -31,18 +32,17 @@ const BASE_PROFILE = {
   minipower_experience: "returning",
 }
 
-function makeProject(mode) {
+function makeProject(withProfile = true) {
   const root = mkdtempSync(join(tmpdir(), "mp-baseline-"))
   mkdirSync(join(root, "memory"), { recursive: true })
   mkdirSync(join(root, "docs"), { recursive: true })
   writeFileSync(join(root, "memory", "memory.md"), "# Memory\n", "utf8")
-  if (mode) {
+  if (withProfile) {
     writeFileSync(
       join(root, "memory", "profile.json"),
       JSON.stringify({
         ...BASE_PROFILE,
         version: 2,
-        project_mode: mode,
         approval_source: { docs: "local", tasks: "local", code: "local" },
       }),
       "utf8",
@@ -51,27 +51,21 @@ function makeProject(mode) {
   return root
 }
 
-const MODES = ["standard", "mvp", "maintain"]
-
 // ─── C4 — baseline deny tuyệt đối ───────────────────────────────────────────
 
-test("baseline-guard (C4) — docs/02-baseline DENY ở cả 3 mode", async (t) => {
-  for (const mode of MODES) {
-    await t.test(`mode ${mode} → deny`, () => {
-      const root = makeProject(mode)
-      try {
-        const r = checkBaselineGuard("docs/02-baseline/v1.0/DOC-06-srs.md", "", { root })
-        assert.equal(r.action, "deny")
-        assert.match(r.message, /baseline/i)
-      } finally {
-        rmSync(root, { recursive: true, force: true })
-      }
-    })
+test("baseline-guard (C4) — docs/02-baseline DENY", () => {
+  const root = makeProject()
+  try {
+    const r = checkBaselineGuard("docs/02-baseline/v1.0/DOC-06-srs.md", "", { root })
+    assert.equal(r.action, "deny")
+    assert.match(r.message, /baseline/i)
+  } finally {
+    rmSync(root, { recursive: true, force: true })
   }
 })
 
 test("baseline-guard (C4) — không lối thoát nào mở được baseline", async (t) => {
-  const root = makeProject("maintain") // mode dễ dãi nhất
+  const root = makeProject()
   try {
     await t.test("BYPASS KHÔNG mở (§5: hook duy nhất không có BYPASS)", () => {
       assert.equal(
@@ -101,8 +95,8 @@ test("baseline-guard (C4) — không lối thoát nào mở được baseline", 
       )
     })
 
-    await t.test("baseline rỗng (mvp/maintain chưa chốt) vẫn deny — vô hại, ít nhánh test", () => {
-      const r2 = makeProject("mvp")
+    await t.test("baseline rỗng (chưa chốt) vẫn deny — vô hại, ít nhánh test", () => {
+      const r2 = makeProject()
       try {
         assert.equal(checkBaselineGuard("docs/02-baseline/", "", { root: r2 }).action, "deny")
       } finally {
@@ -115,7 +109,7 @@ test("baseline-guard (C4) — không lối thoát nào mở được baseline", 
 })
 
 test("baseline-guard (C4) — không deny nhầm tên gần giống", async (t) => {
-  const root = makeProject("standard")
+  const root = makeProject()
   try {
     await t.test("module tên chứa chữ 'baseline' → allow", () => {
       assert.equal(
@@ -139,38 +133,11 @@ test("baseline-guard (C4) — không deny nhầm tên gần giống", async (t) 
   }
 })
 
-// ─── C5 — _legacy theo mode ─────────────────────────────────────────────────
+// ─── C5 — _legacy theo số khai ─────────────────────────────────────────────────
 
-test("baseline-guard (C5) — _legacy: standard/mvp deny trừ migrate", async (t) => {
-  for (const mode of ["standard", "mvp"]) {
-    await t.test(`mode ${mode}: không nhắc migrate → deny`, () => {
-      const root = makeProject(mode)
-      try {
-        const r = checkBaselineGuard("docs/03-modules/_legacy/old.md", "đọc file này", { root })
-        assert.equal(r.action, "deny")
-        assert.match(r.message, /migrate|_legacy/i, "thông điệp nêu điều kiện mở khoá")
-      } finally {
-        rmSync(root, { recursive: true, force: true })
-      }
-    })
-
-    await t.test(`mode ${mode}: prompt nhắc migrate → allow`, () => {
-      const root = makeProject(mode)
-      try {
-        assert.equal(
-          checkBaselineGuard("docs/03-modules/_legacy/old.md", "migrate module cũ", { root })
-            .action,
-          "allow",
-        )
-      } finally {
-        rmSync(root, { recursive: true, force: true })
-      }
-    })
-  }
-})
-
-test("baseline-guard (C5) — mode maintain MỞ _legacy vô điều kiện", async (t) => {
-  const root = makeProject("maintain")
+test("baseline-guard (C5) — _legacy mở theo gate_levels.legacy_read (hiện allow)", async (t) => {
+  assert.equal(GATE_LEVELS.legacy_read, "allow", "test này viết cho mức allow — đổi số khai thì đổi test")
+  const root = makeProject()
   try {
     await t.test("không cần nhắc migrate — đọc tài liệu cũ chính là công việc", () => {
       assert.equal(
@@ -200,7 +167,7 @@ test("baseline-guard (C5) — mode maintain MỞ _legacy vô điều kiện", as
 // ─── R2 — fail-open ─────────────────────────────────────────────────────────
 
 test("baseline-guard (R2) — thiếu profile: giữ mặc định an toàn, không ném", async (t) => {
-  const root = makeProject(null) // không có profile.json
+  const root = makeProject(false) // không có profile.json
   try {
     await t.test("baseline vẫn deny (an toàn không phụ thuộc profile)", () => {
       assert.equal(
@@ -209,14 +176,10 @@ test("baseline-guard (R2) — thiếu profile: giữ mặc định an toàn, kh�
       )
     })
 
-    await t.test("_legacy rơi về hành vi standard — deny trừ migrate", () => {
+    await t.test("_legacy theo số khai, không phụ thuộc profile", () => {
       assert.equal(
         checkBaselineGuard("docs/03-modules/_legacy/old.md", "đọc thử", { root }).action,
-        "deny",
-      )
-      assert.equal(
-        checkBaselineGuard("docs/03-modules/_legacy/old.md", "migrate", { root }).action,
-        "allow",
+        GATE_LEVELS.legacy_read,
       )
     })
   } finally {
@@ -225,7 +188,7 @@ test("baseline-guard (R2) — thiếu profile: giữ mặc định an toàn, kh�
 })
 
 test("baseline-guard — đầu vào không hợp lệ", async (t) => {
-  const root = makeProject("standard")
+  const root = makeProject()
   try {
     await t.test("path rỗng / null / undefined → allow, không ném", () => {
       assert.equal(checkBaselineGuard("", "", { root }).action, "allow")

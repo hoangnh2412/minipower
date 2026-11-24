@@ -12,7 +12,7 @@ body:
     id: context
     attributes:
       label: "1. Bối cảnh"
-      description: "Loại dự án, project_mode, pack đang dùng, stack — KHÔNG tên dự án / khách / người"
+      description: "Loại dự án, pack đang dùng, stack — KHÔNG tên dự án / khách / người"
     validations:
       required: true
 

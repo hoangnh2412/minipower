@@ -10,7 +10,6 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 
-import { PROJECT_MODES } from "../lib/rules.js"
 import { PROFILE_VERSION } from "../lib/profile-guard.js"
 import { ROUTER as ROUTER_DIR } from "../lib/skill-catalog.js"
 
@@ -19,18 +18,6 @@ const INIT = readFileSync(join(ROUTER_DIR, "skills", "minipower-router-init", "S
 const INIT_MD = readFileSync(join(ROUTER_DIR, "project-skeleton", "INIT.md"), "utf8")
 const PROFILE_TPL = readFileSync(join(ROUTER_DIR, "templates", "TPL-agent-profile.md"), "utf8")
 const HUB = `${ROUTER}\n${INIT}\n${INIT_MD}\n${PROFILE_TPL}`
-
-test("router — vùng generated project-modes có mặt (gen sẽ ném nếu mất marker)", () => {
-  assert.match(ROUTER, /BEGIN generated: project-modes/)
-  assert.match(ROUTER, /END generated: project-modes/)
-})
-
-test("router — mọi mode trong rules.json đều được nhắc (init câu 6)", () => {
-  for (const id of Object.keys(PROJECT_MODES)) {
-    assert.match(ROUTER, new RegExp(`\`${id}\``), `router chưa nhắc chế độ \`${id}\``)
-  }
-  assert.match(ROUTER, /project_mode/, "router phải nêu tên trường project_mode")
-})
 
 test("router — bốn mặt provider được hỏi (init, ADR-033)", () => {
   for (const face of ["docs_provider", "tasks_provider", "chat_provider", "code_provider"]) {

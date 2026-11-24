@@ -21,9 +21,9 @@ Lời nhắc phiên (một slice, sửa DOC, đọc `profile.user.json`) ở `AG
 | Token guard | `bin/token-guard.js` | Thiếu scope, `@docs/` quá rộng, chặn baseline/_legacy |
 | Auto-routing DOC → phase | `bin/auto-routing.js` | Chèn `Phase:` / chặn conflict khi tag nhiều DOC |
 | Profile guard | `bin/profile-guard.js` | Chặn việc minipower khi thiếu `memory/profile.json` |
-| Prereq gate | `bin/prereq-gate.js` | Thiếu DOC tiền đề theo intent × mode × **module** — block ở `standard`, warn ở `mvp`/`maintain` |
+| Prereq gate | `bin/prereq-gate.js` | Thiếu DOC tiền đề theo intent × **module** — mức khai `rules.json → gate_levels.prereq` |
 | Decision-log staleness | `bin/decision-staleness.js` | Advisory (không chặn), keyword-gated |
-| Baseline guard (`beforeReadFile`) | `bin/baseline-guard.js` | Chặn `02-baseline/` mọi mode (không BYPASS); `_legacy/` mở ở mode `maintain` |
+| Baseline guard (`beforeReadFile`) | `bin/baseline-guard.js` | Chặn `02-baseline/` luôn (không BYPASS); `_legacy/` theo `gate_levels.legacy_read` |
 
 **SSOT map DOC → phase:** [auto-routing.js](../../src/router/hooks/lib/auto-routing.js) (`phase_by_doc` trong [rules.json](../../src/router/hooks/lib/rules.json)).
 

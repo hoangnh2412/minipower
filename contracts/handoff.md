@@ -1,6 +1,6 @@
 # Handoff boundaries — điểm bàn giao H1–H6 (GIAO THỨC)
 
-**Trạng thái:** 🟢 Nguyên tắc **per-module đã sống** ([ADR-020](../ADRs/todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-13/14 — `prereq-gate` kiểm tiền đề theo module, `fan-out` = pipeline theo module). Hai điểm liên-repo **H4/H6** chờ mô hình 2 repo — xem [cross-repo-bridge.md](cross-repo-bridge.md).
+**Trạng thái:** 🟢 Nguyên tắc **per-module đã sống** ([ADR-020](../ADRs/cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-13/14 — `prereq-gate` kiểm tiền đề theo module, `fan-out` = pipeline theo module). Hai điểm liên-repo **H4/H6** chờ mô hình 2 repo — xem [cross-repo-bridge.md](cross-repo-bridge.md).
 
 Tổng quát bảng *"Mức tối thiểu để dev bắt đầu"* của [parallel-work.md](../src/router/docs/parallel-work.md) thành boundary có tên. **H0** (trước ký) bổ sung ADR-030/033; **H1–H6** không đổi sau ký.
 
@@ -18,16 +18,16 @@ Tổng quát bảng *"Mức tối thiểu để dev bắt đầu"* của [parall
 
 ## 1. Handoff là **per-module**, không phải per-project
 
-Sau [ADR-020](../ADRs/todo/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-14, mỗi boundary xảy ra **cho từng module một**, theo nhịp riêng của module đó:
+Sau [ADR-020](../ADRs/cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-bang-hook.md) QĐ-14, mỗi boundary xảy ra **cho từng module một**, theo nhịp riêng của module đó:
 
 > `ORD` qua **H4** sang code trong khi `INV` còn chưa qua **H2**. Đó là trạng thái **đúng**, không phải lệch pha cần đồng bộ.
 
 | | |
 |---|---|
 | **Đơn vị bàn giao** | Một module, không phải cả dự án. "Input tối thiểu" ở bảng trên đọc là *"tối thiểu **cho module đang bàn giao**"* |
-| **Ai mở cổng** | **Người**. Không hook nào phán module đã đủ để qua boundary — `prereq-gate` chỉ nhắc khi thiếu DOC tiền đề *của đúng module đó* (QĐ-13), và ở `standard` nó chặn với lối thoát `BYPASS` |
+| **Ai mở cổng** | **Người**. Không hook nào phán module đã đủ để qua boundary — `prereq-gate` chỉ nhắc khi thiếu DOC tiền đề *của đúng module đó* (QĐ-13) ở mức khai `rules.json → gate_levels.prereq`; người quyết đi tiếp |
 | **Không có vạch đích chung** | Không boundary nào chờ "mọi module xong". Tổng hợp (trace-matrix, BRD đầy đủ) là **bước riêng** do lead làm khi cần |
-| **Chế độ dự án** | `mvp`/`maintain` hạ *input tối thiểu* theo `prereq_overrides`, **không** bỏ boundary. Cái hụt ghi `memory/doc-debt.md` |
+| **Dự án cần ít tài liệu** | Hạ *input tối thiểu* là quyết định của người, **không** bỏ boundary. Cái hụt ghi `memory/doc-debt.md` |
 
 **Hệ quả cho repo consumer (Jarvis):** nhận bàn giao theo module, không chờ trọn bộ docs. Thiếu gì thì nêu tên module + DOC cụ thể, đừng trả lại cả lô.
 

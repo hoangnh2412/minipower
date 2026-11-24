@@ -1,5 +1,9 @@
 # Changelog — minipower-router-init
 
+## 1.0.2 · 2026-11-24
+
+- Bỏ câu «project_mode chỉ lấy từ profile» — trường đã gỡ; provider / bề mặt vẫn chỉ lấy từ `memory/profile.json`.
+
 ## 1.0.1 · 2026-11-23
 
 - Gắn marker `nhắc tên cũ có chủ đích` cho dòng hướng dẫn nâng cấp shim bản cũ, để check A12 không báo oan.

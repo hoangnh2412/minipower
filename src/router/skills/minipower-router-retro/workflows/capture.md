@@ -33,7 +33,7 @@ Khuôn cố định: *"Trong tình huống X, làm Y thay vì Z."* Không viết
 
 Điền đủ 11 trường theo [lesson.yml](../../../../../.github/ISSUE_TEMPLATE/lesson.yml), in ra chat dạng bảng hoặc khối text để người đọc trước khi đăng:
 
-1. Bối cảnh — loại dự án, `project_mode`, pack, stack
+1. Bối cảnh — loại dự án, pack, stack
 2. Công việc — yêu cầu gì, skill nào, input tóm tắt
 3. Hiện tượng — trích đoạn đã ẩn danh
 4. Nguyên nhân — dòng/mục cụ thể, hoặc "không rõ"

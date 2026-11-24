@@ -8,7 +8,7 @@ Atomic pack `architecture/`. Không agent bàn giao agent (ADR-033 QĐ-1 · ADR-
 
 | Tình huống | Mở |
 |------------|-----|
-| Chế độ `maintain`, hệ cũ không tài liệu | [SKILL.md](SKILL.md) — quy trình 8 bước, đích theo DOC |
+| Tiếp quản hệ cũ không tài liệu | [SKILL.md](SKILL.md) — quy trình 8 bước, đích theo DOC |
 | Cần hiểu một luồng trong codebase lạ trước khi sửa | `reading-method.md` + pattern đúng stack |
 | Phân vân flow đã hiểu đủ chưa | `reading-method.md` §12 Definition of Done |
 

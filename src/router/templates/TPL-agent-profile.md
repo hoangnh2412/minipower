@@ -14,7 +14,6 @@ Khuôn `AGENTS.md` lúc init. `CLAUDE.md` = cùng thân, thêm block import ở 
 |-------|--------|
 | `{project_name}` | `profile.project_name` |
 | `{project_summary}` | `profile.project_summary` |
-| `{project_mode}` | `mvp` \| `standard` \| `maintain` |
 | `{current_phase}` | `profile.current_phase` |
 | `{docs_provider}` | `local` \| `outline` |
 | `{tasks_provider}` | `openproject` \| `lark` \| `none` |
@@ -32,7 +31,6 @@ Dự án — **commit được**. Không chứa `user_name` / xưng hô.
   "project_name": "billing-demo",
   "project_summary": "Hệ thống quản lý hóa đơn điện tử",
   "current_phase": "discovery",
-  "project_mode": "standard",
   "docs_provider": "local",
   "tasks_provider": "none",
   "chat_provider": "none",
@@ -44,7 +42,6 @@ Dự án — **commit được**. Không chứa `user_name` / xưng hô.
 | Field | Quy tắc |
 |-------|---------|
 | `version` | `3` bản mới. `1` và `2` vẫn hợp lệ — không chặn dự án cũ |
-| `project_mode` | `mvp` · `standard` · `maintain` — đổi kèm DEC |
 | `docs_provider` | `local` \| `outline` |
 | `tasks_provider` | `openproject` \| `lark` \| `none` (`none` = hàng `artifact` trong SQLite, không folder task markdown) |
 | `chat_provider` | `slack` \| `lark` \| `none` |
@@ -87,7 +84,6 @@ SSOT máy đọc là `memory/profile.json`. Bảng trong file này chỉ là b�
 | Mô tả | {project_summary} |
 | Phạm vi | Module và in/out trong `docs/01-project/DOC-03-brd.md`. Chưa có dòng module thì phạm vi là `TBD`, không tự thêm module. |
 | Phiên bản hồ sơ | Schema profile **v3**. DOC trong `docs/` trước sign-off: Version `—`, Status `Draft` (`docs/00-governance/doc-versioning.md`). Sau ký: snapshot `docs/02-baseline/vX.Y/`. |
-| Chế độ | `{project_mode}` — `mvp` · `standard` · `maintain`. Đổi chế độ kèm DEC trong `memory/decision-log.md`. |
 | Phase hiện tại | `{current_phase}` |
 | Mặt công cụ | docs `{docs_provider}` · tasks `{tasks_provider}` · chat `{chat_provider}` · code `{code_provider}` |
 | Trace | `memory/trace.sql` (khuôn) · `memory/trace.db` (gitignore) |
@@ -165,7 +161,7 @@ Thứ tự đầu phiên:
 | Kiến trúc | `04-platform/` DOC-08, DOC-11, DOC-12 | Chỉ phần đụng module đang làm |
 | Quyết định đã có | `memory/decision-log.md` | Status `accepted`; cái `proposed` chưa phải luật |
 | Câu hỏi còn mở | `memory/open-questions.md` | Không trả lời hộ phần đang TBD |
-| Nợ tài liệu | `memory/doc-debt.md` | `mvp` / `maintain`: khoản bỏ qua phải có dòng ở đây |
+| Nợ tài liệu | `memory/doc-debt.md` | Khoản bỏ qua phải có dòng ở đây |
 | Đã ký | `02-baseline/vX.Y/` | Đối chiếu, không sửa |
 | Sau ký | `06-changes/CR-xxx/` | Delta và impact, không vá thẳng baseline |
 
@@ -199,7 +195,7 @@ Checklist ngày đầu, làm một lần rồi thôi:
 | QC | DOC-07, DOC-16, dòng trace của module | Sinh FR mới |
 | DevOps | DOC-17, NFR (DOC-13) của bề mặt triển khai | Đổi hành vi nghiệp vụ |
 
-`maintain`: trước tài liệu mong muốn, đọc vùng đang chạy và `assets/archive/` của đúng vùng đó. `mvp`: dừng ở DOC-03 + FR/AC của module, trừ khi người yêu cầu DOC khác.
+Hệ cũ: trước tài liệu mong muốn, đọc vùng đang chạy và `assets/archive/` của đúng vùng đó. Làm nhanh: dừng ở DOC-03 + FR/AC của module, trừ khi người yêu cầu DOC khác.
 
 ## 3. Quy tắc
 
@@ -222,18 +218,17 @@ Checklist ngày đầu, làm một lần rồi thôi:
 2. **Truy vết được.** UC → FR → AC → Test nối bằng ID. Cross-ref bằng ID, không copy nội dung FR sang module khác.
 3. **Giữ cách làm, không giữ dữ liệu.** Quy trình nằm ở skill đã cài. Nghiệp vụ nằm ở `docs/` hoặc công cụ docs (`outline` khi provider là outline). Việc nằm ở provider task hoặc SQLite. Code nằm ở git / GitLab. `memory/` không trở thành kho SRS.
 4. **Một owner một artifact.** Một module một owner. Một boundary một producer. Consumer bắt đầu khi đủ input tối thiểu của **đúng module đó**.
-5. **Chi phí tương xứng.** `mvp`: bộ lõi, khoản bỏ qua ghi `doc-debt.md` ngay trong phiên. `standard`: đủ tiền đề trước khi thực thi; sau baseline mọi sửa đi qua CR. `maintain`: mô tả cái đang chạy; lệch tài liệu và thực tế là câu hỏi, không tự sửa cho "đúng". Chế độ đang chạy là `{project_mode}` — áp hàng đó.
+5. **Chi phí tương xứng.** Làm nhanh: bộ lõi, khoản bỏ qua ghi `doc-debt.md` ngay trong phiên. Làm chuẩn: đủ tiền đề trước khi thực thi; sau baseline mọi sửa đi qua CR. Hệ cũ: mô tả cái đang chạy; lệch tài liệu và thực tế là câu hỏi, không tự sửa cho "đúng". Tình huống do người nêu lúc giao việc; không chắc thì hỏi, không đoán.
 6. **Tài liệu — thảo luận trước, ghi sau.** Trong lúc đang trao đổi, agent phân tích và thảo luận trong chat (phương án, trade-off, nháp nội dung) cho đến khi người **xác nhận chốt**; sau đó mới cập nhật `docs/` hoặc artifact DOC. Không ghi vào file nội dung còn đang mở hoặc chưa được người duyệt.
 7. **Code — chưa chốt thì không sửa.** Khi người chỉ ra điểm chưa rõ và đặt câu hỏi, agent trả lời và thảo luận trong chat; **không** sửa `backend/`, `frontend/` hay artifact code cho đến khi người xác nhận hướng xử lý. Micro đã thống nhất (typo, format) vẫn theo mục 3 khi không nằm trong luồng làm rõ đang mở.
 8. **Code — ít nhất mà trọn, không tự thêm fallback.** Thang chọn: có cần tồn tại → codebase đã có → thư viện chuẩn / nền tảng → dependency đã cài → một dòng → mới viết tối thiểu. **Không** thêm tuỳ chọn, abstraction, dependency hay logic dự phòng (giá trị mặc định im lặng, `catch` rồi đi tiếp, rẽ đường phụ) khi người chưa đồng ý — thiếu điều kiện thì fail rõ và hỏi trong lượt hỏi trọn gói. Không cắt validation ở biên, error handling chống mất dữ liệu, bảo mật, accessibility. Đường tắt ghi `shortcut: <giới hạn>, <khi nào nâng>`. Cuối lượt nêu điều đã bỏ qua và rủi ro. Toàn văn: mục *Viết code* trong shared-conventions của skill đã cài.
 
-| Chế độ | Tài liệu giữ | Khi bỏ bước |
-|--------|----------------|-------------|
-| `mvp` | DOC-01, DOC-03, DOC-06, DOC-07, ADR khi quyết định lớn, DOC-17 rút gọn | Ghi `doc-debt.md`. ID `{MOD}-FR-` / `{MOD}-AC-` dùng từ đầu. |
-| `standard` | Đủ DOC theo phase của việc đang làm. Trace khép UC–FR–AC–Test. | `prereq-gate` nhắc thiếu tiền đề của module. `BYPASS` là lệnh của người, ghi lý do. |
-| `maintain` | DOC-04, DOC-08–12, DOC-17 (runbook), DOC-18 | As-built từng vùng, một vùng một phiên, đầu ra là nháp + câu hỏi. |
+| Tình huống | Tài liệu giữ | Khi bỏ bước |
+|------------|----------------|-------------|
+| Làm nhanh (demo) | DOC-01, DOC-03, DOC-06, DOC-07, ADR khi quyết định lớn, DOC-17 rút gọn | Ghi `doc-debt.md`. ID `{MOD}-FR-` / `{MOD}-AC-` dùng từ đầu. |
+| Làm chuẩn (bàn giao) | Đủ DOC theo phase của việc đang làm. Trace khép UC–FR–AC–Test. | `prereq-gate` nhắc thiếu tiền đề của module. `BYPASS` là lệnh của người, ghi lý do. |
+| Hệ cũ (tiếp quản) | DOC-04, DOC-08–12, DOC-17 (runbook), DOC-18 | As-built từng vùng, một vùng một phiên, đầu ra là nháp + câu hỏi. |
 
-Đổi `{project_mode}` không im lặng: DEC + người OK.
 
 ## 5. Quy ước
 
@@ -292,7 +287,7 @@ Ba cổng đều **mềm**: verdict là phán đoán của người, không có 
 
 Tại mỗi điểm chốt: AI soạn DEC nháp (đã làm, cần quyết, rủi ro, TBD) trong `decision-log.md`, người duyệt / sửa / trả lại. Chưa duyệt thì hỏi: chốt bây giờ hay đi tiếp và ghi nợ. Không tự dừng việc người đã giao. Không có DEC nghĩa là thiếu dấu vết, không nghĩa là cấm đi tiếp.
 
-`prereq-gate` nhìn **file tiền đề của đúng module**. `standard` có thể chặn khi thiếu; lối thoát là `BYPASS` do người ra lệnh và ghi lý do. `mvp` và `maintain` hạ mức tối thiểu, không xoá boundary; khoản hụt vào `doc-debt.md`.
+`prereq-gate` nhìn **file tiền đề của đúng module** và chỉ nhắc khi thiếu (mức khai ở `rules.json → gate_levels.prereq`); người quyết làm tiếp thì khoản hụt vào `doc-debt.md`, không xoá boundary. `BYPASS` là lệnh của người, ghi lý do.
 
 Đụng `docs/02-baseline/` luôn là việc đầy đủ: CR ở `06-changes/`, không vá snapshot.
 
@@ -326,7 +321,7 @@ Một slice xong khi tất cả dòng dưới đúng:
 - Không sửa file ngoài slice, không sửa `02-baseline/`, không sửa DOC owner khác.
 - Nếu có điểm cần chốt: DEC nháp đã trình, người đã chọn duyệt hoặc ghi nợ.
 - Việc nhiều bước hoặc có L3/Git: người đã OK kế hoạch trước khi ghi.
-- `mvp` hoặc `maintain` mà bỏ một DOC trong lõi của việc đó: đã có dòng `doc-debt.md` trong cùng phiên.
+- Bỏ một DOC trong lõi của việc đó: đã có dòng `doc-debt.md` trong cùng phiên.
 - FR mới trong slice có AC tương ứng, hoặc AC được ghi nợ rõ ID. Không tuyên bố trace khép khi chưa có AC.
 - Header DOC vẫn đúng versioning: nháp giữ Version `—`.
 

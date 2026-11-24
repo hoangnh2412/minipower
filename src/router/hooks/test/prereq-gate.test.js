@@ -1,12 +1,12 @@
 /**
  * Test ĐỎ cho prereq-gate (ADR-020 C2, QĐ-11d, QĐ-13 · việc #2 §8).
- * Viết TRƯỚC hook (QĐ-10) — mô tả hành vi đúng cho cả 3 mode.
+ * Viết TRƯỚC hook (QĐ-10). Mức chặn là số khai `rules.json → gate_levels.prereq`.
  *
  * Ba tính chất phải đúng, theo thứ tự quan trọng:
  *  1. **Theo module** (QĐ-13) — module lệch nhịp là bình thường: kêu cho module
  *     thiếu tài liệu, IM cho module đã đủ. Không nêu module → im, chỉ kiểm cấp dự án.
  *  2. **Người quyết cuối** (QĐ-11d) — chặn luôn mở được bằng BYPASS.
- *  3. **Fail-open** (R2) — không đọc được profile thì chỉ WARN, không bao giờ block.
+ *  3. **Fail-open** (R2) — không đọc được profile thì cũng không bao giờ ném.
  */
 
 import test from "node:test"
@@ -15,6 +15,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs"
 import { join } from "node:path"
 import { tmpdir } from "node:os"
 
+import { GATE_LEVELS } from "../lib/rules.js"
 import { checkPrereqGate, extractModuleId } from "../lib/prereq-gate.js"
 
 const BASE_PROFILE = {
@@ -38,21 +39,20 @@ function makeProject() {
   return root
 }
 
-/** Ghi profile v2 với mode cho trước. */
-function setMode(root, mode) {
+/** Ghi profile v2 hợp lệ. */
+function setProfile(root) {
   writeFileSync(
     join(root, "memory", "profile.json"),
     JSON.stringify({
       ...BASE_PROFILE,
       version: 2,
-      project_mode: mode,
       approval_source: { docs: "local", tasks: "local", code: "local" },
     }),
     "utf8",
   )
 }
 
-/** Ghi profile v1 (không khai mode) — nhánh legacy của R2. */
+/** Ghi profile v1 — nhánh legacy của R2. */
 function setLegacyProfile(root) {
   writeFileSync(
     join(root, "memory", "profile.json"),
@@ -181,7 +181,7 @@ test("extractModuleId (Q9) — không nhận ra thì im lặng, không ném", as
 
 test("prereq-gate — cho qua sớm", async (t) => {
   const root = makeProject()
-  setMode(root, "standard")
+  setProfile(root)
   try {
     await t.test("BYPASS → allow (QĐ-11d: thao tác OK tường minh của người)", () => {
       assert.equal(
@@ -206,67 +206,30 @@ test("prereq-gate — cho qua sớm", async (t) => {
   }
 })
 
-// ─── Mức chặn theo mode ─────────────────────────────────────────────────────
+// ─── Mức khai: warn ─────────────────────────────────────────────────────────
 
-test("prereq-gate — standard BLOCK, mvp/maintain WARN (§1 dòng Gate cứng)", async (t) => {
-  await t.test("standard: thiếu DOC-03 → block, nêu đúng DOC thiếu", () => {
+test("prereq-gate — mức khai `gate_levels.prereq` = warn: nhắc, không chặn", async (t) => {
+  assert.equal(GATE_LEVELS.prereq, "warn", "test này viết cho mức warn — đổi số khai thì đổi test")
+
+  await t.test("thiếu DOC-03 → warn, nêu đúng DOC thiếu, nhắc ghi nợ", () => {
     const root = makeProject()
-    setMode(root, "standard")
+    setProfile(root)
     try {
       const r = checkPrereqGate("phan tich yeu cau cho du an", [], { root })
-      assert.equal(r.action, "block")
+      assert.equal(r.action, "warn")
       assert.match(r.message, /DOC-03/)
-      assert.match(r.message, /BYPASS/, "thông điệp phải chỉ lối thoát")
+      assert.match(r.message, /doc-debt/, "phải nhắc ghi nợ tài liệu")
     } finally {
       rmSync(root, { recursive: true, force: true })
     }
   })
 
-  await t.test("standard: có DOC-03 → allow", () => {
+  await t.test("có DOC-03 → allow", () => {
     const root = makeProject()
-    setMode(root, "standard")
+    setProfile(root)
     addProjectDoc(root, "03")
     try {
       assert.equal(checkPrereqGate("phan tich yeu cau", [], { root }).action, "allow")
-    } finally {
-      rmSync(root, { recursive: true, force: true })
-    }
-  })
-
-  await t.test("mvp: cùng tình huống → warn, KHÔNG block", () => {
-    const root = makeProject()
-    setMode(root, "mvp")
-    try {
-      const r = checkPrereqGate("phan tich yeu cau", [], { root })
-      assert.equal(r.action, "warn")
-      assert.match(r.message, /doc-debt/, "mvp phải nhắc ghi nợ tài liệu")
-    } finally {
-      rmSync(root, { recursive: true, force: true })
-    }
-  })
-
-  await t.test("maintain: implement không đòi tiền đề nào → allow dù docs rỗng", () => {
-    const root = makeProject()
-    setMode(root, "maintain")
-    try {
-      assert.equal(checkPrereqGate("viet code cho module", [], { root }).action, "allow")
-    } finally {
-      rmSync(root, { recursive: true, force: true })
-    }
-  })
-
-  await t.test("mvp: override nhẹ tay — implement chỉ đòi 03·06·07", () => {
-    const root = makeProject()
-    setMode(root, "mvp")
-    addProjectDoc(root, "03")
-    addModuleDoc(root, "ORD", "06")
-    addModuleDoc(root, "ORD", "07")
-    try {
-      // standard sẽ còn đòi 08/11/12/19; mvp thì không.
-      assert.equal(
-        checkPrereqGate("viet code cho Module: ORD", [], { root }).action,
-        "allow",
-      )
     } finally {
       rmSync(root, { recursive: true, force: true })
     }
@@ -277,7 +240,7 @@ test("prereq-gate — standard BLOCK, mvp/maintain WARN (§1 dòng Gate cứng)"
 
 test("prereq-gate (QĐ-13) — module lệch nhịp: kêu module thiếu, im module đủ", async (t) => {
   const root = makeProject()
-  setMode(root, "standard")
+  setProfile(root)
   addModuleDoc(root, "ORD", "04") // Đặt hàng đã có Business Rules
   addModule(root, "INV") // Kho đã đăng ký, chưa có gì
   try {
@@ -288,9 +251,9 @@ test("prereq-gate (QĐ-13) — module lệch nhịp: kêu module thiếu, im mod
       )
     })
 
-    await t.test("module THIẾU tài liệu → block, nêu đúng tên module", () => {
+    await t.test("module THIẾU tài liệu → warn, nêu đúng tên module", () => {
       const r = checkPrereqGate("ve prototype cho Module: INV", [], { root })
-      assert.equal(r.action, "block")
+      assert.equal(r.action, "warn")
       assert.match(r.message, /DOC-04/)
       assert.match(r.message, /INV/, "phải nêu module nào đang thiếu")
     })
@@ -302,7 +265,7 @@ test("prereq-gate (QĐ-13) — module lệch nhịp: kêu module thiếu, im mod
     await t.test("một module xong KHÔNG tắt chuông cho module khác", () => {
       // Đây là lý do bỏ phương án "có ≥1 file là đủ" (QĐ-13).
       assert.equal(checkPrereqGate("ve prototype cho Module: ORD", [], { root }).action, "allow")
-      assert.equal(checkPrereqGate("ve prototype cho Module: INV", [], { root }).action, "block")
+      assert.equal(checkPrereqGate("ve prototype cho Module: INV", [], { root }).action, "warn")
     })
   } finally {
     rmSync(root, { recursive: true, force: true })
@@ -312,13 +275,13 @@ test("prereq-gate (QĐ-13) — module lệch nhịp: kêu module thiếu, im mod
 test("prereq-gate (QĐ-13) — intent trộn hai cấp kiểm đúng từng cấp", async (t) => {
   // design-architecture đòi DOC-03 (dự án) + DOC-06 (module) + DOC-13 (dự án).
   const root = makeProject()
-  setMode(root, "standard")
+  setProfile(root)
   addModuleDoc(root, "ORD", "06")
   addProjectDoc(root, "13")
   try {
-    await t.test("thiếu DOC-03 cấp dự án → block, chỉ nêu DOC-03", () => {
+    await t.test("thiếu DOC-03 cấp dự án → warn, chỉ nêu DOC-03", () => {
       const r = checkPrereqGate("thiet ke kien truc cho Module: ORD", [], { root })
-      assert.equal(r.action, "block")
+      assert.equal(r.action, "warn")
       assert.match(r.message, /DOC-03/)
       assert.doesNotMatch(r.message, /DOC-06/, "DOC-06 của ORD đã có — không được kêu")
       assert.doesNotMatch(r.message, /DOC-13/, "DOC-13 đã có — không được kêu")
@@ -335,7 +298,7 @@ test("prereq-gate (QĐ-13) — intent trộn hai cấp kiểm đúng từng cấ
     await t.test("DOC module-scope KHÔNG được thoả bằng file của module khác", () => {
       addModule(root, "INV")
       const r = checkPrereqGate("thiet ke kien truc cho Module: INV", [], { root })
-      assert.equal(r.action, "block")
+      assert.equal(r.action, "warn")
       assert.match(r.message, /DOC-06/, "INV chưa có DOC-06 dù ORD đã có")
     })
   } finally {

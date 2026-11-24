@@ -29,7 +29,7 @@ Router báo PHỨC → `Sẽ chạy minipower-router-plan để lập kế hoạ
 
 ## Ví dụ — kế hoạch
 
-Yêu cầu ở trên. Mode `standard`, tầng full.
+Yêu cầu ở trên. Tầng full.
 
 **Tổng quan**
 
