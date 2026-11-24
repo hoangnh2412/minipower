@@ -21,4 +21,5 @@ A12 **không** soát `ADRs/` và chính sổ này: ADR là bản ghi lịch sử
 ## Sổ
 
 - `sdlc/` — đã gỡ — ADR-037 xoá thư mục gốc `sdlc/`; runtime + skeleton + template chuyển sang `src/router/`.
+- `mvp` — đã gỡ — khái niệm chế độ dự án, bỏ 2026-11-24 cùng `project_mode`; tài liệu xây dần theo tiến trình. (`maintain`/`standard` không vào sổ: là từ tiếng Anh thường gặp — `maintainer`, `standard` trong presales — A12 so chuỗi con sẽ báo oan; nghiệm thu hai chữ đó bằng grep nguyên từ.)
 - `project_mode` — đã gỡ — S7 (#13) thi hành 2026-11-24; mức gate thành số khai `rules.json → gate_levels`; ADR-020 → cancel.

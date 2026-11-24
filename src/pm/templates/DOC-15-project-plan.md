@@ -9,7 +9,7 @@
 ---
 
 > **Hai mức điền —「lõi」và「full」.** Heading **không** đánh dấu = **lõi**: điền ở mọi dự án.
-> Heading có **`▸ full`** = chỉ cần khi làm chuẩn để bàn giao / nghiệm thu.
+> Heading có **`▸ full`** = điền khi tiến trình cần tới (bàn giao / nghiệm thu); chưa cần thì ghi nợ.
 > Bỏ mục `▸ full` là **có chủ đích**, không phải làm ẩu — nhưng phải ghi nợ vào
 > `memory/doc-debt.md`. **Không xoá heading**: giữ chỗ để sau chỉ việc điền tiếp.
 
@@ -62,7 +62,7 @@
 
 | Phase | Milestone | Deliverables | Start | End |
 |-------|-----------|--------------|-------|-----|
-| Phase 1 — MVP | M1: SRS baseline | DOC-06 v1.0 | | |
+| Phase 1 — Release đầu | M1: SRS baseline | DOC-06 v1.0 | | |
 | Phase 2 | M2: UAT sign-off | DOC-07, DOC-16 | | |
 | Go-live | M3: Production | DOC-17 | | |
 

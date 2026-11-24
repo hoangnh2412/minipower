@@ -7,7 +7,7 @@
 # FAIL (chặn pipeline): ID trỏ sai · ID khai trùng.
 # WARN (không chặn):    FR chưa có AC · AC chưa có Test.
 #
-# KHÔNG phạt vì tài liệu chưa viết: mvp/maintain cố ý thiếu DOC. Script chỉ soi
+# KHÔNG phạt vì tài liệu chưa viết: tài liệu xây dần theo tiến trình, thiếu DOC là bình thường. Script chỉ soi
 # ID trong tài liệu ĐANG CÓ.
 #
 # Cài: copy file này vào root dự án, sửa MINIPOWER_PATH cho đúng chỗ pack.

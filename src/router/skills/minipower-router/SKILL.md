@@ -3,7 +3,7 @@ name: minipower-router
 description: Phân loại intent Minipower, triage đơn hay phức, rồi gợi ý đúng một lá cho mỗi task. Dùng khi làm gì tiếp, chọn skill, dispatcher, không biết mở pack nào — không tự gọi MCP L3, không agent bàn giao agent.
 metadata:
   workflow: github
-  version: 1.1.0
+  version: 1.1.1
 ---
 
 # minipower-router
@@ -62,7 +62,7 @@ Bảng dưới là **gợi ý pack** khi LLM định hướng, không phải mat
 | MR GitLab commit push | `vcs/` |
 | code .NET Jarvis | `backend/` |
 | code React kit `@platform/core` | `frontend/` |
-| as-built / maintain legacy | `minipower-architecture-as-built` |
+| as-built / tiếp quản hệ cũ | `minipower-architecture-as-built` |
 
 Thiếu input tối thiểu của pack → **hỏi một lượt**, không bịa, không làm hộ pack trước (QĐ-19).
 

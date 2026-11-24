@@ -1,6 +1,6 @@
 # Minipower
 
-**Minipower** là **AI Operating Model** của doanh nghiệp — mô hình vận hành viết thành dạng AI thi hành được: chứa **kỹ năng của từng vị trí** và **quy trình của từng phòng ban — kể cả quy trình liên phòng ban**, dưới dạng AI thi hành được; tích hợp với bộ công cụ công ty đang dùng (quản lý việc, wiki, Git, giám sát) để doanh nghiệp **vận hành theo quy trình phát triển phần mềm thống nhất** — từ dự án làm nhanh để demo, làm chuẩn để bàn giao, tới tiếp quản hệ đang chạy.
+**Minipower** là **AI Operating Model** của doanh nghiệp — mô hình vận hành viết thành dạng AI thi hành được: chứa **kỹ năng của từng vị trí** và **quy trình của từng phòng ban — kể cả quy trình liên phòng ban**, dưới dạng AI thi hành được; tích hợp với bộ công cụ công ty đang dùng (quản lý việc, wiki, Git, giám sát) để doanh nghiệp **vận hành theo quy trình phát triển phần mềm thống nhất**.
 
 Cách làm dựa trên ba nguyên tắc:
 
@@ -34,15 +34,9 @@ Cách làm dựa trên ba nguyên tắc:
 
 ---
 
-## Không dự án nào cũng cần đủ 19 tài liệu
+## Tài liệu xây dần theo tiến trình
 
-Minipower **không** bắt chọn chế độ dự án. Mọi dự án dùng **một cấu trúc thư mục**; cần ít tài liệu thì điền ít và ghi phần thiếu vào `memory/doc-debt.md` — nợ hiện hình, trả dần trước khi chốt baseline. Ba tình huống hay gặp:
-
-| Tình huống | Điền gì trước | Rồi sao |
-|------------|---------------|---------|
-| *"3 tuần nữa demo, làm chạy được trước"* | BRD + FR + AC + hướng dẫn triển khai rút gọn | Trả nợ theo `doc-debt.md` → chốt baseline |
-| Outsource, sản phẩm mới, khách nghiệm thu theo tài liệu | Đủ 19 DOC, có baseline, sau baseline đổi gì cũng qua CR | Bàn giao / vận hành |
-| Tiếp quản hệ chạy nhiều năm, tài liệu thất lạc | Khai quật cái **đang có**: business rule, kiến trúc, data model, runbook | As-built đủ → chốt baseline |
+Minipower **không** bắt chọn chế độ dự án hay «bộ tài liệu cần» từ đầu. Mọi dự án dùng **một cấu trúc thư mục**; tài liệu được viết **trong quá trình phát triển**, đến cuối chỉ **tổng hợp lại** rồi chốt baseline. Chỗ chưa điền ghi vào `memory/doc-debt.md` — nợ hiện hình, trả trước khi chốt.
 
 Hook `prereq-gate` chỉ **nhắc** khi thiếu tiền đề (mức khai ở `rules.json → gate_levels`). **Con người là người ra lệnh** — hệ cảnh báo, bạn xác nhận là chạy.
 
@@ -162,7 +156,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 | **[minipower-architecture-solution-lite](src/architecture/skills/minipower-architecture-solution-lite/SKILL.md)** | giải pháp mức bán, trước ký | *Phương án module cho báo giá* — không ULNL |
 | **[minipower-architecture-sad](src/architecture/skills/minipower-architecture-sad/SKILL.md)** | SAD, ADR, API, data | *Viết DOC-08/12 cho ORD* |
 | **[minipower-architecture-review](src/architecture/skills/minipower-architecture-review/SKILL.md)** | QC SAD/ADR | *Soi ADR header DOC-09* |
-| **[minipower-architecture-as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md)** | maintain, legacy, CodeGraph | *Khai quật bounded context thanh toán* — người trigger |
+| **[minipower-architecture-as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md)** | tiếp quản hệ cũ, legacy, CodeGraph | *Khai quật bounded context thanh toán* — người trigger |
 | **[minipower-architecture-tenant-org](src/architecture/skills/minipower-architecture-tenant-org/SKILL.md)** | xếp Tenant, Org, OrgStructure | *Chi nhánh này là tenant con hay phòng ban* |
 | **[minipower-architecture-impact](src/architecture/skills/minipower-architecture-impact/SKILL.md)** | impact thay đổi, góc kỹ thuật | *Đánh giá impact kỹ thuật trước khi sửa DOC-08/12* |
 
@@ -177,7 +171,7 @@ Hub: [router](src/router/README.md) · [discovery](src/discovery/README.md) · [
 
 | Skill | Dùng khi | Cách dùng |
 |-------|----------|-----------|
-| **[minipower-support-registry](src/support/skills/minipower-support-registry/SKILL.md)** | registry, thiếu DOC theo mode | *Rà registry mvp còn thiếu gì* — nhắc, không sửa FR |
+| **[minipower-support-registry](src/support/skills/minipower-support-registry/SKILL.md)** | registry, DOC chưa điền | *Rà registry còn thiếu gì* — nhắc, không sửa FR |
 | **[minipower-support-publish](src/support/skills/minipower-support-publish/SKILL.md)** | công bố Outline/chat | *Công bố ORD-FR-012 lên Outline* → Read skill kênh, L2/L3 |
 
 ### QA — [`qa/`](src/qa/)
@@ -285,7 +279,7 @@ Tầng trên lá kênh `tasks`. Không một tên trường, trạng thái hay d
 | [pm-plan](src/pm/skills/minipower-pm-plan/SKILL.md) · [ops-deploy](src/ops/skills/minipower-ops-deploy/SKILL.md) · [analyst-cr](src/analyst/skills/minipower-analyst-cr/SKILL.md) | Kế hoạch · deploy · CR nội dung |
 | [deliberation](src/router/skills/minipower-router-deliberation/SKILL.md) · [readiness](src/router/skills/minipower-router-readiness/SKILL.md) · [plan](src/router/skills/minipower-router-plan/SKILL.md) | Gate mềm · kế hoạch nhiều task |
 | [parallel-work](src/router/docs/parallel-work.md) | Fan-out = pipeline theo module, hoặc task độc lập của kế hoạch đã OK (harness, Minipower không viết runtime) |
-| [as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md) | Maintain / legacy |
+| [as-built](src/architecture/skills/minipower-architecture-as-built/SKILL.md) | Tiếp quản hệ cũ / legacy |
 | `minipower-*-review` trong từng pack | QC — người ký |
 
 ---

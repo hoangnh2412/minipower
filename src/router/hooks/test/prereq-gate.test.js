@@ -309,7 +309,7 @@ test("prereq-gate (QĐ-13) — intent trộn hai cấp kiểm đúng từng cấ
 // ─── R2 — fail-open ─────────────────────────────────────────────────────────
 
 test("prereq-gate (R2) — fail-open: không đọc được mode thì chỉ WARN, không bao giờ block", async (t) => {
-  await t.test("chưa có profile.json → warn (dù mặc định là standard)", () => {
+  await t.test("chưa có profile.json → warn", () => {
     const root = makeProject()
     try {
       const r = checkPrereqGate("phan tich yeu cau", [], { root })

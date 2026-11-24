@@ -74,7 +74,7 @@ Init copy cây của bề mặt được chọn (`backend/src|tests|build`, `fro
 
 Init copy **nguyên** skeleton `docs/`. **Không** cắt folder theo mức tài liệu dự án cần.
 
-Lý do: dự án làm nhanh rồi sẽ phải bổ sung tài liệu. Cắt folder hôm nay là tạo việc di trú ngày mai. Giữ nguyên khung thì về sau chỉ là **điền tiếp**.
+Lý do: tài liệu xây dần theo tiến trình, rồi sẽ bổ sung. Cắt folder hôm nay là tạo việc di trú ngày mai. Giữ nguyên khung thì về sau chỉ là **điền tiếp**.
 
 Hệ quả: sẽ có folder `docs/` rỗng có chủ đích — nói ra bằng README.
 

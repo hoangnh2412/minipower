@@ -9,7 +9,7 @@
 ---
 
 > **Hai mức điền —「lõi」và「full」.** Heading **không** đánh dấu = **lõi**: điền ở mọi dự án.
-> Heading có **`▸ full`** = chỉ cần khi làm chuẩn để bàn giao / nghiệm thu.
+> Heading có **`▸ full`** = điền khi tiến trình cần tới (bàn giao / nghiệm thu); chưa cần thì ghi nợ.
 > Bỏ mục `▸ full` là **có chủ đích**, không phải làm ẩu — nhưng phải ghi nợ vào
 > `memory/doc-debt.md`. **Không xoá heading**: giữ chỗ để sau chỉ việc điền tiếp.
 
@@ -39,7 +39,7 @@
 
 ### 3.3 Bảo mật
 
-| NFR ID | Requirement | Standard / control |
+| NFR ID | Requirement | Tiêu chuẩn / control |
 |--------|-------------|------------------|
 | NFR-S01 | Authentication | SSO + MFA for admin |
 | NFR-S02 | Authorization | RBAC + ABAC |

@@ -2,8 +2,8 @@
  * Golden test — trace:check (ADR-020 QĐ-5 · C8, việc #11).
  *
  * Điều quan trọng nhất cần chứng minh: nó **không phạt vì tài liệu chưa viết**.
- * `mvp`/`maintain` cố ý thiếu DOC (QĐ-2); một `trace:check` kêu inh ỏi ở hai chế độ
- * đó sẽ bị người dùng tắt đi, và tắt rồi thì cả C8 mất tác dụng luôn.
+ * Tài liệu xây dần theo tiến trình, thiếu DOC là bình thường (QĐ-2); một `trace:check`
+ * kêu inh ỏi ở đó sẽ bị người dùng tắt đi, và tắt rồi thì cả C8 mất tác dụng luôn.
  */
 
 import test from "node:test"
@@ -105,7 +105,7 @@ test("KHÔNG duplicate khi cùng ID khai một lần rồi được nhắc lại
 
 // ─── Không phạt vì chưa viết (QĐ-5, QĐ-2) ───────────────────────────────────
 
-test("mvp/maintain — chưa có DOC-07 thì KHÔNG cảnh báo 'FR thiếu AC'", () => {
+test("thiếu DOC có chủ đích — chưa có DOC-07 thì KHÔNG cảnh báo 'FR thiếu AC'", () => {
   const root = proj()
   try {
     write(root, "docs/03-modules/ORD/DOC-06-srs.md", "| ORD-FR-001 | A |\n| ORD-FR-002 | B |\n")

@@ -27,7 +27,7 @@ Sau [ADR-020](../ADRs/cancel/ADR-020-2026-08-20-minipower-3-che-do-du-an-gate-ba
 | **Đơn vị bàn giao** | Một module, không phải cả dự án. "Input tối thiểu" ở bảng trên đọc là *"tối thiểu **cho module đang bàn giao**"* |
 | **Ai mở cổng** | **Người**. Không hook nào phán module đã đủ để qua boundary — `prereq-gate` chỉ nhắc khi thiếu DOC tiền đề *của đúng module đó* (QĐ-13) ở mức khai `rules.json → gate_levels.prereq`; người quyết đi tiếp |
 | **Không có vạch đích chung** | Không boundary nào chờ "mọi module xong". Tổng hợp (trace-matrix, BRD đầy đủ) là **bước riêng** do lead làm khi cần |
-| **Dự án cần ít tài liệu** | Hạ *input tối thiểu* là quyết định của người, **không** bỏ boundary. Cái hụt ghi `memory/doc-debt.md` |
+| **Tài liệu chưa đủ** | Hạ *input tối thiểu* là quyết định của người, **không** bỏ boundary. Cái hụt ghi `memory/doc-debt.md` |
 
 **Hệ quả cho repo consumer (Jarvis):** nhận bàn giao theo module, không chờ trọn bộ docs. Thiếu gì thì nêu tên module + DOC cụ thể, đừng trả lại cả lô.
 

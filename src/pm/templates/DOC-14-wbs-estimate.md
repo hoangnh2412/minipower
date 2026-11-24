@@ -78,7 +78,7 @@ Story không có AC chưa phải story (DOC-07). Tách theo sản phẩm / luồ
 
 | Wave | Stories | Total SP | Target date |
 |------|---------|----------|-------------|
-| MVP | US-001 … | | |
+| Release đầu | US-001 … | | |
 | Phase 2 | | | |
 
 ## 9. Truy vết

@@ -17,7 +17,7 @@ DOC-14 (WBS + estimate) · DOC-15 (project plan) · risk log · [complexity-rubr
 
 ## Câu hỏi cần hỏi
 - Deadline cứng hay mềm? Ràng buộc nguồn lực gì?
-- FR nào bắt buộc cho MVP, cái nào hoãn được?
+- FR nào bắt buộc cho release đầu, cái nào hoãn được?
 - Phụ thuộc bên ngoài (đội khác, vendor) nào?
 - Rủi ro lớn nhất có thể trật kế hoạch là gì?
 - Định nghĩa "done" cho mỗi mốc?

@@ -1,8 +1,8 @@
 # Kế hoạch — {yêu cầu, một câu}
 
-| Tầng | Mode | Ngày | Trạng thái |
-|------|------|------|------------|
-| micro \| light \| full | standard \| mvp \| maintain | YYYY-MM-DD | chờ OK \| đã OK \| PASS |
+| Tầng | Ngày | Trạng thái |
+|------|------|------------|
+| micro \| light \| full | YYYY-MM-DD | chờ OK \| đã OK \| PASS |
 
 **Khi nào dùng:** [minipower-router](../skills/minipower-router/SKILL.md) triage ra **PHỨC** (một lá không phủ trọn yêu cầu) → [minipower-router-plan](../skills/minipower-router-plan/SKILL.md) điền khuôn này. Kế hoạch **sống trên chat**, không ghi file DOC; kéo dài nhiều phiên → người quyết ghi `memory/memory.md` dạng checklist `[ ] #n`.
 

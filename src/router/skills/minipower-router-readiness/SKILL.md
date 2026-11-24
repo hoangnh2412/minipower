@@ -3,7 +3,7 @@ name: minipower-router-readiness
 description: Soát tiền đề trước khi viết code/test/deploy: liệt kê mọi thiếu một lượt, hoãn có ghi nợ. Dùng khi readiness-gate, thực thi, đủ chưa — không tự BLOCK máy.
 metadata:
   workflow: github
-  version: 1.0.1
+  version: 1.0.2
 ---
 
 # minipower-router-readiness
@@ -55,7 +55,7 @@ Yêu cầu thực thi
 
 **Mặc định vs cấu hình riêng (Q7):** đây là bộ **mặc định**. Đầu phiên gate hỏi *"Dùng bộ tiền đề mặc định, hay dự án có bộ riêng?"* — nếu riêng, đọc `memory/open-questions.md` / `memory/memory.md` để lấy danh sách tiền đề của dự án thay cho bảng này.
 
-**Một bộ cho mọi dự án.** Hook `prereq-gate` dùng đúng bảng trên, ở mức khai `rules.json → gate_levels.prereq`. Verdict "đủ tạm" ghi `open-questions.md` (nợ tiền đề của phiên) hoặc **`memory/doc-debt.md`** (nợ tài liệu — trả trước khi chốt baseline). Dự án cần ít tài liệu không đổi cấu hình, chỉ ghi nợ.
+**Một bộ cho mọi dự án.** Hook `prereq-gate` dùng đúng bảng trên, ở mức khai `rules.json → gate_levels.prereq`. Verdict "đủ tạm" ghi `open-questions.md` (nợ tiền đề của phiên) hoặc **`memory/doc-debt.md`** (nợ tài liệu — trả trước khi chốt baseline). Tài liệu xây dần theo tiến trình — thiếu thì ghi nợ, không đổi cấu hình.
 
 **Kiểm theo module.** Tiền đề cột *"theo module"* chỉ soát được khi biết module nào. Prompt không nêu module (`Module: {id}`, đường dẫn `03-modules/{id}/`, ID `{MOD}-FR-…`, hoặc tên folder có thật) → **bỏ qua các mục đó, không đoán**. Module chạy lệch nhịp là bình thường: `ORD` đủ tiền đề không có nghĩa `INV` cũng đủ.
 

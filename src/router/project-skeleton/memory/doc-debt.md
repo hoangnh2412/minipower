@@ -2,11 +2,11 @@
 
 **Cái gì còn thiếu, và vì sao chấp nhận thiếu.**
 
-Dự án làm nhanh hay tiếp quản hệ cũ cố tình **không** điền đủ 19 DOC — đó là lựa chọn hợp lý, không phải cẩu thả. Nhưng lựa chọn đó chỉ lành mạnh khi món nợ **hiện hình**. File này là chỗ nợ hiện hình.
+Tài liệu xây dần theo tiến trình, nên có lúc cố tình **chưa** điền đủ 19 DOC — đó là lựa chọn hợp lý, không phải cẩu thả. Nhưng lựa chọn đó chỉ lành mạnh khi món nợ **hiện hình**. File này là chỗ nợ hiện hình.
 
 Nằm ở gốc `memory/` vì nó **cắt ngang mọi phase** — *bản đồ đường tới baseline* (ADR-020). Không nhầm với [`open-questions.md`](open-questions.md) (nợ tiền đề phiên) hay `memory.md` (nhắc việc cá nhân, gitignore).
 
-> Dự án làm chuẩn từ đầu thường để file này rỗng. Không rỗng cũng không sao: nó thành danh sách việc trước khi chốt baseline.
+> File rỗng cũng được. Không rỗng thì nó là danh sách việc tổng hợp trước khi chốt baseline.
 
 ## Vì sao phải ghi
 
@@ -26,7 +26,7 @@ Nằm ở gốc `memory/` vì nó **cắt ngang mọi phase** — *bản đồ �
 |-----|--------|
 | **Thiếu gì** | DOC + mục cụ thể — `DOC-04 Business Rules`, không phải "tài liệu nghiệp vụ" |
 | **Module / phạm vi** | `{MOD}` nếu là DOC theo module; `dự án` nếu cấp dự án |
-| **Vì sao chấp nhận thiếu** | Lý do thật: *"MVP demo 3 tuần"*, *"rule chôn trong code, chưa khai quật"* |
+| **Vì sao chấp nhận thiếu** | Lý do thật: *"demo 3 tuần"*, *"rule chôn trong code, chưa khai quật"* |
 | **Cần trước khi** | Sự kiện bắt buộc trả nợ — `chốt baseline v1.0`, `bàn giao` |
 
 ## Khi nào ghi thêm

@@ -1,7 +1,7 @@
 /**
  * Intent → gợi ý skill (test vàng / khóa). Route lúc làm việc = LLM (ADR-034 QĐ-4).
  *
- * Không đặt trong `hooks/lib` — tầng cứng hook cấm phụ thuộc SOP maintain.
+ * Không đặt trong `hooks/lib` — tầng cứng hook cấm phụ thuộc tầng SOP.
  */
 
 function fold(s) {
@@ -26,7 +26,7 @@ export const INTENT_RULES = [
   { skill: "minipower-architecture-solution-lite", keys: ["giải pháp mức bán", "phương án module", "solution lite"] },
   { skill: "minipower-architecture-sad", keys: ["viết sad", "doc-08", "doc-12", "viết adr"] },
   { skill: "minipower-architecture-review", keys: ["review sad", "soi adr"] },
-  { skill: "minipower-architecture-as-built", keys: ["khai quật", "bounded context đang chạy", "maintain legacy"] },
+  { skill: "minipower-architecture-as-built", keys: ["khai quật", "bounded context đang chạy", "tiếp quản hệ cũ"] },
   { skill: "minipower-architecture-tenant-org", keys: ["xếp tenant", "tenant con", "orgstructure", "multi-org", "phân loại tenant"] },
   { skill: "minipower-pm-plan", keys: ["lập kế hoạch", "wbs", "story point", "doc-14", "doc-15"] },
   { skill: "minipower-pm-cr-track", keys: ["ticket cr", "ghi cr", "board cr"] },

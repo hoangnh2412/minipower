@@ -87,7 +87,7 @@ test("profile v2 (QĐ-1, QĐ-12)", async (t) => {
 
   // nhắc tên cũ có chủ đích: test tương thích — profile đã cài còn trường này phải vẫn hợp lệ
   await t.test("v2 còn trường project_mode cũ (bất kỳ giá trị) → vẫn hợp lệ, không chặn oan dự án đã cài", () => {
-    for (const m of ["standard", "mvp", "maintain", "turbo"]) {
+    for (const m of ["gia-tri-cu", "turbo"]) {
       assert.equal(validateProfile({ ...VALID_PROFILE_V2, project_mode: m }).valid, true, m) // nhắc tên cũ có chủ đích: tương thích
     }
   })
@@ -280,7 +280,7 @@ test("providersFromProfile — map v2 local tasks → none", () => {
 
 // nhắc tên cũ có chủ đích: test tương thích — profile đã cài còn trường này phải vẫn hợp lệ
 test("profile v3 còn trường project_mode cũ → vẫn hợp lệ (dự án đích không phải sửa gì)", () => {
-  assert.equal(validateProfile({ ...VALID_PROFILE_V3, project_mode: "mvp" }).valid, true) // nhắc tên cũ có chủ đích: tương thích
+  assert.equal(validateProfile({ ...VALID_PROFILE_V3, project_mode: "gia-tri-cu" }).valid, true) // nhắc tên cũ có chủ đích: tương thích
 })
 
 test("identity T7 — os_username lệch", async (t) => {

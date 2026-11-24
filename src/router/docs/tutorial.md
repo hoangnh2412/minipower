@@ -46,17 +46,7 @@ Script hỏi provider và bề mặt (`docs`, `backend`, `frontend`…). Kết q
 | `docs/` | Artifact chính thức (DOC-01 → DOC-19) |
 | `memory/` | Sổ đội: `decision-log.md`, `open-questions.md`, `doc-debt.md` |
 
-Cấu trúc `docs/` copy từ [docs-skeleton](../docs-skeleton/README.md). Mọi dự án dùng **cùng khung folder** — khác nhau chỉ ở *DOC nào cần điền ngay*; phần thiếu ghi `memory/doc-debt.md`.
-
-### Điền tài liệu tới đâu
-
-| Tình huống | DOC ưu tiên điền trước |
-|------------|------------------------|
-| Demo nhanh, 2–4 tuần | DOC-01, 03, 06, 07, 09, 17 |
-| Outsource, nghiệm thu theo tài liệu | Đủ 19 DOC + baseline |
-| Tiếp quản hệ cũ, tài liệu thất lạc | DOC-04, 08–12, 17, 18 (khai quật as-built) |
-
-Phần còn lại của tutorial mô tả luồng **đầy đủ**. Cuối bài có [lối tắt MVP](#lối-tắt-mvp).
+Cấu trúc `docs/` copy từ [docs-skeleton](../docs-skeleton/README.md). Mọi dự án dùng **cùng khung folder**. Tài liệu xây dần theo tiến trình, cuối cùng tổng hợp; chỗ chưa điền ghi `memory/doc-debt.md`.
 
 ---
 
@@ -342,25 +332,6 @@ flowchart TB
 | 5b | Sắp deploy | Runbook | `minipower-ops-deploy` | 17 |
 | 6 | Gói đủ ký | Baseline | (thủ công + support-registry) | snapshot `02-baseline/` |
 | 7 | Đổi sau ký | CR | `analyst-cr` + `pm-cr-track` | 18 + `06-changes/` |
-
----
-
-## Lối tắt MVP
-
-Dự án cần demo nhanh, ưu tiên đường ngắn:
-
-```text
-assets/ (file thô)
-  → DOC-01 + DOC-03 (scope + module)     [discovery-survey — rút gọn]
-  → DOC-06 + DOC-07 (FR + AC Must)        [analyst-srs — bỏ qua prototype nếu UI đơn giản]
-  → DOC-09 (ADR quan trọng)               [architecture-sad — chỉ quyết định then chốt]
-  → DOC-17 (deploy tối thiểu)               [ops-deploy]
-  → code + demo
-```
-
-DOC chưa điền ghi vào `memory/doc-debt.md` — trả nợ trước khi chốt baseline.
-
-Hook `prereq-gate` chỉ **nhắc**, không chặn — mức khai ở `rules.json → gate_levels`.
 
 ---
 

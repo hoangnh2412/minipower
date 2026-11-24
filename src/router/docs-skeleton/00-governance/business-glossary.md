@@ -111,7 +111,7 @@ Trace matrix (DOC-16 mục trace): **Pass** / **Fail** trên từng dòng FR↔T
 
 | Giá trị | Ý nghĩa |
 |---------|---------|
-| **Must** | Bắt buộc MVP / baseline; chặn UAT & go-live nếu chưa đáp ứng |
+| **Must** | Bắt buộc cho release đầu / baseline; chặn UAT & go-live nếu chưa đáp ứng |
 | **Should** | Quan trọng; có thể hoãn release nhỏ nếu trade-off |
 | **Could** | Mong muốn; không chặn UAT / sign-off |
 

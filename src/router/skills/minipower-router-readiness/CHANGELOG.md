@@ -1,5 +1,9 @@
 # Changelog — minipower-router-readiness
 
+## 1.0.2 · 2026-11-24
+
+- Câu chữ: tài liệu xây dần theo tiến trình, thiếu thì ghi nợ.
+
 ## 1.0.1 · 2026-11-24
 
 - Gỡ bảng «Theo chế độ dự án»: một bộ tiền đề cho mọi dự án, mức hook theo `rules.json → gate_levels.prereq`.

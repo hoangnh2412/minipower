@@ -10,7 +10,7 @@
  *          ở hai chỗ. Hai lỗi này máy chắc chắn đúng, và im lặng thì trace mục nát.
  *   WARN — FR chưa có AC, AC chưa có Test. Đây là *chưa làm*, không phải *làm sai*.
  *
- * **Không phạt vì tài liệu chưa viết.** `mvp`/`maintain` cố ý thiếu DOC (QĐ-2).
+ * **Không phạt vì tài liệu chưa viết.** Tài liệu xây dần theo tiến trình, thiếu DOC là bình thường (QĐ-2).
  * Module chưa có DOC-07 thì không cảnh báo "FR thiếu AC" — cảnh báo đó chỉ nói lại
  * điều `doc-debt.md` đã ghi, và cảnh báo lặp là cách nhanh nhất khiến người ta
  * thôi đọc cảnh báo.

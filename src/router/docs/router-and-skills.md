@@ -141,7 +141,7 @@ Luồng artifact theo phase: [pipeline.md](pipeline.md).
 
 Dữ liệu: `prereq_by_intent` trong `rules.json`. Bảng đầy đủ (generated): [router-readiness/SKILL.md](../skills/minipower-router-readiness/SKILL.md).
 
-| Intent `id` | DOC yêu cầu (standard) |
+| Intent `id` | DOC yêu cầu |
 |-------------|-------------------------|
 | `write-requirements` | 03 |
 | `prototype` | 04 |
@@ -225,7 +225,7 @@ Test catalog + intent: `src/router/hooks/test/minipower-catalog.test.js`, `inten
 
 ## 10. Mức gate máy
 
-Khai thẳng ở `rules.json → gate_levels` (`prereq`, `legacy_read`) cho mọi dự án — không có chế độ dự án. Dự án cần ít tài liệu ghi nợ `memory/doc-debt.md`, không đổi cấu hình.
+Khai thẳng ở `rules.json → gate_levels` (`prereq`, `legacy_read`) cho mọi dự án — không có chế độ dự án. Tài liệu xây dần theo tiến trình; chỗ chưa điền ghi nợ `memory/doc-debt.md`, không đổi cấu hình.
 
 ## 11. Tài liệu liên quan
 

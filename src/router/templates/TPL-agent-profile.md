@@ -195,8 +195,6 @@ Checklist ngày đầu, làm một lần rồi thôi:
 | QC | DOC-07, DOC-16, dòng trace của module | Sinh FR mới |
 | DevOps | DOC-17, NFR (DOC-13) của bề mặt triển khai | Đổi hành vi nghiệp vụ |
 
-Hệ cũ: trước tài liệu mong muốn, đọc vùng đang chạy và `assets/archive/` của đúng vùng đó. Làm nhanh: dừng ở DOC-03 + FR/AC của module, trừ khi người yêu cầu DOC khác.
-
 ## 3. Quy tắc
 
 - Có `.minipower/` thì chọn **đúng một** skill `minipower-*` đã cài. Nói `Sẽ chạy {skill} để xử lý {việc}.` rồi mới làm. Không bịa tên skill.
@@ -218,16 +216,12 @@ Hệ cũ: trước tài liệu mong muốn, đọc vùng đang chạy và `asset
 2. **Truy vết được.** UC → FR → AC → Test nối bằng ID. Cross-ref bằng ID, không copy nội dung FR sang module khác.
 3. **Giữ cách làm, không giữ dữ liệu.** Quy trình nằm ở skill đã cài. Nghiệp vụ nằm ở `docs/` hoặc công cụ docs (`outline` khi provider là outline). Việc nằm ở provider task hoặc SQLite. Code nằm ở git / GitLab. `memory/` không trở thành kho SRS.
 4. **Một owner một artifact.** Một module một owner. Một boundary một producer. Consumer bắt đầu khi đủ input tối thiểu của **đúng module đó**.
-5. **Chi phí tương xứng.** Làm nhanh: bộ lõi, khoản bỏ qua ghi `doc-debt.md` ngay trong phiên. Làm chuẩn: đủ tiền đề trước khi thực thi; sau baseline mọi sửa đi qua CR. Hệ cũ: mô tả cái đang chạy; lệch tài liệu và thực tế là câu hỏi, không tự sửa cho "đúng". Tình huống do người nêu lúc giao việc; không chắc thì hỏi, không đoán.
+5. **Tài liệu xây dần theo tiến trình.** Đủ tiền đề của việc đang làm trước khi thực thi; khoản bỏ qua ghi `doc-debt.md` ngay trong phiên; cuối cùng tổng hợp rồi chốt baseline, sau baseline mọi sửa đi qua CR. Khai quật hệ đang chạy thì mô tả cái đang chạy; lệch tài liệu và thực tế là câu hỏi, không tự sửa cho "đúng".
 6. **Tài liệu — thảo luận trước, ghi sau.** Trong lúc đang trao đổi, agent phân tích và thảo luận trong chat (phương án, trade-off, nháp nội dung) cho đến khi người **xác nhận chốt**; sau đó mới cập nhật `docs/` hoặc artifact DOC. Không ghi vào file nội dung còn đang mở hoặc chưa được người duyệt.
 7. **Code — chưa chốt thì không sửa.** Khi người chỉ ra điểm chưa rõ và đặt câu hỏi, agent trả lời và thảo luận trong chat; **không** sửa `backend/`, `frontend/` hay artifact code cho đến khi người xác nhận hướng xử lý. Micro đã thống nhất (typo, format) vẫn theo mục 3 khi không nằm trong luồng làm rõ đang mở.
 8. **Code — ít nhất mà trọn, không tự thêm fallback.** Thang chọn: có cần tồn tại → codebase đã có → thư viện chuẩn / nền tảng → dependency đã cài → một dòng → mới viết tối thiểu. **Không** thêm tuỳ chọn, abstraction, dependency hay logic dự phòng (giá trị mặc định im lặng, `catch` rồi đi tiếp, rẽ đường phụ) khi người chưa đồng ý — thiếu điều kiện thì fail rõ và hỏi trong lượt hỏi trọn gói. Không cắt validation ở biên, error handling chống mất dữ liệu, bảo mật, accessibility. Đường tắt ghi `shortcut: <giới hạn>, <khi nào nâng>`. Cuối lượt nêu điều đã bỏ qua và rủi ro. Toàn văn: mục *Viết code* trong shared-conventions của skill đã cài.
 
-| Tình huống | Tài liệu giữ | Khi bỏ bước |
-|------------|----------------|-------------|
-| Làm nhanh (demo) | DOC-01, DOC-03, DOC-06, DOC-07, ADR khi quyết định lớn, DOC-17 rút gọn | Ghi `doc-debt.md`. ID `{MOD}-FR-` / `{MOD}-AC-` dùng từ đầu. |
-| Làm chuẩn (bàn giao) | Đủ DOC theo phase của việc đang làm. Trace khép UC–FR–AC–Test. | `prereq-gate` nhắc thiếu tiền đề của module. `BYPASS` là lệnh của người, ghi lý do. |
-| Hệ cũ (tiếp quản) | DOC-04, DOC-08–12, DOC-17 (runbook), DOC-18 | As-built từng vùng, một vùng một phiên, đầu ra là nháp + câu hỏi. |
+ID `{MOD}-FR-` / `{MOD}-AC-` dùng từ đầu; trace khép UC–FR–AC–Test trước khi chốt baseline. `prereq-gate` nhắc thiếu tiền đề của module; `BYPASS` là lệnh của người, ghi lý do.
 
 
 ## 5. Quy ước
